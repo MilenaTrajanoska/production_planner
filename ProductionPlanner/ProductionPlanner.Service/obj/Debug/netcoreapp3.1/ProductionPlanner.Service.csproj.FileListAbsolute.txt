@@ -1,0 +1,14 @@
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\obj\Debug\netcoreapp3.1\ProductionPlanner.Service.csprojAssemblyReference.cache
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\obj\Debug\netcoreapp3.1\ProductionPlanner.Service.AssemblyInfoInputs.cache
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\obj\Debug\netcoreapp3.1\ProductionPlanner.Service.AssemblyInfo.cs
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\obj\Debug\netcoreapp3.1\ProductionPlanner.Service.csproj.CoreCompileInputs.cache
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\bin\Debug\netcoreapp3.1\ProductionPlanner.Service.deps.json
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\bin\Debug\netcoreapp3.1\ProductionPlanner.Service.dll
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\bin\Debug\netcoreapp3.1\ProductionPlanner.Service.pdb
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\bin\Debug\netcoreapp3.1\ProductionPlanner.Domain.dll
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\bin\Debug\netcoreapp3.1\ProductionPlanner.Repository.dll
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\bin\Debug\netcoreapp3.1\ProductionPlanner.Domain.pdb
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\bin\Debug\netcoreapp3.1\ProductionPlanner.Repository.pdb
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\obj\Debug\netcoreapp3.1\ProductionPlanner.Service.csproj.CopyComplete
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\obj\Debug\netcoreapp3.1\ProductionPlanner.Service.dll
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Service\obj\Debug\netcoreapp3.1\ProductionPlanner.Service.pdb

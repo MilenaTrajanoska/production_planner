@@ -1,0 +1,12 @@
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Repository.deps.json
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Repository.dll
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.csprojAssemblyReference.cache
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.AssemblyInfoInputs.cache
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.AssemblyInfo.cs
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.csproj.CoreCompileInputs.cache
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Domain.dll
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Domain.pdb
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.csproj.CopyComplete
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Repository.pdb
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.dll
+C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.pdb
