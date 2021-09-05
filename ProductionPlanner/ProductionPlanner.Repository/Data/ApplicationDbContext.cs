@@ -11,6 +11,7 @@ namespace ProductionPlanner.Repository.Data
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<ProductHistory> ProductHistories { get; set; }
+        public virtual DbSet<Material> Materials { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
