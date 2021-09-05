@@ -2,7 +2,69 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row px-5 pb-5 pt-3">
+    <h1 class="display-2 col-6 pl-5 text-right">Welcome!</h1>
+    <p class="small col-6"><br /><br />Fill in the following properties so <br />you can use the production planner better.</p>
+</div>
+<div class="pl-5">
+    <div class="row px-5">
+        <div class="col-6">
+            <div>
+                <div class=" pb-3" style="color: #04396c !important">
+                    <h3><i class="fa fa-industry" aria-hidden="true"></i><b> Workstations</b> </h3>
+                </div>
+                <div class="row px-3">
+                    <div class="col-6 px-2">
+                        Number of workstations
+                        <br />
+                        Capacity of workstation
+                    </div>
+                    <div class="col-6 px-2">
+                        <input type="number" style="max-width:50%!important" />
+                        <br />
+                        <input type="number" style="max-width:50%!important" /> hours
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="pb-3" style="color: #04396c !important">
+                    <h3><i class="fa fa-clock-o" aria-hidden="true"></i><b> Time</b></h3>
+                </div>
+                <div class="row px-3">
+                    <div class="col-6 px-2">
+                        Inter-operation time
+                        <br />
+                        Time for transportation and storage
+                    </div>
+                    <div class="col-6 px-2">
+                        <input type="number" style="max-width:50%!important" />
+                        <br />
+                        <input type="number" style="max-width:50%!important" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-6">
+            <div class="pb-3" style="color: #04396c !important">
+                <h3><i class="fa fa-plus-square-o" aria-hidden="true"></i><b> Other</b> </h3>
+            </div>
+            <div class="row px-3">
+                <div class="col-6 px-2">
+                    Work in process for the beggining
+                </div>
+                <div class="col-6 px-2">
+                    <input type="number" style="max-width:50%!important" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-10"></div>
+    <div class="col-2" style="color: #04396c !important">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+        Edit properties
+    </div>
 </div>
