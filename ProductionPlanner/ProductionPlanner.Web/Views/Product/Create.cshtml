@@ -1,0 +1,116 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ProductionPlanner.Domain.Models.Product
+@{
+    ViewData["Title"] = "New Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h1 class="text-center"><b>New product</b></h1>
+<br /><br />
+<div class="mx-auto w-75">
+    <form >
+        <div class="row">
+            <div class="col-6 border-right">
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="ProductName" class="control-label">Product name</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="ProductName" type="text" class="control-label" style="max-width:50%!important" />
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="InProcessTime" class="control-label">Processing time</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="InProcessTime" type="number" class="control-label" style="max-width:50%!important" /> hours
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="SetUpTime" class="control-label">Set-up time</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="SetUpTime" type="number" class="control-label" style="max-width:50%!important" /> hours
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="PreProcessingWaitTime" class="control-label">Preprocessing waiting time</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="PreProcessingWaitTime" type="number" class="control-label" style="max-width:50%!important" /> hours
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="PostProcessingWaitTime" class="control-label">Postprocessing waiting time</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="PostProcessingWaitTime" type="number" class="control-label" style="max-width:50%!important" /> hours
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 border-left pl-5">
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="SellingPrice" class="control-label">Selling price</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="SellingPrice" type="number" class="control-label" style="max-width:50%!important" /> EUR
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="TotalMaterialCost" class="control-label">Material cost</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="TotalMaterialCost" type="number" class="control-label" style="max-width:50%!important" /> EUR
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="WagePerHour" class="control-label">Wage</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="WagePerHour" type="number" class="control-label" style="max-width:50%!important" /> EUR/hour
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="VariableOHPerDLHour" class="control-label">Variable OH Allocation per DL hour</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="VariableOHPerDLHour" type="number" class="control-label" style="max-width:50%!important" /> EUR/hour
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="InterestRate" class="control-label">Interest rate</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="InterestRate" type="number" class="control-label" style="max-width:50%!important" /> %
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="FixedOHPerYear" class="control-label">Fixed OH per year</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="FixedOHPerYear" type="number" class="control-label" style="max-width:50%!important" /> EUR/year
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row pt-3 pb-5">
+            
+            <div class="d-inline mx-auto"><input type="submit" value="Add product" class="btn btn-primary px-5"/></div>
+            
+        </div>
+    </form>
+</div>
