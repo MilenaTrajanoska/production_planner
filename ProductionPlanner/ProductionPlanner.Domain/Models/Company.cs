@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace ProductionPlanner.Domain.Models
 {
@@ -22,17 +19,25 @@ namespace ProductionPlanner.Domain.Models
         [ForeignKey("Instance")]
         private long InstanceId;
         private static Company Instance { get; set; }
+        private static readonly object syncLock = new object();
 
         private Company()
         {
             IsSet = false;
+            isValid = false;
         }
 
         public static Company getInstance()
         {
             if (Instance == null)
             {
-                Instance = new Company();
+                lock(syncLock){
+                    if(Instance == null)
+                    {
+                        Instance = new Company();
+                    }
+                }
+                
             }
             return Instance;
         }

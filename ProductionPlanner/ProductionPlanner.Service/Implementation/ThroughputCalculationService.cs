@@ -1,8 +1,4 @@
-﻿using ProductionPlanner.Domain.Models;
-using ProductionPlanner.Domain.ViewModels;
-using ProductionPlanner.Repository.Implementation;
-using ProductionPlanner.Repository.Interface;
-using ProductionPlanner.Service.Interface;
+﻿using ProductionPlanner.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +7,16 @@ namespace ProductionPlanner.Service.Implementation
 {
     public class ThroughputCalculationService : IThroughputCalculationService
     {
-        private IRepository<Order> _orderRepository;
+        private readonly ICalculationService _calculationService;
         
-        public ThroughputCalculationService(IRepository<Order> orderRepository)
+        public ThroughputCalculationService(ICalculationService calculationService)
         {
-            _orderRepository = orderRepository;
+            _calculationService = calculationService;
         }
 
         public List<DateTime> calculateThroughputDiagramXAxis(DateTime from)
         {
-            var orders = _orderRepository.GetAll();
-            DateTime startMin = DateTime.MinValue;
+            DateTime startMin;
 
             if (from != null)
             {
@@ -29,10 +24,11 @@ namespace ProductionPlanner.Service.Implementation
             }
             else
             {
-                startMin = orders.Select(o => o.StartDate).Min().AddDays(-1);
+                startMin = _calculationService.getMinStartDate();
             }
-             
-            DateTime endMax = orders.Select(o => o.EndDate).Max();
+
+            DateTime endMax = _calculationService.getMaxEndDate();
+
             List<DateTime> result = new List<DateTime>();
             
             while(startMin.Date.CompareTo(endMax.Date) <= 0)
@@ -48,7 +44,7 @@ namespace ProductionPlanner.Service.Implementation
             var minDate = dates.Min();
             var result = new List<double>();
 
-            dates.ForEach(d => result.Add(calculateOutputForDate(minDate, d)));
+            dates.ForEach(d => result.Add(_calculationService.calculateOutputForDate(minDate, d)));
             return result;
         }
 
@@ -57,7 +53,7 @@ namespace ProductionPlanner.Service.Implementation
             var minDate = dates.Min();
             var result = new List<double>();
 
-            dates.ForEach(d => result.Add(calculateInputForDate(minDate, d)));
+            dates.ForEach(d => result.Add(_calculationService.calculateInputForDate(minDate, d)));
             return result;
         }
 
@@ -66,40 +62,17 @@ namespace ProductionPlanner.Service.Implementation
             var minDate = dates.Min();
             var result = new List<double>();
 
-            dates.ForEach(d => result.Add(calculateWIPForDate(minDate, d)));
+            dates.ForEach(d => result.Add(_calculationService.getWIPForDate(minDate, d)));
             return result;
         }
         public double getCapacity(DateTime minDate, DateTime maxDate)
         {
-            var daysBetween = maxDate.Date.Subtract(minDate.Date).TotalSeconds;
-            return Company.getInstance().NumberOfWS * Company.getInstance().WSCapacity * daysBetween;
-        }
-        private double calculateInputForDate(DateTime from, DateTime to)
-        {
-            return _orderRepository.GetAll()
-                .Where(o => o.StartDate.Date.CompareTo(from.Date) >= 0
-                            && o.StartDate.Date.CompareTo(to.Date)<=0)
-                .Select(o => o.getWorkContent())
-                .ToList()
-                .Sum();
-        }
+            var daysBetween = maxDate.Date.Subtract(minDate.Date).TotalDays;
+            var WS = _calculationService.getNumberOfWorkStations();
+            var capacity = _calculationService.getWorkstationCapacity();
 
-        private double calculateOutputForDate(DateTime from, DateTime to)
-        {
-            return _orderRepository.GetAll()
-                .Where(o => o.StartDate.Date.CompareTo(from.Date) >= 0 
-                            && o.EndDate.Date.CompareTo(to.Date) <= 0)
-                .Select(o => o.getWorkContent())
-                .ToList()
-                .Sum();
+            return WS * capacity * daysBetween;
         }
-
-        private double calculateWIPForDate(DateTime from, DateTime to)
-        {
-            var cumulativeInput = calculateInputForDate(from, to);
-            var cumulativeOutput = calculateOutputForDate(from, to);
-
-            return cumulativeInput - cumulativeOutput;
-        }
+       
     }
 }
