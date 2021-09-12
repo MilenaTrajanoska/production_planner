@@ -17,9 +17,11 @@ namespace ProductionPlanner.Domain.Models
         public int BeginningOfWIP { get; set; }
         public bool IsSet { get; set; }
 
+        public bool isValid { get; set; }
+
         [ForeignKey("Instance")]
-        public long InstanceId;
-        public static Company Instance { get; set; }
+        private long InstanceId;
+        private static Company Instance { get; set; }
 
         private Company()
         {

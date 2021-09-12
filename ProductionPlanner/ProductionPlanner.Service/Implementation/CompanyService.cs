@@ -10,19 +10,31 @@ namespace ProductionPlanner.Service.Implementation
     public class CompanyService : ICompanyService
     {
         private readonly ICompanyRepository companyRepository;
+        private const string errorMessage = "Cannot create more than one company";
 
         public CompanyService(ICompanyRepository _companyRepository)
         {
             this.companyRepository = _companyRepository;
         }
+
         public void CreateNewCompany(Company company)
         {
+            if(companyRepository.Get().IsSet)
+            {
+                throw new InvalidOperationException(errorMessage);
+            }
+
             this.companyRepository.Create(company);
         }
 
         public Company GetCompany()
         {
             return this.companyRepository.Get();
+        }
+
+        public void UpdateCompany(Company company)
+        {
+            this.companyRepository.Update(company);
         }
     }
 }
