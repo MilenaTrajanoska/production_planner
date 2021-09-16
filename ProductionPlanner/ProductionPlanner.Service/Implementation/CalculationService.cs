@@ -24,13 +24,17 @@ namespace ProductionPlanner.Service.Implementation
             return 1 - Math.Pow(1 - Math.Pow(t, C_NORM), 1 / C_NORM);
         }
 
-        public double calculateAverageWorkContent(DateTime minDate)
+        public List<double> getWorkContents(DateTime minDate)
         {
             return _orderRepository.GetAll()
                 .Where(o => o.StartDate.CompareTo(minDate) >= 0)
                 .Select(o => o.getWorkContent())
-                .ToList()
-                .Average();
+                .ToList();
+        }
+
+        public double calculateAverageWorkContent(DateTime minDate)
+        {
+            return getWorkContents(minDate).Average();
         }
 
         public double calculateRelativeWorkContent(DateTime minDate)
@@ -162,7 +166,7 @@ namespace ProductionPlanner.Service.Implementation
         {
             return _orderRepository.GetAll()
                     .Where(o => o.StartDate.Date.CompareTo(minDate.Date) >= 0)
-                    .Select(o => getDaysBetween(o.StartDate, o.EndDate))
+                    .Select(o => o.getThroughputTime())
                     .ToList();
         }
     }

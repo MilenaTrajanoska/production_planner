@@ -5,6 +5,7 @@ namespace ProductionPlanner.Service.Interface
 {
     public interface ICalculationService
     {
+        public List<double> getWorkContents(DateTime minDate);
         double calculateAverageWorkContent(DateTime minDate);
         double calculateSdWorkContent(DateTime minDate);
         double calculateRelativeWorkContent(DateTime minDate);
