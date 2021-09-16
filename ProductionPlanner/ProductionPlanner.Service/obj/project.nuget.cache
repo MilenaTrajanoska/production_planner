@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "LFEayfeX/L0ZhGg3tIRUAM4qj9ghvRpUxTc52t+xlYQnCgIabPupPTV2/qKAFvDVr4dTXVv7ooTkdKXeeiiFog==",
+  "dgSpecHash": "yFNSwgSX17TAWpWC9tWWidVUwNqsJ8CLuP9jxvFqJueDTJks7xKxeXTTPMB+BaP6GkCRGano4OnrouKryNztFg==",
   "success": true,
   "projectFilePath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\ProductionPlanner.Service.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\mimi_\\.nuget\\packages\\mathnet.numerics\\4.15.0\\mathnet.numerics.4.15.0.nupkg.sha512",
     "C:\\Users\\mimi_\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\3.1.9\\microsoft.aspnetcore.cryptography.internal.3.1.9.nupkg.sha512",
     "C:\\Users\\mimi_\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\3.1.9\\microsoft.aspnetcore.cryptography.keyderivation.3.1.9.nupkg.sha512",
     "C:\\Users\\mimi_\\.nuget\\packages\\microsoft.aspnetcore.identity.entityframeworkcore\\3.1.9\\microsoft.aspnetcore.identity.entityframeworkcore.3.1.9.nupkg.sha512",

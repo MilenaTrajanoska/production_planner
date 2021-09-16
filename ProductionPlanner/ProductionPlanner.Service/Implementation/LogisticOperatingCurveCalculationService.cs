@@ -7,9 +7,10 @@ namespace ProductionPlanner.Service.Implementation
 {
     public class LogisticOperatingCurveCalculationService : ILogisticOperatingCurveCalculationService
     {
+        public static double C_NORM = 0.25;
+        public static double T_CALC = 0.006847701;
+        public static double ALPHA = 10;
         private readonly ICalculationService _calculationService;
-        private static double ALPHA = 10.0;   
-        private static double T_CALC = 0.006847701;
         private static List<double> T_VALUES_LIST = new List<double>() {
             0.0000001, 
             0.000001,
@@ -59,25 +60,12 @@ namespace ProductionPlanner.Service.Implementation
 
         }
 
-        private double calculateRoutMax(double WIPrel, DateTime minDate)
-        {
-            var Routavg = _calculationService.calculateAverageRout(minDate);
-            var WS = _calculationService.getNumberOfWorkStations();
-
-            if (WIPrel > (ALPHA + 1)*100)
-            {
-                return Routavg / WS;
-            }
-            var Ua = _calculationService.calculateAverageUtilizationFromT(T_CALC);
-            return Routavg * 100 / (WS * Ua);
-        }
-
         
 
         public List<double> getOutputRateYAxisValues(double WIPrel, DateTime minDate)
         {
             var WS = _calculationService.getNumberOfWorkStations();
-            var RoutMax = calculateRoutMax(WIPrel, minDate);
+            var RoutMax = _calculationService.calculateRoutMax(WIPrel, minDate);
             var result = new List<double>();
             T_VALUES_LIST.ForEach(
                 t => result.Add(_calculationService.calculateAverageUtilizationFromT(t)/100*RoutMax*WS)
@@ -101,7 +89,7 @@ namespace ProductionPlanner.Service.Implementation
         }
         public List<double> getThroughputTimeYAxisValues(double WIPRel, DateTime minDate)
         {
-            var RoutMax = calculateRoutMax(WIPRel, minDate);
+            var RoutMax = _calculationService.calculateRoutMax(WIPRel, minDate);
             var WS = _calculationService.getNumberOfWorkStations();
             var WCa = _calculationService.calculateAverageWorkContent(minDate);
             var WCv = _calculationService.calculateRelativeWorkContent(minDate);
@@ -128,7 +116,7 @@ namespace ProductionPlanner.Service.Implementation
         }
         public List<double> getRangeYAxisValues(double WIPRel, DateTime minDate)
         {
-            var RoutMax = calculateRoutMax(WIPRel, minDate);
+            var RoutMax = _calculationService.calculateRoutMax(WIPRel, minDate);
             var WS = _calculationService.getNumberOfWorkStations();
             var result = new List<double>();
             T_VALUES_LIST.ForEach(
