@@ -7,9 +7,7 @@ namespace ProductionPlanner.Domain.Models
 {
     public class Material : BaseEntity
     {
-        [ForeignKey("PartOfProduct")]
-        public long PartOfProductId { get; set; }
-        public virtual Product PartOfProduct { get; set; }
+        public ICollection<MaterialForProduct> MaterialForProduct { get; set; }
         public string MaterialName { get; set; }
         public double UnitsNeeded { get; set; }
         public double CostPerUnit { get; set; }

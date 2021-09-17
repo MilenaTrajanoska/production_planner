@@ -12,6 +12,8 @@ namespace ProductionPlanner.Repository.Data
         public virtual DbSet<Company> Companies { get; set; }
         public virtual DbSet<ProductHistory> ProductHistories { get; set; }
         public virtual DbSet<Material> Materials { get; set; }
+        public virtual DbSet<MaterialForProduct> MaterialForProduct { get; set; }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
@@ -27,6 +29,18 @@ namespace ProductionPlanner.Repository.Data
             company.WSCapacity = 4;
 
             builder.Entity<Company>().HasData(company);
+
+            builder.Entity<MaterialForProduct>()
+              .HasOne(z => z.Product)
+              .WithMany(z => z.MaterialForProduct)
+              .HasForeignKey(z => z.ProductId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<MaterialForProduct>()
+                .HasOne(z => z.Material)
+                .WithMany(z => z.MaterialForProduct)
+                .HasForeignKey(z => z.MaterialId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

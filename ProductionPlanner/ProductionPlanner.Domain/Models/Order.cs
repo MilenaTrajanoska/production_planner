@@ -11,6 +11,7 @@ namespace ProductionPlanner.Domain.Models
         [ForeignKey("OrderedProduct")]
         public long ProductId { get; set; }
         public int ProductVersion { get; set; }
+        public string OrderName { get; set; }
         public virtual ProductHistory OrderedProduct { get; set; }
         public int Quantity { get; set; }
         public DateTime StartDate { get; set; }

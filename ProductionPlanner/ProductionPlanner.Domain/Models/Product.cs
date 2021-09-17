@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ProductionPlanner.Domain.Models
 {
     public class Product : BaseEntity
     {
+        public ICollection<MaterialForProduct> MaterialForProduct { get; set; }
         public String ProductName { get; set; }
         public double InProcessTime { get; set; }
         public double SetUpTime { get; set; }
