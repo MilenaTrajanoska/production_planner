@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Reports";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<br />
+<br />
+<div class="navbar navbar-expand-lg text-decoration-none text-dark" style="background-color: white; ">
+    <ul class="navbar-nav flex-grow-1">
+        <li class="nav-item text-decoration-none">
+            <a class="text-decoration-none" style="background-color: #e3f2fd; border-radius: 20px 20px 0px 0px; border-style: solid; border-width: thin; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="Index">This week </a>
+        </li>
+        <li class="nav-item text-decoration-none active">
+            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="MonthReports"> This month</a>
+        </li>
+        <li class="nav-item text-decoration-none">
+            <a class="text-decoration-none" style="background-color: white; border-top-style: solid; border-left-style: solid; border-right-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="YearReports"> This year</a>
+        </li>
+    </ul>
+</div>
+<div style="border-bottom-style: solid; border-left-style: solid; border-width: thin; border-color: #dae2df; " class="mx-3">
+    <br />
+    <br />
+    Put yearly graphs here
+    <br />
+    <br />
+</div>
