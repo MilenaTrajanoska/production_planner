@@ -12,6 +12,10 @@ using ProductionPlanner.Repository.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProductionPlanner.Service.Interface;
+using ProductionPlanner.Service.Implementation;
+using ProductionPlanner.Repository.Interface;
+using ProductionPlanner.Repository.Implementation;
 
 namespace ProductionPlanner.Web
 {
@@ -32,6 +36,22 @@ namespace ProductionPlanner.Web
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddTransient<ICalculationService, CalculationService>();
+            services.AddTransient<ICompanyService, CompanyService>();
+            services.AddTransient<ILogisticOperatingCurveCalculationService, LogisticOperatingCurveCalculationService>();
+            services.AddTransient<IMaterialService, MaterialService>();
+            services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IScheduleReliabilityCalculationService, ScheduleReliabilityCalculationService>();
+            services.AddTransient<IThroughputCalculationService, ThroughputCalculationService>();
+            services.AddTransient<IThroughputTimeDistributionCalculationService, ThroughputTimeDistributionCalculationService>();
+            services.AddTransient<IWorkContentDistributionCalculationService, WorkContentDistributionCalculationService>();
+
+            services.AddTransient<ICompanyRepository, CompanyRepository>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }

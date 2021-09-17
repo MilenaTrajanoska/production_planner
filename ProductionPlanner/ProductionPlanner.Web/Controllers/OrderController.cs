@@ -9,19 +9,21 @@ namespace ProductionPlanner.Web.Controllers
 {
     public class OrderController : Controller
     {
-        //private readonly IOrderService orderService;
-        
-        //public OrderController(IOrderService _orderService)
-        //{
-        //    orderService = _orderService;
-            
+        private readonly IOrderService orderService;
 
-        //}
+        public OrderController(IOrderService _orderService)
+        {
+            orderService = _orderService;
+
+        }
 
         //discuss usage
         public IActionResult Index()
         {
-            return View();
+            var orders = orderService.GetAllOrders();
+            //DA SE DOPRAVI ORDER REPOSITORY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            return View(orders);
+            
         }
 
         // GET: Order/Create
