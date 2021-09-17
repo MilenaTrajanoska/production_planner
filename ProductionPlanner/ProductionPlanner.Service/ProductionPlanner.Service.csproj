@@ -5,12 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductionPlanner.Domain\ProductionPlanner.Domain.csproj" />
-    <ProjectReference Include="..\ProductionPlanner.Repository\ProductionPlanner.Repository.csproj" />
+    <PackageReference Include="MathNet.Numerics" Version="4.15.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interface\" />
+    <ProjectReference Include="..\ProductionPlanner.Domain\ProductionPlanner.Domain.csproj" />
+    <ProjectReference Include="..\ProductionPlanner.Repository\ProductionPlanner.Repository.csproj" />
   </ItemGroup>
 
 </Project>

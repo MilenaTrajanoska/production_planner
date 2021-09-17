@@ -5,6 +5,7 @@ namespace ProductionPlanner.Service.Interface
 {
     public interface ICalculationService
     {
+        public List<double> getWorkContents(DateTime minDate);
         double calculateAverageWorkContent(DateTime minDate);
         double calculateSdWorkContent(DateTime minDate);
         double calculateRelativeWorkContent(DateTime minDate);
@@ -20,5 +21,10 @@ namespace ProductionPlanner.Service.Interface
         double getWIPForDate(DateTime startDate, DateTime endDate);
         public List<double> getListOfWIP(List<DateTime> dates);
         public List<double> getThroughputTimes(DateTime minDate);
+        public double calculateTIO(DateTime minDate);
+        public double calculateAverageUtilizationGlobal();
+        public double getAlpha();
+        public double calculateRoutMax(double WIPrel, DateTime minDate);
+        public double calculateWIPRel(DateTime minDate);
     }
 }

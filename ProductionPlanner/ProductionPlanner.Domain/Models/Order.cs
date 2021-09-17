@@ -21,5 +21,10 @@ namespace ProductionPlanner.Domain.Models
         {
             return Quantity * OrderedProduct.InProcessTime + OrderedProduct.SetUpTime;
         }
+
+        public double getThroughputTime()
+        {
+            return Convert.ToInt32(EndDate.Date.Subtract(StartDate.Date).TotalDays);
+        }
     }
 }
