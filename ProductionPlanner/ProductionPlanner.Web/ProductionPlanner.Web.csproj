@@ -19,4 +19,8 @@
     <ProjectReference Include="..\ProductionPlanner.Service\ProductionPlanner.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="files\" />
+  </ItemGroup>
+
 </Project>
