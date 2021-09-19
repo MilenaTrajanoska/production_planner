@@ -28,6 +28,13 @@ namespace ProductionPlanner.Repository.Data
             company.NumberOfWS = 0;
             company.WSCapacity = 4;
 
+            builder.Entity<Product>()
+                .HasAlternateKey(p => p.ProductName);
+            builder.Entity<Order>()
+                .HasAlternateKey(o => o.OrderName);
+            builder.Entity<Material>()
+                .HasAlternateKey(m => m.MaterialName);
+
             builder.Entity<Company>().HasData(company);
 
             builder.Entity<MaterialForProduct>()

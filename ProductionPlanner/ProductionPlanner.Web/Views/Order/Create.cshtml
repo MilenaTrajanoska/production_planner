@@ -59,13 +59,34 @@
 
 
     <div class="col-6 border-left pl-5">
+        @if (ViewBag.Messages != null)
+        {
+            var messages = ViewBag.Messages as List<string>;
+            var alert_type = messages.Count > 1 ? "alert-danger" : "alert-success";
+        <div class="alert @alert_type" role="alert">
+            @foreach (string message in messages)
+            {
+                <p>@message</p>
+            }
+        </div>
+        }
         <div class="pb-3">
             <h1><b>Existing order</b></h1>
             <br />
             <h5>Import spreadsheets with orders</h5>
             <br />
             <div>
-                <input type="submit" value="Import" class="btn btn-primary w-75" />
+                <form asp-controller="Order" asp-action="ImportOrdersFromSpreadsheet" method="post" enctype="multipart/form-data">
+
+                    <div class="form-group w-100">
+                        <input type="file" name="file" class="form-control" />
+                    </div>
+
+                    <hr />
+
+                    <button type="submit" class="btn btn-outline-primary">Import Orders</button>
+
+                </form>
             </div>
 
         </div>

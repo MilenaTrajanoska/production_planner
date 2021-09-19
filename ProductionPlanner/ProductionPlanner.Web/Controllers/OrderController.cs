@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using ProductionPlanner.Domain.Models;
 using ProductionPlanner.Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -29,7 +31,23 @@ namespace ProductionPlanner.Web.Controllers
         // GET: Order/Create
         public IActionResult Create()
         {
-            return View();
+            Order order = new Order();
+            return View(order);
+        }
+
+        public IActionResult ImportOrdersFromSpreadsheet(IFormFile file)
+        {
+            List<string> errors = orderService.ImportOrdersFromExcel(file);
+            if (errors.Count > 0)
+            {
+                ViewBag.Messages = errors;
+            } else
+            {
+               ViewBag.Messages = new List<string>(){ "Successfully uploaded orders."};
+            }
+
+            return View("Create", new Order());
+            
         }
     }
 }

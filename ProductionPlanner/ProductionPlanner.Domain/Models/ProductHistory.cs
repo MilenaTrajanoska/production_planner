@@ -23,6 +23,8 @@ namespace ProductionPlanner.Domain.Models
         public long ProductId { get; set; }
         public virtual Product ReferencedProduct { get; set; }
 
+        public bool isValid { get; set; }
+
         public ProductHistory()
         {
             Version = 1;
