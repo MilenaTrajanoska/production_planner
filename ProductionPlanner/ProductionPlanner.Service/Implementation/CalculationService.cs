@@ -121,6 +121,10 @@ namespace ProductionPlanner.Service.Implementation
 
         public DateTime getMaxEndDate()
         {
+            if (_orderRepository.GetAll().Count() == 0)
+            {
+                return DateTime.Now;
+            }
             return _orderRepository.GetAll()
                 .Select(o => o.EndDate)
                 .ToList()

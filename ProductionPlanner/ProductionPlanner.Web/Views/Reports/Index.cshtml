@@ -5,27 +5,137 @@
     ViewData["Title"] = "Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@model ProductionPlanner.Domain.ViewModels.ThroughputDiagram
 
-
-<br /><br />
+<br />
+<br />
 <div class="navbar navbar-expand-lg text-decoration-none text-dark" style="background-color: white; ">
     <ul class="navbar-nav flex-grow-1">
         <li class="nav-item text-decoration-none  active ">
             <a class="text-decoration-none" style="background-color: white; border-radius: 20px 20px 0px 0px; border-top-style: solid; border-left-style: solid; border-right-style: solid; border-width: thin; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="Index">This week </a>
         </li>
         <li class="nav-item text-decoration-none">
-            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="MonthReports" > This month</a>
+            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="MonthReports"> This month</a>
         </li>
         <li class="nav-item text-decoration-none">
-            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="YearReports" > This year</a>
+            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="YearReports"> This year</a>
         </li>
     </ul>
 </div>
 <div style="border-bottom-style: solid; border-left-style: solid; border-width: thin; border-color: #dae2df; " class="mx-3">
     <br />
     <br />
-    Put graphs here
+    <div class="row">
+        <div class="col-md-12 p-5">
+            <div id="throughput_diagram"></div>
+        </div>
+        <div class="col-md-12 p-5">
+            <div id="lodistic_operating_curves"></div>
+        </div>
+        <div class="col-md-12 p-5">
+            <div id="work_content_distribution"></div>
+        </div>
+        <div class="col-md-12 p-5">
+            <div id="throughput_time_distribution"></div>
+        </div>
+        <div class="col-md-12 p-5">
+            <div id="schedule_reliability_operating_curve "></div>
+        </div>
+    </div>
     <br />
     <br />
 </div>
 
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js%22%3E"></script>
+<script>
+
+    // throughput_diagram
+    //var svg1 = d3.select("#throughput_diagram")
+    //    .append("svg")
+    //    .attr("width", 1000)
+    //    .attr("height", 300)
+    //var x = d3.scaleBand()
+    //    .domain(["A", "B", "C", "D", "E"])       // This is what is written on the Axis: from 0 to 100
+    //    .range([100, 800])                       // This is where the axis is placed: from 100 px to 800px
+    //    .padding([0.8])                          // Goes between 0 and 1. Default is 0
+    //svg1
+    //    .append("g")
+    //    .attr("transform", "translate(0,250)")      // This controls the vertical position of the Axis
+    //    .call(d3.axisBottom(x));
+    //svg1
+    //    .append("rect")
+    //    .attr("x", x("C"))
+    //    .attr("y", 100)
+    //    .attr("height", 150)
+    //    .attr("width", x.bandwidth())
+    //    .style("fill", "#69b3a2")
+    //    .style("opacity", 0.5)
+
+
+
+    var input = JSON.parse('@Html.Raw(Json.Serialize(Model.Input))');
+    var output = JSON.parse('@Html.Raw(Json.Serialize(Model.Output))');
+    var wip = JSON.parse('@Html.Raw(Json.Serialize(Model.WIP))');
+    var capacity = JSON.parse('@Html.Raw(Json.Serialize(Model.Capacity))');
+
+    console.log(input);
+    console.log(output);
+    console.log(wip);
+    console.log(capacity);
+
+    const WIDTH = 400;
+    const HEIGHT = 300;
+    const MARGIN = { top: 10, right: 10, bottom: 20, left: 30 };
+    const INNER_WIDTH = WIDTH - MARGIN.left - MARGIN.right;
+    const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom;
+    const svg = d3.select('#lodistic_operating_curves').append('svg')
+        .attr('width', WIDTH)
+        .attr('height', HEIGHT)
+        .append('g')
+        .attr('transform', 'translate(' + MARGIN.left + ',' + MARGIN.top + ')');
+
+    const x = d3.scaleLinear().domain([0, 1]).range([0, INNER_WIDTH]);
+    const y = d3.scaleLinear().domain([0, 1]).range([INNER_HEIGHT, 0]);
+    const xAxis = d3.axisBottom(x).ticks(10);
+    const yAxis = d3.axisLeft(y).ticks(10);
+    const xAxisGrid = d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat('').ticks(10);
+    const yAxisGrid = d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat('').ticks(10);
+
+    // Create grids.
+    svg.append('g')
+        .attr('class', 'x axis-grid')
+        .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
+        .call(xAxisGrid);
+    svg.append('g')
+        .attr('class', 'y axis-grid')
+        .call(yAxisGrid);
+    // Create axes.
+    svg.append('g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
+        .call(xAxis);
+    svg.append('g')
+        .attr('class', 'y axis')
+        .call(yAxis);
+
+    //###############################################################
+
+    // lodistic_operating_curves
+
+
+    // work_content_distribution
+
+
+
+    // throughput_time_distribution
+
+
+    // schedule_reliability_operating_curve
+
+</script>
+<style>
+    .axis-grid line {
+        stroke: lightgray;
+    }
+</style>

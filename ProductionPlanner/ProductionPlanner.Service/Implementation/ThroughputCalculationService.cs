@@ -34,7 +34,7 @@ namespace ProductionPlanner.Service.Implementation
             while(startMin.Date.CompareTo(endMax.Date) <= 0)
             {
                 result.Add(DateTime.Parse(startMin.ToString()));
-                startMin.AddDays(1);
+                startMin = startMin.AddDays(1);
             }
             return result;
         }
