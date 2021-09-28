@@ -8,9 +8,11 @@
 }
 <br />
 <h1 class="text-center"><b>New product</b></h1>
-<br /><br />
+<br />
+<br />
 <div class="mx-auto w-75">
-    <form >
+    <form asp-controller="Product" asp-action="Create" method="post">
+        @*var jsonObj = @Html.Raw(Json.Encode(ViewBag.Materials));*@
         <div class="row">
             <div class="col-6 border-right">
                 <div class="row form-group">
@@ -53,6 +55,22 @@
                         <input asp-for="PostProcessingWaitTime" type="number" class="control-label" style="max-width:50%!important" /> hours
                     </div>
                 </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="VariableOHPerDLHour" class="control-label">Variable OH Allocation per DL hour</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="VariableOHPerDLHour" type="number" class="control-label" style="max-width:50%!important" /> EUR/hour
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="FixedOHPerYear" class="control-label">Fixed OH per year</label>
+                    </div>
+                    <div class="col-6">
+                        <input asp-for="FixedOHPerYear" type="number" class="control-label" style="max-width:50%!important" /> EUR/year
+                    </div>
+                </div>
             </div>
 
             <div class="col-6 border-left pl-5">
@@ -66,10 +84,15 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-6">
-                        <label asp-for="TotalMaterialCost" class="control-label">Material cost</label>
+                        <label asp-for="MaterialForProduct" class="control-label">Add Material</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="TotalMaterialCost" type="number" class="control-label" style="max-width:50%!important" /> EUR
+                        <button type="button" id="add-material" class="btn btn-primary"><b>+</b> Add Material</button>
+
+                        <br />
+                        <div id="all-materials">
+
+                        </div>
                     </div>
                 </div>
                 <div class="row form-group">
@@ -80,14 +103,7 @@
                         <input asp-for="WagePerHour" type="number" class="control-label" style="max-width:50%!important" /> EUR/hour
                     </div>
                 </div>
-                <div class="row form-group">
-                    <div class="col-6">
-                        <label asp-for="VariableOHPerDLHour" class="control-label">Variable OH Allocation per DL hour</label>
-                    </div>
-                    <div class="col-6">
-                        <input asp-for="VariableOHPerDLHour" type="number" class="control-label" style="max-width:50%!important" /> EUR/hour
-                    </div>
-                </div>
+
                 <div class="row form-group">
                     <div class="col-6">
                         <label asp-for="InterestRate" class="control-label">Interest rate</label>
@@ -96,21 +112,38 @@
                         <input asp-for="InterestRate" type="number" class="control-label" style="max-width:50%!important" /> %
                     </div>
                 </div>
-                <div class="row form-group">
-                    <div class="col-6">
-                        <label asp-for="FixedOHPerYear" class="control-label">Fixed OH per year</label>
-                    </div>
-                    <div class="col-6">
-                        <input asp-for="FixedOHPerYear" type="number" class="control-label" style="max-width:50%!important" /> EUR/year
-                    </div>
-                </div>
+
             </div>
         </div>
         <br />
         <div class="row pt-3 pb-5">
-            
-            <div class="d-inline mx-auto"><input type="submit" value="Add product" class="btn btn-primary px-5"/></div>
-            
+
+            <div class="d-inline mx-auto"><input type="submit" value="Add product" class="btn btn-primary px-5" /></div>
+
         </div>
     </form>
 </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    @*console.log(@ViewBag.Materials)
+
+    var material_num = 0;
+    var materialsList = JSON.parse('@Html.Raw(ViewBag.Materials)');
+
+    $("#add-material").click(function () {
+        //$("#all-materials").append("<b>Material name:<b>" + '<input type="text" name="materials[' + material_num + ']" id="material[' + material_num + ']">' + "<small>Material quantity<small>" + '<input type="number" name="materials-quantity[' + material_num + ']" id="material-quantity[' + material_num + ']">');
+
+
+        $("#all-materials").append("<b>Material name: </b>" +
+            '<select id="drpEmpList" class="form-control" asp-for="Product.MaterialForProduct[' + material_num +  '].Material.MaterialName" asp-items="@(new SelectList(materialsList, "Value", "Text"))"><option value="">--Select--</option>  </select>' +
+            "<small>Material quantity: </small>" +
+            '<input type="number" name="Product.MaterialForProduct[' + material_num +  '].Quantity" id="material-quantity[' + material_num + ']">'
+        );
+        material_num++;
+    });*@
+
+
+</script>
