@@ -35,6 +35,16 @@ namespace ProductionPlanner.Web.Controllers
             return View(order);
         }
 
+        [HttpPost]
+        public IActionResult Create(Order order)
+        {
+            if (ModelState.IsValid)
+            {
+                orderService.CreateNewOrder(order);
+            }
+            return View();
+        }
+
         public IActionResult ImportOrdersFromSpreadsheet(IFormFile file)
         {
             List<string> errors = orderService.ImportOrdersFromExcel(file);

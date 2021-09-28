@@ -8,17 +8,18 @@
 }
 <div class="pt-5 px-5 row">
     <div class="col-6">
-        <form asp-action="Create">
+        <form asp-controller="Order" asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="pb-3">
                 <h1><b>New order</b></h1>
                 <br />
                 <div class="row form-group pl-4">
                     <div class="col-4">
-                        <label class="control-label">Order id:</label>
+                        <label asp-for="OrderName" class="control-label">Order id:</label>
                     </div>
                     <div class="col-8">
-                        <input type="text" style="max-width:50%!important" />
+                        <input asp-for="OrderName" type="text" style="max-width:50%!important" />
+                        <span asp-validation-for="OrderName" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row form-group pl-4">
