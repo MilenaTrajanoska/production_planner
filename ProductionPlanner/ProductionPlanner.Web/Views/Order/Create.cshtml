@@ -46,7 +46,7 @@
                         <label asp-for="EndDate" class="control-label">End date: </label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="EndDate" type="date" style="max-width:50%!important" />
+                        <input asp-for="EndDate" type="date" value="<?php echo date('Y-m-d'); ?>" style="max-width:50%!important" />
                         <span asp-validation-for="EndDate" class="text-danger"></span>
                     </div>
                 </div>
