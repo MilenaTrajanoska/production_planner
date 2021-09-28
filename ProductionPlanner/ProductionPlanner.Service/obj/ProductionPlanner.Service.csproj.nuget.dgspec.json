@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\ProductionPlanner.Service.csproj": {}
+    "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\ProductionPlanner.Service.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj": {
+    "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj",
         "projectName": "ProductionPlanner.Domain",
-        "projectPath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj",
-        "packagesPath": "C:\\Users\\mimi_\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\obj\\",
+        "projectPath": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mimi_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,6 +26,7 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -37,6 +38,13 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -52,21 +60,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj": {
+    "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj",
         "projectName": "ProductionPlanner.Repository",
-        "projectPath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj",
-        "packagesPath": "C:\\Users\\mimi_\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\obj\\",
+        "projectPath": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mimi_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -78,9 +86,10 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj": {
-                "projectPath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj"
+              "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj": {
+                "projectPath": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj"
               }
             }
           }
@@ -93,7 +102,12 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[3.1.9, )"
@@ -118,21 +132,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\ProductionPlanner.Service.csproj": {
+    "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\ProductionPlanner.Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\ProductionPlanner.Service.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\ProductionPlanner.Service.csproj",
         "projectName": "ProductionPlanner.Service",
-        "projectPath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\ProductionPlanner.Service.csproj",
-        "packagesPath": "C:\\Users\\mimi_\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\obj\\",
+        "projectPath": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\ProductionPlanner.Service.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Service\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\mimi_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -144,12 +158,13 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj": {
-                "projectPath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj"
+              "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj": {
+                "projectPath": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Domain\\ProductionPlanner.Domain.csproj"
               },
-              "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj": {
-                "projectPath": "C:\\Users\\mimi_\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj"
+              "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj": {
+                "projectPath": "C:\\Users\\User\\Documents\\GitHub\\production_planner\\ProductionPlanner\\ProductionPlanner.Repository\\ProductionPlanner.Repository.csproj"
               }
             }
           }
@@ -162,6 +177,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "ClosedXML": {
               "target": "Package",
@@ -174,6 +190,10 @@
             "MathNet.Numerics": {
               "target": "Package",
               "version": "[4.15.0, )"
+            },
+            "Microsoft.AspNetCore.Http": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             },
             "Microsoft.AspNetCore.Http.Features": {
               "target": "Package",
@@ -195,7 +215,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.403\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }
