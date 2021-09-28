@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+    Create new material
+*@
+@{
+}
+@model ProductionPlanner.Domain.Models.Material
+
+<h1 class="text-center">
+    Create a new material
+</h1>
+<br />
+<br />
+<div class="mx-auto w-75">
+    <form asp-controller="Material" asp-action="Index" method="post">
+        <div class="row form-group">
+            <div class="col-6">
+                <label asp-for="MaterialName" class="control-label">Material name</label>
+            </div>
+            <div class="col-6">
+                <input asp-for="MaterialName" type="text" class="control-label" style="max-width:50%!important" />
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-6">
+                <label asp-for="CostPerUnit" class="control-label">Cost per unit</label>
+            </div>
+            <div class="col-6">
+                <input asp-for="CostPerUnit" type="text" class="control-label" style="max-width:50%!important" />
+            </div>
+        </div>
+
+
+        <div class="row pt-3 pb-5">
+
+            <div class="d-inline mx-auto"><input type="submit" value="Add material" class="btn btn-primary px-5" /></div>
+
+        </div>
+    </form>
+
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
