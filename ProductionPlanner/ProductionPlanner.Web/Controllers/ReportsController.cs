@@ -40,30 +40,78 @@ namespace ProductionPlanner.Web.Controllers
 
         public IActionResult Index()
         {
-            DateTime minDate = DateTime.Today.AddDays((int)-7);
-            List<DateTime> datesWeekly = throughputCalculationService.calculateThroughputDiagramXAxis(minDate);
+            List<DateTime> datesWeekly = this.LastWeekDates();
 
-            //ViewBag.date = d.ToString();
-           
-            List<double> input = throughputCalculationService.calculateInputSeries(datesWeekly);
-            List<double> output = throughputCalculationService.calculateOutputSeries(datesWeekly);
-            List<double> wip = throughputCalculationService.calculateWIPSeries(datesWeekly);
-            double capacity = throughputCalculationService.getCapacity(minDate, DateTime.Today);
+            //List<double> input = throughputCalculationService.calculateInputSeries(datesWeekly);
+            //List<double> output = throughputCalculationService.calculateOutputSeries(datesWeekly);
+            //List<double> wip = throughputCalculationService.calculateWIPSeries(datesWeekly);
+            //double tCapacity = throughputCalculationService.getCapacity(datesWeekly);
+            //ThroughputDiagram throughputDiagramModel = new ThroughputDiagram(input, output, wip, tCapacity);
 
-            ThroughputDiagram throughputDiagramModel = new ThroughputDiagram(input,output,wip,capacity);
+            //List<double> wcdClasses = workContentDistributionCalculationService.getXAxisValues(datesWeekly);
+            //List<double> wcdRel = workContentDistributionCalculationService.getYAxisValues(datesWeekly);
+            //WorkContentDistributionDiagramModel workContentDistributionDiagramModel = new WorkContentDistributionDiagramModel(wcdClasses, wcdRel);
 
-            return View(throughputDiagramModel);
+            //List<double> outputRate = logisticOperatingCurveCalculationService.getOutputRateXAxisValues(datesWeekly);
+            //List<double> throughputTime = logisticOperatingCurveCalculationService.getThroughputTimeXAxisValues(datesWeekly);
+            //double range = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(datesWeekly);
+            //List<double> locCapacity = logisticOperatingCurveCalculationService.getCapacityXAxisValues(datesWeekly);
+            //List<double> opOperatingPoin = logisticOperatingCurveCalculationService.getOPOperatingPointXAxisValues(datesWeekly);
+            //double opRange = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(datesWeekly);
+            //double opThroughputTime = logisticOperatingCurveCalculationService.getOPThroughputTimeXAxisValues(datesWeekly);
+            //LodisticOperatingCurvesDiagramModel lodisticOperatingCurvesDiagramModel = new LodisticOperatingCurvesDiagramModel(outputRate, throughputTime, range, locCapacity, opOperatingPoin, opRange, opThroughputTime);
+
+            //List<double> ttdClasses = throughputTimeDistributionCalculationService.getXAxisValues(datesWeekly);
+            //List<double> ttdRel = throughputTimeDistributionCalculationService.getYAxisValues(datesWeekly);
+            //ThroughputTimeDistributionDiagramModel throughputTimeDistributionDiagramModel = new ThroughputTimeDistributionDiagramModel(ttdClasses, ttdRel);
+
+            //List<double> scheduleReliability = scheduleReliabilityCalculationService.getXAxisScheduleReliability(datesWeekly);
+            //List<double> meanWIP = scheduleReliabilityCalculationService.getXAxisMeanWIP(datesWeekly);
+            //ScheduleReliabilityOperatingCurveDiagramModel scheduleReliabilityOperatingCurveDiagramModel = new ScheduleReliabilityOperatingCurveDiagramModel(scheduleReliability, meanWIP);
+
+            //Diagram diagram = new Diagram(throughputDiagramModel, workContentDistributionDiagramModel, lodisticOperatingCurvesDiagramModel, throughputTimeDistributionDiagramModel, scheduleReliabilityOperatingCurveDiagramModel);
+
+            //return View(diagram);
+            return View();
         }
 
         public IActionResult MonthReports()
         {
+            List<DateTime> datesMonthly = this.LastMonthDates();
             return View();
         }
 
         public IActionResult YearReports()
         {
+            List<DateTime> datesYearly = this.YearDates(2021);
+
             return View();
         }
 
+        private List<DateTime> LastWeekDates()
+        {
+            var lastSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);
+            var lastMonday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek - 6);
+            return new List<DateTime> { lastMonday, lastSunday };
+        }
+
+        private List<DateTime> LastMonthDates()
+        {
+            var dateNow = DateTime.Now;
+            var dateLastMonth = DateTime.Now.AddMonths(-1);
+            var daysInMonth = DateTime.DaysInMonth(dateNow.Year, dateNow.Month);
+            var daysInLastMonth = DateTime.DaysInMonth(dateLastMonth.Year, dateLastMonth.Month);
+            var firstOfMonth = DateTime.Now.AddDays(-(int)dateNow.Day - daysInLastMonth + 1);
+            var lastOfMonth = DateTime.Now.AddDays(-(int)daysInMonth + 1);
+            return new List<DateTime> { firstOfMonth, lastOfMonth };
+        }
+
+        private List<DateTime> YearDates(int year)
+        {
+            var yearsBack = DateTime.Now.Year - year;
+            var firstOfYear = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfYear + 1).AddYears(-yearsBack);
+            var lastOfYear = DateTime.Today.AddDays(-1).AddYears(-yearsBack);
+            return new List<DateTime> { firstOfYear, lastOfYear };
+        }
     }
 }
