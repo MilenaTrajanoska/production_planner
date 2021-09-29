@@ -7,7 +7,7 @@ namespace ProductionPlanner.Service.Interface
 {
     public interface IProductService
     {
-        void CreateNewProduct(Product product);
+        Product CreateNewProduct(Product product);
         List<Product> GetAllProducts();
         Product GetProduct(long id);
         void UpdateExistingProduct(Product product);

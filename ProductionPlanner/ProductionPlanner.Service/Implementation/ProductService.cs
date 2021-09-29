@@ -1,4 +1,5 @@
-﻿using ProductionPlanner.Domain.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductionPlanner.Domain.Models;
 using ProductionPlanner.Repository.Implementation;
 using ProductionPlanner.Service.Interface;
 using System;
@@ -16,19 +17,20 @@ namespace ProductionPlanner.Service.Implementation
             productRepository = _productRepository;
         }
 
-        public void CreateNewProduct(Product product)
+        public Product CreateNewProduct(Product product)
         {
-            this.productRepository.Insert(product);
+            return this.productRepository.Insert(product);
         }
 
         public List<Product> GetAllProducts()
         {
-            return this.productRepository.GetAll().ToList();
+            return this.productRepository.getEntities().Include(p => p.MaterialForProduct).Include("MaterialForProduct.Material").ToList();
+
         }
 
         public Product GetProduct(long id)
         {
-            return this.productRepository.Get(id);
+            return this.productRepository.getEntities().Include(p => p.MaterialForProduct).Include("MaterialForProduct.Material").Where(p=>p.Id==id).FirstOrDefault();
         }
 
         public void UpdateExistingProduct(Product product)

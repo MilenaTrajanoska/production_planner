@@ -12,7 +12,7 @@
 <br />
 <div class="mx-auto w-75">
     <form asp-controller="Product" asp-action="Create" method="post">
-        @*var jsonObj = @Html.Raw(Json.Encode(ViewBag.Materials));*@
+        
         <div class="row">
             <div class="col-6 border-right">
                 <div class="row form-group">
@@ -82,7 +82,7 @@
                         <input asp-for="SellingPrice" type="number" class="control-label" style="max-width:50%!important" /> EUR
                     </div>
                 </div>
-                <div class="row form-group">
+                @*<div class="row form-group">
                     <div class="col-6">
                         <label asp-for="MaterialForProduct" class="control-label">Add Material</label>
                     </div>
@@ -91,21 +91,13 @@
 
                         <br />
                         <div id="all-materials">
-                            <select asp-for="MaterialForProduct.ElementAt(0).Material.MaterialName" asp-items="ViewBag.Materials" style="display:none" class="materials-dropdown">
+                            <select asp-for="MaterialForProduct" asp-items="ViewBag.Materials" style="display:none" class="materials-dropdown">
 
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-6">
-                        <label asp-for="TotalMaterialCost" class="control-label">Total material cost</label>
-                    </div>
-                    <div class="col-6">
-                        <span id="total-material-cost-calculated"></span> EUR/hour
-                        @*tuka da se vnese presmetano so funkcija?*@
-                    </div>
-                </div>
+                </div>*@
+                
                 <div class="row form-group">
                     <div class="col-6">
                         <label asp-for="WagePerHour" class="control-label">Wage</label>
