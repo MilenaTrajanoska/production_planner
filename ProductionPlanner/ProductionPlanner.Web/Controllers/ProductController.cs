@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ProductionPlanner.Domain.Models;
 using ProductionPlanner.Service.Interface;
 using System;
@@ -28,7 +29,12 @@ namespace ProductionPlanner.Web.Controllers
         //to be discussed
         public IActionResult Create()
         {
-            ViewBag.Materials = materialService.GetAllMaterials().Select(m => m.MaterialName).ToList();
+            ViewBag.Materials = materialService.GetAllMaterials().Select(a => 
+                new SelectListItem
+                {
+                    Value = a.MaterialName,
+                    Text = a.MaterialName
+                } ).ToList();
             var product = new Product();
             return View(product);
         }

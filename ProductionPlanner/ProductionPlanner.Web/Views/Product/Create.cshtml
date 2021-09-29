@@ -91,13 +91,15 @@
 
                         <br />
                         <div id="all-materials">
+                            <select asp-for="MaterialForProduct.ElementAt(0).Material.MaterialName" asp-items="ViewBag.Materials" style="display:none" class="materials-dropdown">
 
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-6">
-                        <label asp-for="TotalMaterialCost" class="control-label">Totak material cost</label>
+                        <label asp-for="TotalMaterialCost" class="control-label">Total material cost</label>
                     </div>
                     <div class="col-6">
                         <span id="total-material-cost-calculated"></span> EUR/hour
@@ -137,22 +139,44 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    @*console.log(@ViewBag.Materials)
+    
 
     var material_num = 0;
     var materialsList = JSON.parse('@Html.Raw(ViewBag.Materials)');
 
     $("#add-material").click(function () {
+
+        var list = $(".materials-dropdown");
+        if (list.length == 1) {
+            $(list[0]).show();
+        }
+        else {
+            var element = $(list[0]).clone();
+            $("#all-materials").append(element);
+        }
+
         //$("#all-materials").append("<b>Material name:<b>" + '<input type="text" name="materials[' + material_num + ']" id="material[' + material_num + ']">' + "<small>Material quantity<small>" + '<input type="number" name="materials-quantity[' + material_num + ']" id="material-quantity[' + material_num + ']">');
+        /*var promenliva = new SelectList((IEnumerable < SelectListItem >)ViewBag.Materials, "Value", "Text");*/
 
 
-        $("#all-materials").append("<b>Material name: </b>" +
-            '<select id="drpEmpList" class="form-control" asp-for="Product.MaterialForProduct[' + material_num +  '].Material.MaterialName" asp-items="@(new SelectList(materialsList, "Value", "Text"))"><option value="">--Select--</option>  </select>' +
+        @*$("#all-materials").append("<b>Material name: </b>" +
+            '<select id="drpEmpList" class="form-control" asp-for="Product.MaterialForProduct[' + material_num +  '].Material.MaterialName" asp-items="@(new SelectList((IEnumerable<SelectListItem>)ViewBag.Materials, "Value", "Text"))"><option value="">--Select--</option></select>' +
             "<small>Material quantity: </small>" +
             '<input type="number" name="Product.MaterialForProduct[' + material_num +  '].Quantity" id="material-quantity[' + material_num + ']">'
-        );
-        material_num++;
-    });*@
+        );*@
+        //var select = document.createElement('select');
+
+        //materialsList.forEach(function(opt){
+        //    var option = document.createChild("option");
+        //    option.value = opt;
+        //    option.text = opt;
+        //    select.appendChild(option);
+        //})
+
+        //$("#all-materials").append(select);
+
+        //material_num++;
+    });
 
 
 </script>
