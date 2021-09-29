@@ -36,7 +36,13 @@
                 @Html.DisplayFor(modelItem => item.ProductName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.MaterialForProduct)
+                <div>
+                    @foreach (var material in item.MaterialForProduct)
+                    {
+                        <p>@material.Material.MaterialName</p>
+                    }
+                </div>
+                
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SellingPrice)

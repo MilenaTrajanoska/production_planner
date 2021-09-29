@@ -19,23 +19,29 @@ namespace ProductionPlanner.Repository.Interface
             this.context = context;
             entities = context.Set<T>();
         }
+        
+        public DbSet<T> getEntities()
+        {
+            return entities;
+        }
         public IEnumerable<T> GetAll()
         {
-            return entities.AsEnumerable();
+            return getEntities();
         }
 
         public T Get(long? id)
         {
             return entities.SingleOrDefault(s => s.Id == id);
         }
-        public void Insert(T entity)
+        public T Insert(T entity)
         {
             if (entity == null)
             {
                 throw new ArgumentNullException("entity");
             }
-            entities.Add(entity);
+            var result  = entities.Add(entity);
             context.SaveChanges();
+            return result.Entity;
         }
 
         public void Update(T entity)

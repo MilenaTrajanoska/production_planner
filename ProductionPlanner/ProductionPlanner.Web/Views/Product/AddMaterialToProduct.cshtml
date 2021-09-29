@@ -1,0 +1,48 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ProductionPlanner.Domain.ViewModels.AddMaterialToProduct
+
+@if (ViewBag.ErrorMaterialAdded != null)
+{
+
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMaterialAdded
+    </div>
+}
+@if (ViewBag.SuccessMaterialAdded != null)
+{
+
+    <div class="alert alert-success" role="alert">
+        @ViewBag.SuccessMaterialAdded
+    </div>
+}
+<h1 class="text-center"><b>Add material to @Model.SelectedProduct.ProductName</b></h1>
+<br />
+<br />
+<div class="mx-auto w-75">
+    <form asp-controller="Product" asp-action="AddMaterialToProduct" method="post">
+
+        <div class="form-group">
+            <input type="hidden" asp-for="ProductId" value="@Model.ProductId" />
+            <select class="form-control" asp-for="MaterialName" asp-items="ViewBag.Materials">
+            </select>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Add Material</button>
+        </div>
+    </form>
+
+    <div class="row">
+        <div class="col-6">
+            <a asp-controller="Product" asp-action="Index" class="btn btn-success">Done</a>
+        </div>
+        <div class="col-6">
+            <a asp-controller="Product" asp-action="Index" class="btn btn-danger">Cancel</a>
+        </div>
+    </div>
+</div>
+
