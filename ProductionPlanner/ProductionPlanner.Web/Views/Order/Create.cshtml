@@ -10,6 +10,20 @@
     <div class="col-6">
         <form asp-controller="Order" asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (ViewBag.Error != null)
+            {
+
+                <div class="alert alert-danger" role="alert">
+                    @ViewBag.Error
+                </div>
+            }
+            @if (ViewBag.Success != null)
+            {
+
+                <div class="alert alert-success" role="alert">
+                    @ViewBag.Success
+                </div>
+            }
             <div class="pb-3">
                 <h1><b>New order</b></h1>
                 <br />
@@ -18,17 +32,17 @@
                         <label asp-for="OrderName" class="control-label">Order id:</label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="OrderName" type="text" style="max-width:50%!important" />
+                        <input class="form-control" asp-for="OrderName" type="text" style="max-width:50%!important" />
                         <span asp-validation-for="OrderName" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row form-group pl-4">
                     <div class="col-4">
-                        <label asp-for="OrderedProduct" class="control-label">Product name:</label>
+                        <label asp-for="OrderedProduct.ProductName" class="control-label">Product name:</label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="OrderedProduct" type="text" style="max-width:50%!important" />
-                        <span asp-validation-for="OrderedProduct" class="text-danger"></span>
+                        <input class="form-control" asp-for="OrderedProduct.ProductName" type="text" style="max-width:50%!important" />
+                        <span asp-validation-for="OrderedProduct.ProductName" class="text-danger"></span>
                     </div>
 
                 </div>
@@ -37,8 +51,17 @@
                         <label asp-for="Quantity" class="control-label">Quantity</label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="Quantity" type="number" style="max-width:50%!important" />
+                        <input class="form-control" asp-for="Quantity" type="number" style="max-width:50%!important" />
                         <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="StartDate" class="control-label">End date: </label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="StartDate" type="date" value="<?php echo date('Y-m-d'); ?>" style="max-width:60%!important" />
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="row form-group pl-4">
@@ -46,7 +69,7 @@
                         <label asp-for="EndDate" class="control-label">End date: </label>
                     </div>
                     <div class="col-8">
-                        <input asp-for="EndDate" type="date" value="<?php echo date('Y-m-d'); ?>" style="max-width:50%!important" />
+                        <input class="form-control" asp-for="EndDate" type="date" value="<?php echo date('Y-m-d'); ?>" style="max-width:60%!important" />
                         <span asp-validation-for="EndDate" class="text-danger"></span>
                     </div>
                 </div>
@@ -80,7 +103,7 @@
                 <form asp-controller="Order" asp-action="ImportOrdersFromSpreadsheet" method="post" enctype="multipart/form-data">
 
                     <div class="form-group w-100">
-                        <input type="file" name="file" class="form-control" />
+                        <input type="file" name="file" class="form-control" accept=".xlsx" />
                     </div>
 
                     <hr />

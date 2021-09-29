@@ -48,6 +48,7 @@ namespace ProductionPlanner.Repository.Data
                 .WithMany(z => z.MaterialForProduct)
                 .HasForeignKey(z => z.MaterialId)
                 .OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
