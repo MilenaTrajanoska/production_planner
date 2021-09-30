@@ -6,20 +6,39 @@
 @{
 }
 @model ProductionPlanner.Domain.Models.Material
+<br />
+<br />
 
+@if (ViewBag.ErrorMaterial != null)
+{
+
+    <div class="alert alert-danger" role="alert">
+        @ViewBag.ErrorMaterial
+    </div>
+}
+@if (ViewBag.SuccessMaterial != null)
+{
+
+    <div class="alert alert-success" role="alert">
+        @ViewBag.SuccessMaterial
+    </div>
+}
 <h1 class="text-center">
-    Create a new material
+    <b>
+        Create a new material
+    </b>
+
 </h1>
 <br />
 <br />
-<div class="mx-auto w-75">
+<div class="mx-auto w-25">
     <form asp-controller="Material" asp-action="Index" method="post">
         <div class="row form-group">
             <div class="col-6">
                 <label asp-for="MaterialName" class="control-label">Material name</label>
             </div>
             <div class="col-6">
-                <input asp-for="MaterialName" type="text" class="control-label" style="max-width:50%!important" />
+                <input asp-for="MaterialName" type="text" class="form-control" />
             </div>
         </div>
 
@@ -28,14 +47,14 @@
                 <label asp-for="CostPerUnit" class="control-label">Cost per unit</label>
             </div>
             <div class="col-6">
-                <input asp-for="CostPerUnit" type="text" class="control-label" style="max-width:50%!important" />
+                <input asp-for="CostPerUnit" type="text" class="form-control" />
             </div>
         </div>
 
 
-        <div class="row pt-3 pb-5">
+        <div class="form-group">
 
-            <div class="d-inline mx-auto"><input type="submit" value="Add material" class="btn btn-primary px-5" /></div>
+            <input type="submit" value="Add material" class="btn btn-primary w-100" />
 
         </div>
     </form>

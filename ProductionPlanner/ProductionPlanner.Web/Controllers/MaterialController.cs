@@ -30,7 +30,12 @@ namespace ProductionPlanner.Web.Controllers
             if (ModelState.IsValid)
             {
                 materialService.CreateNewMaterial(material);
+                ViewBag.SuccessMaterial = "Successfully added new material";
 
+            }
+            else
+            {
+                ViewBag.ErrorMaterial = "Could not add new material";
             }
             return View(); //da se dopise
         }

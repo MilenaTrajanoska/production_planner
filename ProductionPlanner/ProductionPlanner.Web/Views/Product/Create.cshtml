@@ -20,7 +20,7 @@
                         <label asp-for="ProductName" class="control-label">Product name</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="ProductName" type="text" class="control-label" style="max-width:50%!important" />
+                        <input asp-for="ProductName" type="text" class="form-control" style="max-width: 50% !important; display: inline-block" />
                     </div>
                 </div>
                 <div class="row form-group">
@@ -28,7 +28,7 @@
                         <label asp-for="InProcessTime" class="control-label">Processing time</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="InProcessTime" type="number" class="control-label" style="max-width:50%!important" /> hours
+                        <input asp-for="InProcessTime" type="number" class="form-control" style="max-width: 50% !important; display: inline-block" /> hours
                     </div>
                 </div>
                 <div class="row form-group">
@@ -36,7 +36,7 @@
                         <label asp-for="SetUpTime" class="control-label">Set-up time</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="SetUpTime" type="number" class="control-label" style="max-width:50%!important" /> hours
+                        <input asp-for="SetUpTime" type="number" class="form-control" style="max-width: 50% !important; display: inline-block" /> hours
                     </div>
                 </div>
                 <div class="row form-group">
@@ -44,7 +44,7 @@
                         <label asp-for="PreProcessingWaitTime" class="control-label">Preprocessing waiting time</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="PreProcessingWaitTime" type="number" class="control-label" style="max-width:50%!important" /> hours
+                        <input asp-for="PreProcessingWaitTime" type="number" class="form-control" style="max-width: 50% !important; display: inline-block" /> hours
                     </div>
                 </div>
                 <div class="row form-group">
@@ -52,15 +52,19 @@
                         <label asp-for="PostProcessingWaitTime" class="control-label">Postprocessing waiting time</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="PostProcessingWaitTime" type="number" class="control-label" style="max-width:50%!important" /> hours
+                        <input asp-for="PostProcessingWaitTime" type="number" class="form-control" style="max-width: 50% !important; display: inline-block" /> hours
                     </div>
                 </div>
+                
+            </div>
+
+            <div class="col-6 border-left pl-5">
                 <div class="row form-group">
                     <div class="col-6">
                         <label asp-for="VariableOHPerDLHour" class="control-label">Variable OH Allocation per DL hour</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="VariableOHPerDLHour" type="number" class="control-label" style="max-width:50%!important" /> EUR/hour
+                        <input asp-for="VariableOHPerDLHour" type="number" class="form-control" style="max-width: 50% !important; display: inline-block" /> EUR/hour
                     </div>
                 </div>
                 <div class="row form-group">
@@ -68,42 +72,39 @@
                         <label asp-for="FixedOHPerYear" class="control-label">Fixed OH per year</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="FixedOHPerYear" type="number" class="control-label" style="max-width:50%!important" /> EUR/year
+                        <input asp-for="FixedOHPerYear" type="number" class="form-control" style="max-width: 50% !important; display: inline-block" /> EUR/year
                     </div>
                 </div>
-            </div>
-
-            <div class="col-6 border-left pl-5">
                 <div class="row form-group">
                     <div class="col-6">
                         <label asp-for="SellingPrice" class="control-label">Selling price</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="SellingPrice" type="number" class="control-label" style="max-width:50%!important" /> EUR
+                        <input asp-for="SellingPrice" type="number" class="form-control" style="max-width: 50% !important; display: inline-block" /> EUR
                     </div>
                 </div>
                 @*<div class="row form-group">
-                    <div class="col-6">
-                        <label asp-for="MaterialForProduct" class="control-label">Add Material</label>
-                    </div>
-                    <div class="col-6">
-                        <button type="button" id="add-material" class="btn btn-primary"><b>+</b> Add Material</button>
+            <div class="col-6">
+                <label asp-for="MaterialForProduct" class="control-label">Add Material</label>
+            </div>
+            <div class="col-6">
+                <button type="button" id="add-material" class="btn btn-primary"><b>+</b> Add Material</button>
 
-                        <br />
-                        <div id="all-materials">
-                            <select asp-for="MaterialForProduct" asp-items="ViewBag.Materials" style="display:none" class="materials-dropdown">
+                <br />
+                <div id="all-materials">
+                    <select asp-for="MaterialForProduct" asp-items="ViewBag.Materials" style="display:none" class="materials-dropdown">
 
-                            </select>
-                        </div>
-                    </div>
-                </div>*@
-                
+                    </select>
+                </div>
+            </div>
+        </div>*@
+
                 <div class="row form-group">
                     <div class="col-6">
                         <label asp-for="WagePerHour" class="control-label">Wage</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="WagePerHour" type="number" class="control-label" style="max-width:50%!important" /> EUR/hour
+                        <input asp-for="WagePerHour" type="number" class="form-control" style="max-width: 50% !important; display: inline-block" /> EUR/hour
                     </div>
                 </div>
 
@@ -112,7 +113,7 @@
                         <label asp-for="InterestRate" class="control-label">Interest rate</label>
                     </div>
                     <div class="col-6">
-                        <input asp-for="InterestRate" type="number" class="control-label" style="max-width:50%!important" /> %
+                        <input asp-for="InterestRate" type="number" class="form-control" style="max-width: 50% !important; display: inline-block" /> %
                     </div>
                 </div>
 
