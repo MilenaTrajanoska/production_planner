@@ -31,26 +31,26 @@ namespace ProductionPlanner.Service.Implementation
             _calculationService = calculationService;
         }
 
-        private double calculateIb(double t, DateTime minDate)
+        private double calculateIb(double t, DateTime minDate, DateTime maxDate)
         {
-            var WIPImin = _calculationService.calculateWipiMin(minDate);
+            var WIPImin = _calculationService.calculateWipiMin(minDate, maxDate);
             var Ua = _calculationService.calculateAverageUtilizationFromT(t);
             return WIPImin * Ua / 100;
         }
 
-        private double calculateIp(double t, DateTime minDate)
+        private double calculateIp(double t, DateTime minDate, DateTime maxDate)
         {
-            var WIPImin = _calculationService.calculateWipiMin(minDate);
+            var WIPImin = _calculationService.calculateWipiMin(minDate, maxDate);
             return WIPImin * ALPHA * t;
         }
 
-        public List<double> getOutputRateXAxisValues(DateTime minDate)
+        public List<double> getOutputRateXAxisValues(DateTime minDate, DateTime maxDate)
         {
             var Ib = new List<double>();
-            T_VALUES_LIST.ForEach(t => Ib.Add(calculateIb(t, minDate)));
+            T_VALUES_LIST.ForEach(t => Ib.Add(calculateIb(t, minDate, maxDate)));
 
             var Ip = new List<double>();
-            T_VALUES_LIST.ForEach(t => Ip.Add(calculateIp(t, minDate)));
+            T_VALUES_LIST.ForEach(t => Ip.Add(calculateIp(t, minDate, maxDate)));
 
             if (Ib.Count() != Ip.Count())
             {
@@ -62,10 +62,10 @@ namespace ProductionPlanner.Service.Implementation
 
         
 
-        public List<double> getOutputRateYAxisValues(double WIPrel, DateTime minDate)
+        public List<double> getOutputRateYAxisValues(DateTime minDate, DateTime maxDate)
         {
             var WS = _calculationService.getNumberOfWorkStations();
-            var RoutMax = _calculationService.calculateRoutMax(WIPrel, minDate);
+            var RoutMax = _calculationService.calculateRoutMax(minDate, maxDate);
             var result = new List<double>();
             T_VALUES_LIST.ForEach(
                 t => result.Add(_calculationService.calculateAverageUtilizationFromT(t)/100*RoutMax*WS)
@@ -73,70 +73,70 @@ namespace ProductionPlanner.Service.Implementation
             return result;
         }
 
-        public List<double> getThroughputTimeXAxisValues(DateTime minDate)
+        public List<double> getThroughputTimeXAxisValues(DateTime minDate, DateTime maxDate)
         {
             //it's the same x
-            return getOutputRateXAxisValues(minDate);
+            return getOutputRateXAxisValues(minDate, maxDate);
         }
 
-        private double calculateThroughputTime(double RoutMax, double WS, double WCa, double WCv, double t, DateTime minDate)
+        private double calculateThroughputTime(double RoutMax, double WS, double WCa, double WCv, double t, DateTime minDate, DateTime maxDate)
         {
-            var Ib = calculateIb(t, minDate);
-            var Ip = calculateIp(t, minDate);
+            var Ib = calculateIb(t, minDate, maxDate);
+            var Ip = calculateIp(t, minDate, maxDate);
             var Im = Ib + Ip;
             var Ua = _calculationService.calculateAverageUtilizationFromT(t);
             return Im / (Ua * RoutMax * WS / 100) - WCa / RoutMax * Math.Pow(WCv, 2);
         }
-        public List<double> getThroughputTimeYAxisValues(double WIPRel, DateTime minDate)
+        public List<double> getThroughputTimeYAxisValues(DateTime minDate, DateTime maxDate)
         {
-            var RoutMax = _calculationService.calculateRoutMax(WIPRel, minDate);
+            var RoutMax = _calculationService.calculateRoutMax(minDate, maxDate);
             var WS = _calculationService.getNumberOfWorkStations();
-            var WCa = _calculationService.calculateAverageWorkContent(minDate);
-            var WCv = _calculationService.calculateRelativeWorkContent(minDate);
+            var WCa = _calculationService.calculateAverageWorkContent(minDate, maxDate);
+            var WCv = _calculationService.calculateRelativeWorkContent(minDate, maxDate);
             var result = new List<double>();
             T_VALUES_LIST.ForEach(
-                t => result.Add(calculateThroughputTime(RoutMax, WS, WCa, WCv, t, minDate))
+                t => result.Add(calculateThroughputTime(RoutMax, WS, WCa, WCv, t, minDate, maxDate))
                 );
             return result;
         }
 
-        public List<double> getRangeXAxisValues(DateTime minDate)
+        public List<double> getRangeXAxisValues(DateTime minDate, DateTime maxDate)
         {
-            return getOutputRateXAxisValues(minDate);
+            return getOutputRateXAxisValues(minDate, maxDate);
         }
 
-        private double calculateRm(double RoutMax, double WS, double t, DateTime minDate)
+        private double calculateRm(double RoutMax, double WS, double t, DateTime minDate, DateTime maxDate)
         {
-            var Ib = calculateIb(t, minDate);
-            var Ip = calculateIp(t, minDate);
+            var Ib = calculateIb(t, minDate, maxDate);
+            var Ip = calculateIp(t, minDate, maxDate);
             var Im = Ib + Ip;
             var Ua = _calculationService.calculateAverageUtilizationFromT(t);
             return Im / (Ua * RoutMax * WS / 100);
             
         }
-        public List<double> getRangeYAxisValues(double WIPRel, DateTime minDate)
+        public List<double> getRangeYAxisValues(DateTime minDate, DateTime maxDate)
         {
-            var RoutMax = _calculationService.calculateRoutMax(WIPRel, minDate);
+            var RoutMax = _calculationService.calculateRoutMax(minDate, maxDate);
             var WS = _calculationService.getNumberOfWorkStations();
             var result = new List<double>();
             T_VALUES_LIST.ForEach(
-                t => result.Add(calculateRm(RoutMax, WS,t, minDate))
+                t => result.Add(calculateRm(RoutMax, WS,t, minDate, maxDate))
                 );
             return result;
         }
 
-        public List<double> getCapacityXAxisValues(DateTime minDate)
+        public List<double> getCapacityXAxisValues(DateTime minDate, DateTime maxDate)
         {
             var result = new List<double>();
             result.Add(0);
             var t = T_VALUES_LIST.ElementAt(T_VALUES_LIST.Count() - 1);
-            var Ib = calculateIb(t, minDate);
-            var Ip = calculateIp(t, minDate);
+            var Ib = calculateIb(t, minDate, maxDate);
+            var Ip = calculateIp(t, minDate, maxDate);
             result.Add(Ip + Ib);
             return result;
         }
 
-        public List<double> getCapacityYAxisValues(DateTime minDate)
+        public List<double> getCapacityYAxisValues(DateTime minDate, DateTime maxDate)
         {
             var WS = _calculationService.getNumberOfWorkStations();
             var capacity = _calculationService.getWorkstationCapacity();
@@ -147,7 +147,7 @@ namespace ProductionPlanner.Service.Implementation
             };
         }
 
-        private List<DateTime> calculateDates(DateTime from)
+        private List<DateTime> calculateDates(DateTime from, DateTime to)
         {
             DateTime startMin;
 
@@ -160,21 +160,28 @@ namespace ProductionPlanner.Service.Implementation
                 startMin = _calculationService.getMinStartDate();
             }
 
-            DateTime endMax = _calculationService.getMaxEndDate();
+            DateTime endMax;
+            if(to!=null)
+            {
+                endMax = to;
+            }else
+            {
+                endMax = _calculationService.getMaxEndDate();
+            }
 
             List<DateTime> result = new List<DateTime>();
 
             while (startMin.Date.CompareTo(endMax.Date) <= 0)
             {
                 result.Add(DateTime.Parse(startMin.ToString()));
-                startMin.AddDays(1);
+                startMin = startMin.AddDays(1);
             }
             return result;
         }
-        public List<double> getOPOperatingPointXAxisValues(DateTime minDate)
+        public List<double> getOPOperatingPointXAxisValues(DateTime minDate, DateTime maxDate)
         {
-            var dates = calculateDates(minDate);
-            var WIPa = _calculationService.getListOfWIP(dates).ToList().Average();
+            var dates = calculateDates(minDate, maxDate);
+            var WIPa = _calculationService.getListOfWIP(minDate, maxDate).ToList().Average();
             return new List<double>()
             {
                 WIPa,
@@ -182,7 +189,7 @@ namespace ProductionPlanner.Service.Implementation
             };
         }
 
-        public List<double> getOPOperatingPointYAxisValues(DateTime minDate)
+        public List<double> getOPOperatingPointYAxisValues(DateTime minDate, DateTime maxDate)
         {
             DateTime minStartDate;
             if (minDate != null)
@@ -192,11 +199,19 @@ namespace ProductionPlanner.Service.Implementation
             {
                 minStartDate = _calculationService.getMinStartDate();
             }
-            var endDate = _calculationService.getMaxEndDate();
+            DateTime endDate;
+            if(maxDate!=null)
+            {
+                endDate = maxDate;
+            }
+            else
+            {
+                endDate = _calculationService.getMaxEndDate();
+            }
+            
 
             var daysBetween = endDate.Date.Subtract(minStartDate.Date).TotalDays;
-            var dates = calculateDates(minDate);
-            var WIPsum = _calculationService.getListOfWIP(dates).ToList().Sum();
+            var WIPsum = _calculationService.getListOfWIP(minDate, maxDate).ToList().Sum();
             return new List<double>()
             {
                 0,
@@ -204,24 +219,22 @@ namespace ProductionPlanner.Service.Implementation
             };
         }
 
-        public double getOPRangeXAxisValues(DateTime minDate)
+        public double getOPRangeXAxisValues(DateTime minDate, DateTime maxDate)
         {
-            var dates = calculateDates(minDate);
-            return _calculationService.getListOfWIP(dates).ToList().Average();
+            return _calculationService.getListOfWIP(minDate, maxDate).ToList().Average();
         }
 
-        public double getOPRangeYAxisValues(DateTime minDate)
+        public double getOPRangeYAxisValues(DateTime minDate, DateTime maxDate)
         {
-            return _calculationService.calculateAverageRout(minDate);
+            return _calculationService.calculateAverageRout(minDate, maxDate);
         }
 
-        public double getOPThroughputTimeXAxisValues(DateTime minDate)
+        public double getOPThroughputTimeXAxisValues(DateTime minDate, DateTime maxDate)
         {
-            var dates = calculateDates(minDate);
-            return _calculationService.getListOfWIP(dates).ToList().Average();
+            return _calculationService.getListOfWIP(minDate, maxDate).ToList().Average();
         }
 
-        public double getOPThroughputTimeYAxisValues(DateTime minDate)
+        public double getOPThroughputTimeYAxisValues(DateTime minDate, DateTime maxDate)
         {
             DateTime startDate;
             if (minDate != null)
@@ -232,7 +245,18 @@ namespace ProductionPlanner.Service.Implementation
             {
                 startDate = _calculationService.getMinStartDate();
             }
-            return _calculationService.getThroughputTimes(startDate).Average();
+            DateTime endDate;
+            if(maxDate!=null)
+            {
+                endDate = maxDate;
+            }
+            else
+            {
+                endDate = _calculationService.getMaxEndDate();
+            }
+
+            return _calculationService.getThroughputTimes(startDate, endDate).Average();
         }
+
     }
 }

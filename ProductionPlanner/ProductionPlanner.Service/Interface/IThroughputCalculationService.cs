@@ -6,10 +6,10 @@ namespace ProductionPlanner.Service.Interface
 {
     public interface IThroughputCalculationService
     {
-        List<DateTime> calculateThroughputDiagramXAxis(DateTime from);
-        List<double> calculateOutputSeries(List<DateTime> dates);
-        List<double> calculateInputSeries(List<DateTime> dates);
-        List<double> calculateWIPSeries(List<DateTime> dates);
+        List<DateTime> calculateThroughputDiagramXAxis(DateTime from, DateTime to);
+        List<double> calculateOutputSeries(DateTime minDate, DateTime maxDate);
+        List<double> calculateInputSeries(DateTime minDate, DateTime maxDate);
+        List<double> calculateWIPSeries(DateTime minDate, DateTime maxDate);
         double getCapacity(DateTime minDate, DateTime maxDate);
     }
 }
