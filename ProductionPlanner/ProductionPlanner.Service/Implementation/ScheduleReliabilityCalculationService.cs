@@ -52,10 +52,10 @@ namespace ProductionPlanner.Service.Implementation
         {
             _calculationService = calculationService;
         }
-        public List<double> getXAxisMeanWIP(DateTime minDate)
+        public List<double> getXAxisMeanWIP(DateTime minDate, DateTime maxDate)
         {
-            var WIPmActual = calculateWIPmActual(minDate);
-            var WIPImin = _calculationService.calculateWipiMin(minDate);
+            var WIPmActual = calculateWIPmActual(minDate, maxDate);
+            var WIPImin = _calculationService.calculateWipiMin(minDate, maxDate);
             double res;
             if(WIPmActual > 1.6 * WIPImin)
             {
@@ -71,10 +71,10 @@ namespace ProductionPlanner.Service.Implementation
                 res
             };
         }
-        public List<double> getYAxisMeanWIP(DateTime minDate)
+        public List<double> getYAxisMeanWIP(DateTime minDate, DateTime maxDate)
         {
-            var WIPmActual = calculateWIPmActual(minDate);
-            var WIPImin = _calculationService.calculateWipiMin(minDate);
+            var WIPmActual = calculateWIPmActual(minDate, maxDate);
+            var WIPImin = _calculationService.calculateWipiMin(minDate, maxDate);
             double res;
             if (WIPmActual > 1.6 * WIPImin)
             {
@@ -90,9 +90,9 @@ namespace ProductionPlanner.Service.Implementation
             };
         }
 
-        public List<double> getXAxisScheduleReliability(DateTime minDate)
+        public List<double> getXAxisScheduleReliability(DateTime minDate, DateTime maxDate)
         {
-            var WIPImin = _calculationService.calculateWipiMin(minDate);
+            var WIPImin = _calculationService.calculateWipiMin(minDate, maxDate);
             var wipAverage = new List<double>();
             var wipBuffer = new List<double>();
             foreach (var t in T_VALUES)
@@ -105,16 +105,14 @@ namespace ProductionPlanner.Service.Implementation
 
         }
 
-        
-
-        public List<double> getYAxisScheduleReliability(DateTime minDate)
+        public List<double> getYAxisScheduleReliability(DateTime minDate, DateTime maxDate)
         {
-            var TIO = _calculationService.calculateTIO(minDate);
-            var b = calculateUpperTIOBoundry(minDate);
-            var a = calculateLowerTIOBoundry(minDate);
-            var TIOms = calculateTIOm(minDate);
+            var TIO = _calculationService.calculateTIO(minDate, maxDate);
+            var b = calculateUpperTIOBoundry(minDate, maxDate);
+            var a = calculateLowerTIOBoundry(minDate, maxDate);
+            var TIOms = calculateTIOm(minDate, maxDate);
 
-            var TIOs = Statistics.StandardDeviation(_calculationService.getThroughputTimes(minDate));
+            var TIOs = Statistics.StandardDeviation(_calculationService.getThroughputTimes(minDate, maxDate));
             var phiListB = new List<double>();
             var phiListA = new List<double>();
 
@@ -133,22 +131,20 @@ namespace ProductionPlanner.Service.Implementation
             
         }
 
-        private double calculateWIPmActual(DateTime minDate)
+        private double calculateWIPmActual(DateTime minDate, DateTime maxDate)
         {
-            var Rm = calculateRm(minDate);
-            var WIPRel = _calculationService.calculateWIPRel(minDate);
-            var routMax = _calculationService.calculateRoutMax(WIPRel, minDate);
+            var Rm = calculateRm(minDate, maxDate);
+            var routMax = _calculationService.calculateRoutMax(minDate, maxDate);
             var WS = _calculationService.getNumberOfWorkStations();
 
             return Rm * routMax * WS;
         }
 
-        private double calculateRm(DateTime minDate)
+        private double calculateRm(DateTime minDate, DateTime maxDate)
         {
-            var TIO = _calculationService.calculateTIO(minDate);
-            var WCa = _calculationService.calculateAverageWorkContent(minDate);
-            var WIPRel = _calculationService.calculateWIPRel(minDate);
-            var routMax = _calculationService.calculateRoutMax(WIPRel, minDate);
+            var TIO = _calculationService.calculateTIO(minDate, maxDate);
+            var WCa = _calculationService.calculateAverageWorkContent(minDate, maxDate);
+            var routMax = _calculationService.calculateRoutMax(minDate, maxDate);
 
             if (routMax == 0)
             {
@@ -166,20 +162,19 @@ namespace ProductionPlanner.Service.Implementation
             return _calculationService.calculateAverageUtilizationFromT(t);
         }
 
-        private double calculateUpperTIOBoundry(DateTime minDate)
+        private double calculateUpperTIOBoundry(DateTime minDate, DateTime maxDate)
         {
-            return _calculationService.calculateTIO(minDate) + 1;
+            return _calculationService.calculateTIO(minDate, maxDate) + 1;
         }
-        private double calculateLowerTIOBoundry(DateTime minDate)
+        private double calculateLowerTIOBoundry(DateTime minDate, DateTime maxDate)
         {
-            return _calculationService.calculateTIO(minDate) - 1;
+            return _calculationService.calculateTIO(minDate, maxDate) - 1;
         }
-        private List<double> calculateTIOm(DateTime minDate)
+        private List<double> calculateTIOm(DateTime minDate, DateTime maxDate)
         {
-            var TTPms = calculateTTPmean(minDate);
-            var WIPRel = _calculationService.calculateWIPRel(minDate);
-            var WCa = _calculationService.calculateAverageWorkContent(minDate);
-            var routMax = _calculationService.calculateRoutMax(WIPRel, minDate);
+            var TTPms = calculateTTPmean(minDate, maxDate);
+            var WCa = _calculationService.calculateAverageWorkContent(minDate, maxDate);
+            var routMax = _calculationService.calculateRoutMax(minDate, maxDate);
 
             if (TTPms == null || routMax==0)
             {
@@ -187,15 +182,14 @@ namespace ProductionPlanner.Service.Implementation
             }
             return TTPms.Select(t => t - WCa / routMax).ToList();
         }
-        private List<double> calculateTTPmean(DateTime minDate)
+        private List<double> calculateTTPmean(DateTime minDate, DateTime maxDate)
         {
-            var WIPms = getXAxisScheduleReliability(minDate);
+            var WIPms = getXAxisScheduleReliability(minDate, maxDate);
             var Um = T_VALUES.Select(t => calculateUtilizationMean(t)).ToList();
-            var WIPRel = _calculationService.calculateWIPRel(minDate);
-            var routMax = _calculationService.calculateRoutMax(WIPRel, minDate);
+            var routMax = _calculationService.calculateRoutMax(minDate, maxDate);
             var WS = _calculationService.getNumberOfWorkStations();
-            var WCa = _calculationService.calculateAverageWorkContent(minDate);
-            var WCv = _calculationService.calculateRelativeWorkContent(minDate);
+            var WCa = _calculationService.calculateAverageWorkContent(minDate, maxDate);
+            var WCv = _calculationService.calculateRelativeWorkContent(minDate, maxDate);
 
             if (routMax == 0 || WS == 0)
             {

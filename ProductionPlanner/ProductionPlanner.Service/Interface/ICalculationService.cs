@@ -5,13 +5,13 @@ namespace ProductionPlanner.Service.Interface
 {
     public interface ICalculationService
     {
-        public List<double> getWorkContents(DateTime minDate);
-        double calculateAverageWorkContent(DateTime minDate);
-        double calculateSdWorkContent(DateTime minDate);
-        double calculateRelativeWorkContent(DateTime minDate);
-        double calculateWipiMin(DateTime minDate);
+        public List<double> getWorkContents(DateTime minDate, DateTime maxDate);
+        double calculateAverageWorkContent(DateTime minDate, DateTime maxDate);
+        double calculateSdWorkContent(DateTime minDate, DateTime maxDate);
+        double calculateRelativeWorkContent(DateTime minDate, DateTime maxDate);
+        double calculateWipiMin(DateTime minDate, DateTime maxDate);
         double calculateAverageUtilizationFromT(double t);
-        double calculateAverageRout(DateTime minDate);
+        double calculateAverageRout(DateTime minDate, DateTime maxDate);
         double getNumberOfWorkStations();
         double getWorkstationCapacity();
         DateTime getMinStartDate();
@@ -19,12 +19,12 @@ namespace ProductionPlanner.Service.Interface
         public double calculateInputForDate(DateTime from, DateTime to);
         public double calculateOutputForDate(DateTime from, DateTime to);
         double getWIPForDate(DateTime startDate, DateTime endDate);
-        public List<double> getListOfWIP(List<DateTime> dates);
-        public List<double> getThroughputTimes(DateTime minDate);
-        public double calculateTIO(DateTime minDate);
+        public List<double> getListOfWIP(DateTime minDate, DateTime maxDate);
+        public List<double> getThroughputTimes(DateTime minDate, DateTime maxDate);
+        public double calculateTIO(DateTime minDate, DateTime maxDate);
         public double calculateAverageUtilizationGlobal();
         public double getAlpha();
-        public double calculateRoutMax(double WIPrel, DateTime minDate);
-        public double calculateWIPRel(DateTime minDate);
+        public double calculateRoutMax(DateTime minDate, DateTime maxDate);
+        public double calculateWIPRel(DateTime minDate, DateTime maxDate);
     }
 }

@@ -12,7 +12,7 @@ namespace ProductionPlanner.Service.Implementation
         {
             _calculationService = calculationService;
         }
-        public List<double> getXAxisValues(DateTime minDate)
+        public List<double> getXAxisValues(DateTime minDate, DateTime maxDate)
         {
 
             DateTime startDate;
@@ -24,8 +24,17 @@ namespace ProductionPlanner.Service.Implementation
             {
                 startDate = minDate;
             }
+            DateTime endDate;
+            if (maxDate == null)
+            {
+                endDate = _calculationService.getMaxEndDate();
+            }
+            else
+            {
+                endDate = maxDate;
+            }
 
-            var throughputTimes = _calculationService.getThroughputTimes(startDate);
+            var throughputTimes = _calculationService.getThroughputTimes(startDate, endDate);
             var maxTT = throughputTimes.Max();
 
             var result = new List<double>();
@@ -48,7 +57,7 @@ namespace ProductionPlanner.Service.Implementation
             return result;
         }
 
-        public List<double> getYAxisValues(DateTime minDate)
+        public List<double> getYAxisValues(DateTime minDate, DateTime maxDate)
         {
             DateTime startDate;
             if (minDate == null)
@@ -60,8 +69,18 @@ namespace ProductionPlanner.Service.Implementation
                 startDate = minDate;
             }
 
-            var xVals = getXAxisValues(startDate);
-            var throughputTimes = _calculationService.getThroughputTimes(startDate);
+            DateTime endDate;
+            if (maxDate == null)
+            {
+                endDate = _calculationService.getMaxEndDate();
+            }
+            else
+            {
+                endDate = maxDate;
+            }
+
+            var xVals = getXAxisValues(startDate, endDate);
+            var throughputTimes = _calculationService.getThroughputTimes(startDate, endDate);
             var numOrders = throughputTimes.Count;
             var frequencies = new List<double>();
             foreach (var val in xVals)
