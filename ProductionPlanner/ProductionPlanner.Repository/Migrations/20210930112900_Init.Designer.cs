@@ -10,8 +10,8 @@ using ProductionPlanner.Repository.Data;
 namespace ProductionPlanner.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210913193041_MaterialForProduct")]
-    partial class MaterialForProduct
+    [Migration("20210930112900_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -284,12 +284,15 @@ namespace ProductionPlanner.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("MaterialName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("UnitsNeeded")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("MaterialName");
 
                     b.ToTable("Materials");
                 });
@@ -306,6 +309,9 @@ namespace ProductionPlanner.Repository.Migrations
 
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -327,7 +333,8 @@ namespace ProductionPlanner.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OrderName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
@@ -342,6 +349,8 @@ namespace ProductionPlanner.Repository.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("OrderName");
 
                     b.HasIndex("ProductId");
 
@@ -380,7 +389,8 @@ namespace ProductionPlanner.Repository.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<double>("SellingPrice")
                         .HasColumnType("float");
@@ -398,6 +408,8 @@ namespace ProductionPlanner.Repository.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("ProductName");
 
                     b.ToTable("Products");
                 });
@@ -453,6 +465,9 @@ namespace ProductionPlanner.Repository.Migrations
 
                     b.Property<double>("WagePerHour")
                         .HasColumnType("float");
+
+                    b.Property<bool>("isValid")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
