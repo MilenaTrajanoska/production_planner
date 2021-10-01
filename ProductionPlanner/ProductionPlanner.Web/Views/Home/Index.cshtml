@@ -1,70 +1,180 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+@model ProductionPlanner.Domain.Models.Company
 <div class="row px-5 pb-5 pt-3">
     <h1 class="display-2 col-6 pl-5 text-right">Welcome!</h1>
     <p class="small col-6"><br /><br />Fill in the following properties so <br />you can use the production planner better.</p>
 </div>
-<div class="pl-5">
-    <div class="row px-5">
-        <div class="col-6">
-            <div>
+<div class="px-5">
+    <form asp-controller="Home" asp-action="Index" method="post">
+        <div class="row px-5">
+            <div class="col-6 form-group">
                 <div class=" pb-3" style="color: #04396c !important">
                     <h3><i class="fa fa-industry" aria-hidden="true"></i><b> Workstations</b> </h3>
                 </div>
-                <div class="row px-3">
-                    <div class="col-6 px-2">
-                        Number of workstations
-                        <br />
-                        Capacity of workstation
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="NumberOfWS" class="control-label">Number of workstations</label>
                     </div>
-                    <div class="col-6 px-2">
-                        <input type="number" style="max-width:50%!important; display:inline-block" class="form-control" />
-                        <br />
-                        <input type="number" style="max-width: 50% !important; display: inline-block" class="form-control"/> hours
+                    <div class="col-6">
+                        <input class="form-control" asp-for="NumberOfWS" type="number" style="max-width: 50% !important; display:inline-block " />
+                        <span asp-validation-for="NumberOfWS" class="text-danger"></span>
                     </div>
                 </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="WSCapacity" class="control-label">Capacity of workstation</label>
+                    </div>
+                    <div class="col-6">
+                        <input class="form-control" asp-for="WSCapacity" type="number" style="max-width: 50% !important; display:inline-block " /> hours
+                        <span asp-validation-for="WSCapacity" class="text-danger"></span>
+                    </div>
+                </div>
+
             </div>
-            <div>
+            <div class="col-6 form-group pl-5">
                 <div class="pb-3" style="color: #04396c !important">
                     <h3><i class="fa fa-clock-o" aria-hidden="true"></i><b> Time</b></h3>
                 </div>
-                <div class="row px-3">
-                    <div class="col-6 px-2">
-                        Inter-operation time
-                        <br />
-                        Time for transportation and storage
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="InterOpTime" class="control-label">Inter-operation time</label>
                     </div>
-                    <div class="col-6 px-2">
-                        <input type="number" style="max-width: 50% !important; display: inline-block" class="form-control"/>
-                        <br />
-                        <input type="number" style="max-width: 50% !important; display: inline-block" class="form-control"/>
+                    <div class="col-6">
+                        <input class="form-control" asp-for="InterOpTime" type="number" style="max-width: 50% !important; display:inline-block " />
+                        <span asp-validation-for="InterOpTime" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-6">
+                        <label asp-for="TransportantionAndStorageTime" class="control-label">Time for transportation and storage</label>
+                    </div>
+                    <div class="col-6">
+                        <input class="form-control" asp-for="TransportantionAndStorageTime" type="number" style="max-width: 50% !important; display:inline-block " />
+                        <span asp-validation-for="TransportantionAndStorageTime" class="text-danger"></span>
                     </div>
                 </div>
             </div>
+        </div>
+        <br />
+
+        <div class="form-group row">
+            <div class="col-4"></div>
+            <div class="col-4"><input type="submit" value="Save changes" class="btn btn-primary w-100" style="background-color: #04396c !important" /></div>
+            <div class="col-4"></div>
 
         </div>
-        <div class="col-6">
-            <div class="pb-3" style="color: #04396c !important">
-                <h3><i class="fa fa-plus-square-o" aria-hidden="true"></i><b> Other</b> </h3>
+    </form>
+    <br />
+    <br />
+    <div>
+        <div class="card">
+            <div class="card-header" style="background-color:white !important">
+                Featured performance
             </div>
-            <div class="row px-3">
-                <div class="col-6 px-2">
-                    Work in process for the beggining
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg" >
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-calendar-o fa-stack-1x fa-inverse rounded-circle"  style="background-color:yellowgreen"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Schedule reliability</small><br /><b style="font-size: 30px">78.4%</b></p>               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-wrench fa-stack-1x fa-inverse rounded-circle" style="background-color:palevioletred"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Average work content</small><br /><b style="font-size: 30px">791.13 hrs</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-hourglass-end fa-stack-1x fa-inverse rounded-circle" style="background-color:lightsalmon"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Average throughput time</small><br /><b style="font-size: 30px">3.02 SCD</b></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-6 px-2">
-                    <input type="number" style="max-width: 50% !important; display: inline-block" class="form-control" />
+                <div class="row invisible_row hidden">
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-pie-chart fa-stack-1x fa-inverse rounded-circle" style="background-color:yellow"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Average utilization rate</small><br /><b style="font-size: 30px">74.3%</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-level-up fa-stack-1x fa-inverse rounded-circle" style="background-color:lightblue"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Maximum output rate</small><br /><b style="font-size: 30px">301.68 hrs/SCD</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-arrows-h fa-stack-1x fa-inverse rounded-circle" style="background-color:lightseagreen"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Average range</small><br /><b style="font-size: 30px">3.04 SCD</b></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
+            <div class="card-footer text-muted text-center" style="background-color:white !important">
+                <a id="button-complete-report" href="#" class="btn btn-primary rounded-pill px-4"><i class="fa fa-circle-o-notch" aria-hidden="true"></i> View complete report</a>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-10"></div>
-    <div class="col-2" style="color: #04396c !important">
-        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-        Edit properties
-    </div>
-</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $("#button-complete-report").click(function () {
+        
+        $(".invisible_row").toggleClass("hidden");
+    });
+
+</script>
+
+<style>
+    .hidden{
+        display:none !important;
+    }
+</style>
