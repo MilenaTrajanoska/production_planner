@@ -4,6 +4,7 @@ using ProductionPlanner.Repository.Data;
 using ProductionPlanner.Repository.Interface;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ProductionPlanner.Repository.Implementation
@@ -12,8 +13,7 @@ namespace ProductionPlanner.Repository.Implementation
     {
         private readonly ApplicationDbContext context;
         private DbSet<Order> orders;
-        private const string errorMessage = "Can not update an order that is not created yet";
-
+        
         public OrderRepository(ApplicationDbContext context)
         {
             this.context = context;
@@ -22,28 +22,41 @@ namespace ProductionPlanner.Repository.Implementation
 
         public void Delete(Order entity)
         {
-            orders.Remove(entity);
+            entity.IsValid = false;
+            orders.Update(entity);
+            context.SaveChanges();
         }
 
         public Order Get(long? id)
         {
-            //orders.Include(o=>o.OrderedProduct.)
-            throw new NotImplementedException();
+            return orders
+                .Include(o => o.OrderedProduct)
+                .Include("OrderedProduct.MaterialForProduct")
+                .Include("OrderedProduct.MaterialForProduct.Material")
+                .SingleOrDefault(o => o.Id == id && o.IsValid);
         }
 
         public IEnumerable<Order> GetAll()
         {
-            throw new NotImplementedException();
+            return orders
+                 .Include(o => o.OrderedProduct)
+                 .Include("OrderedProduct.MaterialForProduct")
+                 .Include("OrderedProduct.MaterialForProduct.Material")
+                 .Where(o => o.IsValid)
+                 .ToList();
         }
 
-        public void Insert(Order entity)
+        public Order Insert(Order entity)
         {
-            throw new NotImplementedException();
+            var order = orders.Add(entity);
+            context.SaveChanges();
+            return order.Entity;
         }
 
         public void Update(Order entity)
         {
-            throw new NotImplementedException();
+            orders.Update(entity);
+            context.SaveChanges();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ProductionPlanner.Repository.Interface
     {
         IEnumerable<Order> GetAll();
         Order Get(long? id);
-        void Insert(Order entity);
+        Order Insert(Order entity);
         void Update(Order entity);
         void Delete(Order entity);
     }

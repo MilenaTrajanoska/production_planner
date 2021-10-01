@@ -27,6 +27,7 @@ namespace ProductionPlanner.Service.Implementation
 
         public void CreateNewOrder(Order order)
         {
+            order.IsValid = true;
             this.orderRepository.Insert(order);
         }
 

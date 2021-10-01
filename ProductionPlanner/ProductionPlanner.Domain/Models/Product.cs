@@ -12,7 +12,6 @@ namespace ProductionPlanner.Domain.Models
         public double PreProcessingWaitTime { get; set; }
         public double PostProcessingWaitTime { get; set; }
         public double SellingPrice { get; set; }
-        public double TotalMaterialCost { get; set; }
         public double WagePerHour { get; set; }
         public double VariableOHPerDLHour { get; set; }
         public double InterestRate { get; set; }
@@ -24,6 +23,17 @@ namespace ProductionPlanner.Domain.Models
         public Product()
         {
             CurrentVersion = 1;
+            MaterialForProduct = new List<MaterialForProduct>();
+        }
+
+        public Double TotalMaterialCost()
+        {
+            double cost = 0;
+            foreach(var mat in MaterialForProduct)
+            {
+                cost += mat.Material.CostPerProduct;
+            }
+            return cost;
         }
 
     }
