@@ -41,7 +41,7 @@
                         <label asp-for="OrderedProduct.ProductName" class="control-label">Product name:</label>
                     </div>
                     <div class="col-8">
-                        <input class="form-control" asp-for="OrderedProduct.ProductName" type="text" style="max-width: 55% !important" />
+                        <select class="form-control" asp-for="OrderedProduct.ProductName"  asp-items="@ViewBag.ProductNames" style="max-width: 55% !important" ></select>
                         <span asp-validation-for="OrderedProduct.ProductName" class="text-danger"></span>
                     </div>
 
