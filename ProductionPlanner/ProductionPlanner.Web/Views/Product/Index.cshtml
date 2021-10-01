@@ -47,13 +47,14 @@
 
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.SellingPrice)
+                    @Html.DisplayFor(modelItem => item.SellingPrice) €
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TotalMaterialCost)
+                    @{var total = item.TotalMaterialCost().ToString("0.00") + " €";}
+                    @total
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.WagePerHour)
+                    @Html.DisplayFor(modelItem => item.WagePerHour) €
                 </td>
 
                 <td>

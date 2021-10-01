@@ -41,6 +41,7 @@ namespace ProductionPlanner.Repository.Implementation
 
             presentCompany.isValid = false;
             companies.Update(presentCompany);
+            company.isValid = true;
             companies.Add(company);
             context.SaveChanges();
         }
