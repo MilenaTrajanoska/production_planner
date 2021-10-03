@@ -1,34 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model ProductionPlanner.Domain.Models.Product
+﻿@model ProductionPlanner.Domain.Models.Product
 @{
-    ViewData["Title"] = "New Product";
+    ViewData["Title"] = "Edit Product";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br />
-<h1 class="text-center"><b>New product</b></h1>
+<h1 class="text-center"><b>Edit product</b></h1>
 <br />
-<br />
-@if (ViewBag.Errors != null)
+@if(ViewBag.Message != null)
 {
-    @foreach (var err in ViewBag.Errors)
-    {
-        <div class="alert alert-danger" role="alert">
-            @err
-        </div>
-    }
-}
-@if (ViewBag.Message != null)
-{
-
-    <div class="alert alert-success" role="alert">
-        @ViewBag.Message
+    <div class="alert alert-success">
+        <p>@ViewBag.Message</p>
     </div>
 }
+<br />
 <div class="mx-auto w-75">
-    <form asp-controller="Product" asp-action="Create" method="post">
-
+    <form asp-controller="Product" asp-action="Edit" method="post">
+        <input type="hidden" asp-for="IsValid" asp-value="@Model.IsValid"/>
         <div class="row">
             <div class="col-6 border-right">
                 <div class="row form-group">
@@ -107,21 +94,7 @@
                         <span asp-validation-for="SellingPrice" class="text-danger"></span>
                     </div>
                 </div>
-                @*<div class="row form-group">
-                        <div class="col-6">
-                            <label asp-for="MaterialForProduct" class="control-label">Add Material</label>
-                        </div>
-                        <div class="col-6">
-                            <button type="button" id="add-material" class="btn btn-primary"><b>+</b> Add Material</button>
-
-                            <br />
-                            <div id="all-materials">
-                                <select asp-for="MaterialForProduct" asp-items="ViewBag.Materials" style="display:none" class="materials-dropdown">
-
-                                </select>
-                            </div>
-                        </div>
-                    </div>*@
+               
 
                 <div class="row form-group">
                     <div class="col-6">
@@ -148,54 +121,8 @@
         <br />
         <div class="row pt-3 pb-5">
 
-            <div class="d-inline mx-auto"><input type="submit" value="Add product" class="btn btn-primary px-5" /></div>
+            <div class="d-inline mx-auto"><input type="submit" value="Save changes" class="btn btn-primary px-5" /></div>
 
         </div>
     </form>
 </div>
-
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-
-
-    var material_num = 0;
-    var materialsList = JSON.parse('@Html.Raw(ViewBag.Materials)');
-
-    $("#add-material").click(function () {
-
-        var list = $(".materials-dropdown");
-        if (list.length == 1) {
-            $(list[0]).show();
-        }
-        else {
-            var element = $(list[0]).clone();
-            $("#all-materials").append(element);
-        }
-
-        //$("#all-materials").append("<b>Material name:<b>" + '<input type="text" name="materials[' + material_num + ']" id="material[' + material_num + ']">' + "<small>Material quantity<small>" + '<input type="number" name="materials-quantity[' + material_num + ']" id="material-quantity[' + material_num + ']">');
-        /*var promenliva = new SelectList((IEnumerable < SelectListItem >)ViewBag.Materials, "Value", "Text");*/
-
-
-        @*$("#all-materials").append("<b>Material name: </b>" +
-            '<select id="drpEmpList" class="form-control" asp-for="Product.MaterialForProduct[' + material_num +  '].Material.MaterialName" asp-items="@(new SelectList((IEnumerable<SelectListItem>)ViewBag.Materials, "Value", "Text"))"><option value="">--Select--</option></select>' +
-            "<small>Material quantity: </small>" +
-            '<input type="number" name="Product.MaterialForProduct[' + material_num +  '].Quantity" id="material-quantity[' + material_num + ']">'
-        );*@
-        //var select = document.createElement('select');
-
-        //materialsList.forEach(function(opt){
-        //    var option = document.createChild("option");
-        //    option.value = opt;
-        //    option.text = opt;
-        //    select.appendChild(option);
-        //})
-
-        //$("#all-materials").append(select);
-
-        //material_num++;
-    });
-
-
-</script>
