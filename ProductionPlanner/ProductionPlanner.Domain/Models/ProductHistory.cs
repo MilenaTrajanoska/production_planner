@@ -29,5 +29,26 @@ namespace ProductionPlanner.Domain.Models
         {
             Version = 1;
         }
+
+        public ProductHistory(Product product)
+        {
+            ProductId = product.Id;
+            ProductName = product.ProductName;
+            Version = product.CurrentVersion;
+            PostProcessingWaitTime = product.PostProcessingWaitTime;
+            PreProcessingWaitTime = product.PreProcessingWaitTime;
+            InProcessTime = product.InProcessTime;
+            SetUpTime = product.SetUpTime;
+            SellingPrice = product.SellingPrice;
+            TotalMaterialCost = product.TotalMaterialCost();
+            WagePerHour = product.WagePerHour;
+            VariableOHPerDLHour = product.VariableOHPerDLHour;
+            InterestRate = product.InterestRate;
+            FixedOHPerYear = product.FixedOHPerYear;
+            CreationDate = DateTime.Now;
+            ModificationDate = DateTime.Now;
+            isValid = true;
+
+        }
     }
 }

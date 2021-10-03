@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using ProductionPlanner.Domain.Exceptions;
 using ProductionPlanner.Domain.Models;
 using ProductionPlanner.Repository.Implementation;
+using ProductionPlanner.Repository.Interface;
 using ProductionPlanner.Service.Interface;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,10 @@ namespace ProductionPlanner.Service.Implementation
 {
     public class OrderService : IOrderService
     {
-        private readonly IRepository<Order> orderRepository;
+        private readonly IOrderRepository orderRepository;
         private readonly IRepository<ProductHistory> productHistoryRepository;
 
-        public OrderService(IRepository<Order> _orderRepository, IRepository<ProductHistory> _productHistoryRepository)
+        public OrderService(IOrderRepository _orderRepository, IRepository<ProductHistory> _productHistoryRepository)
         {
             this.orderRepository = _orderRepository;
             productHistoryRepository = _productHistoryRepository;
@@ -27,6 +28,7 @@ namespace ProductionPlanner.Service.Implementation
 
         public void CreateNewOrder(Order order)
         {
+            order.IsValid = true;
             this.orderRepository.Insert(order);
         }
 
@@ -53,6 +55,7 @@ namespace ProductionPlanner.Service.Implementation
 
         public List<string> ImportOrdersFromExcel(IFormFile file)
         {
+           
             string filePath = $"{Directory.GetCurrentDirectory()}\\files\\{file.FileName}";
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 

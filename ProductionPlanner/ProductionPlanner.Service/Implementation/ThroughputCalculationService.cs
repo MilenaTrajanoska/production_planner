@@ -14,7 +14,7 @@ namespace ProductionPlanner.Service.Implementation
             _calculationService = calculationService;
         }
 
-        public List<DateTime> calculateThroughputDiagramXAxis(DateTime from)
+        public List<DateTime> calculateThroughputDiagramXAxis(DateTime from, DateTime to)
         {
             DateTime startMin;
 
@@ -27,11 +27,19 @@ namespace ProductionPlanner.Service.Implementation
                 startMin = _calculationService.getMinStartDate();
             }
 
-            DateTime endMax = _calculationService.getMaxEndDate();
+            DateTime endDate;
+            if (to != null)
+            {
+                endDate = to;
+            }
+            else
+            {
+                endDate = _calculationService.getMaxEndDate();
+            }
 
             List<DateTime> result = new List<DateTime>();
             
-            while(startMin.Date.CompareTo(endMax.Date) <= 0)
+            while(startMin.Date.CompareTo(endDate.Date) <= 0)
             {
                 result.Add(DateTime.Parse(startMin.ToString()));
                 startMin = startMin.AddDays(1);
@@ -39,27 +47,27 @@ namespace ProductionPlanner.Service.Implementation
             return result;
         }
 
-        public List<double> calculateOutputSeries(List<DateTime> dates)
+        public List<double> calculateOutputSeries(DateTime minDate, DateTime maxDate)
         {
-            var minDate = dates.Min();
+            var dates = calculateThroughputDiagramXAxis(minDate, maxDate);
             var result = new List<double>();
 
             dates.ForEach(d => result.Add(_calculationService.calculateOutputForDate(minDate, d)));
             return result;
         }
 
-        public List<double> calculateInputSeries(List<DateTime> dates)
+        public List<double> calculateInputSeries(DateTime minDate, DateTime maxDate)
         {
-            var minDate = dates.Min();
+            var dates = calculateThroughputDiagramXAxis(minDate, maxDate);
             var result = new List<double>();
 
             dates.ForEach(d => result.Add(_calculationService.calculateInputForDate(minDate, d)));
             return result;
         }
 
-        public List<double> calculateWIPSeries(List<DateTime> dates)
+        public List<double> calculateWIPSeries(DateTime minDate, DateTime maxDate)
         {
-            var minDate = dates.Min();
+            var dates = calculateThroughputDiagramXAxis(minDate, maxDate);
             var result = new List<double>();
 
             dates.ForEach(d => result.Add(_calculationService.getWIPForDate(minDate, d)));

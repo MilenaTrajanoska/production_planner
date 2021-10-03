@@ -14,8 +14,13 @@ namespace ProductionPlanner.Domain.Models
         public string OrderName { get; set; }
         public virtual ProductHistory OrderedProduct { get; set; }
         public int Quantity { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime StartDate { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime EndDate { get; set; }
+        public bool IsValid { get; set; }
 
         public double getWorkContent()
         {

@@ -6,7 +6,7 @@ namespace ProductionPlanner.Service.Interface
 {
     public interface IWorkContentDistributionCalculationService
     {
-        List<double> getXAxisValues(DateTime minDate);
-        List<double> getYAxisValues(DateTime minDate);
+        List<double> getXAxisValues(DateTime minDate, DateTime maxDate);
+        List<double> getYAxisValues(DateTime minDate, DateTime maxDate);
     }
 }

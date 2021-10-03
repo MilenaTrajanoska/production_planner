@@ -4,7 +4,9 @@
 @{
 }
 @model List<ProductionPlanner.Domain.Models.Order>
-
+<br>
+<h1><b>All orders</b></h1>
+<br>
 <table class="table">
     <tr>
         <th>
@@ -34,7 +36,7 @@
                 @Html.DisplayFor(modelItem => item.OrderName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.OrderedProduct.ProductName)
+                @item.OrderedProduct.ProductName
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Quantity)

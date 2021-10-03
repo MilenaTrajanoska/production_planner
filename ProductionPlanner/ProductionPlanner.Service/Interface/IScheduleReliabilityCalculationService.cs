@@ -6,9 +6,9 @@ namespace ProductionPlanner.Service.Interface
 {
     public interface IScheduleReliabilityCalculationService
     {
-        List<double> getXAxisScheduleReliability(DateTime minDate);
-        List<double> getYAxisScheduleReliability(DateTime minDate);
-        List<double> getXAxisMeanWIP(DateTime minDate);
-        List<double> getYAxisMeanWIP(DateTime minDate);
+        List<double> getXAxisScheduleReliability(DateTime minDate, DateTime maxDate);
+        List<double> getYAxisScheduleReliability(DateTime minDate, DateTime maxDate);
+        List<double> getXAxisMeanWIP(DateTime minDate, DateTime maxDate);
+        List<double> getYAxisMeanWIP(DateTime minDate, DateTime maxDate);
     }
 }

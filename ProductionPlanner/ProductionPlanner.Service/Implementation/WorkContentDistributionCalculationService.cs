@@ -14,7 +14,7 @@ namespace ProductionPlanner.Service.Implementation
         {
             _calculationService = calculationService;
         }
-        public List<double> getXAxisValues(DateTime minDate)
+        public List<double> getXAxisValues(DateTime minDate, DateTime maxDate)
         {
             DateTime startDate;
             if(minDate == null)
@@ -25,8 +25,17 @@ namespace ProductionPlanner.Service.Implementation
             {
                 startDate = minDate;
             }
+            DateTime endDate;
+            if (maxDate == null)
+            {
+                endDate = _calculationService.getMaxEndDate();
+            }
+            else
+            {
+                endDate = maxDate;
+            }
 
-            var workContents = _calculationService.getWorkContents(startDate);
+            var workContents = _calculationService.getWorkContents(startDate, endDate);
             var minWC = workContents.Min();
             var maxWC = workContents.Max();
 
@@ -46,7 +55,7 @@ namespace ProductionPlanner.Service.Implementation
 
         }
 
-        public List<double> getYAxisValues(DateTime minDate)
+        public List<double> getYAxisValues(DateTime minDate, DateTime maxDate)
         {
             DateTime startDate;
             if (minDate == null)
@@ -57,9 +66,18 @@ namespace ProductionPlanner.Service.Implementation
             {
                 startDate = minDate;
             }
+            DateTime endDate;
+            if (maxDate == null)
+            {
+                endDate = _calculationService.getMaxEndDate();
+            }
+            else
+            {
+                endDate = maxDate;
+            }
 
-            var xVals = getXAxisValues(startDate);
-            var workContents = _calculationService.getWorkContents(startDate);
+            var xVals = getXAxisValues(startDate, endDate);
+            var workContents = _calculationService.getWorkContents(startDate, endDate);
             var numOrders = workContents.Count;
             var frequencies = new List<double>();
             foreach (var val in xVals)

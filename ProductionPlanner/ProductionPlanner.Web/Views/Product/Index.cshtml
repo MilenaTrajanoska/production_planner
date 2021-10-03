@@ -1,59 +1,68 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-    
+
     All products page
 *@
 @{
 }
 @model List<ProductionPlanner.Domain.Models.Product>
-
-<table class="table">
-    <tr>
-        <th>
-            Product Name
-        </th>
-        <th>
-            Materials
-        </th>
-        <th>
-            Selling Price
-        </th>
-        <th>
-            Total Material Cost
-        </th>
-        <th>
-            Wage Per Hour
-        </th>
-
-
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+    <br>
+    <h1><b>All products</b></h1>
+    <br>
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaterialForProduct)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SellingPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalMaterialCost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WagePerHour)
-            </td>
+            <th>
+                Product Name
+            </th>
+            <th>
+                Materials
+            </th>
+            <th>
+                Selling Price
+            </th>
+            <th>
+                Total Material Cost
+            </th>
+            <th>
+                Wage Per Hour
+            </th>
 
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
+
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    <div>
+                        @foreach (var material in item.MaterialForProduct)
+                        {
+                            <p>@material.Material.MaterialName</p>
+                        }
+                    </div>
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SellingPrice) €
+                </td>
+                <td>
+                    @{var total = item.TotalMaterialCost().ToString("0.00") + " €";}
+                    @total
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WagePerHour) €
+                </td>
+
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>

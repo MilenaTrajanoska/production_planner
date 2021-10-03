@@ -10,3 +10,16 @@ C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionP
 C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Repository.pdb
 C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.dll
 C:\Users\mimi_\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.pdb
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.csproj.AssemblyReference.cache
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.AssemblyInfoInputs.cache
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.AssemblyInfo.cs
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.csproj.CoreCompileInputs.cache
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.dll
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.pdb
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Repository.deps.json
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Repository.dll
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Repository.pdb
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Domain.dll
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\bin\Debug\netcoreapp3.1\ProductionPlanner.Domain.pdb
+C:\Users\User\Documents\GitHub\production_planner\ProductionPlanner\ProductionPlanner.Repository\obj\Debug\netcoreapp3.1\ProductionPlanner.Repository.csproj.CopyComplete
