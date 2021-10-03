@@ -31,6 +31,12 @@
             <input type="hidden" asp-for="ProductId" value="@Model.ProductId" />
             <select class="form-control" asp-for="MaterialName" asp-items="ViewBag.Materials">
             </select>
+            <span asp-validation-for="MaterialName" class="text-danger"></span>
+        </div>
+        <div class="form-group mx-auto">
+            <label asp-for="Quantity"></label>
+            <input type="number" asp-for="Quantity" class="form-control" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
         </div>
 
         <div class="form-group">

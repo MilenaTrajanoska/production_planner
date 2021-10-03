@@ -53,13 +53,13 @@ namespace ProductionPlanner.Service.Implementation
 
         public void UpdateExistingProduct(Product product)
         {
-            product.CurrentVersion += 1;
             product.LastModified = DateTime.Now;
 
             var history = productHistoryRepository.getEntities()
                 .Where(e => e.ProductId == product.Id && e.Version == product.CurrentVersion && e.isValid)
                 .FirstOrDefault();
-            if(history != null)
+            product.CurrentVersion += 1;
+            if (history != null)
             {
                 history.isValid = false;
                 history.ModificationDate = DateTime.Now;

@@ -11,6 +11,6 @@ namespace ProductionPlanner.Domain.Models
         public long MaterialId { get; set; }
         public Material Material { get; set; }
 
-        public int Quantity { get; set; } 
+        public double Quantity { get; set; } 
     }
 }

@@ -13,6 +13,7 @@ namespace ProductionPlanner.Domain.ViewModels
         public Product SelectedProduct { get; set; }
 
         public string MaterialName { get; set; }
+        public double Quantity { get; set; }
 
     }
 }

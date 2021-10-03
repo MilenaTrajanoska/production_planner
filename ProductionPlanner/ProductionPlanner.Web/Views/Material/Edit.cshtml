@@ -9,30 +9,32 @@
 <br />
 <br />
 
-@if (ViewBag.ErrorMaterial != null)
+@if (ViewBag.Errors != null)
 {
-
-    <div class="alert alert-danger" role="alert">
-        @ViewBag.ErrorMaterial
-    </div>
+    @foreach (var err in ViewBag.Errors)
+    {
+        <div class="alert alert-danger" role="alert">
+            @err
+        </div>
+    }
 }
-@if (ViewBag.SuccessMaterial != null)
+@if (ViewBag.Message != null)
 {
 
     <div class="alert alert-success" role="alert">
-        @ViewBag.SuccessMaterial
+        @ViewBag.Message
     </div>
 }
 <h1 class="text-center">
     <b>
-        Create a new material
+        Edit material
     </b>
 
 </h1>
 <br />
 <br />
 <div class="mx-auto w-25">
-    <form asp-controller="Material" asp-action="Index" method="post">
+    <form asp-controller="Material" asp-action="Edit" method="post">
         <div class="row form-group">
             <div class="col-6">
                 <label asp-for="MaterialName" class="control-label">Material name</label>
@@ -55,7 +57,7 @@
 
         <div class="form-group">
 
-            <input type="submit" value="Add material" class="btn btn-primary w-100" />
+            <input type="submit" value="Save Changes" class="btn btn-primary w-100" />
 
         </div>
     </form>

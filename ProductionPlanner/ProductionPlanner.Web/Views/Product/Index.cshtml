@@ -6,63 +6,106 @@
 @{
 }
 @model List<ProductionPlanner.Domain.Models.Product>
-    <br>
-    <h1><b>All products</b></h1>
-    <br>
-    <table class="table">
+<br>
+<h1><b>All products</b></h1>
+<br>
+@if (ViewBag.Errors != null)
+{
+    @foreach (var err in ViewBag.Errors)
+    {
+        <div class="alert alert-danger" role="alert">
+            @err
+        </div>
+    }
+}
+@if (ViewBag.Message != null)
+{
+
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+<table class="table">
+    <tr>
+        <th>
+            Product Name
+        </th>
+        <th>
+            Materials
+        </th>
+        <th>
+            Selling Price
+        </th>
+        <th>
+            Total Material Cost
+        </th>
+        <th>
+            Wage Per Hour
+        </th>
+
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
         <tr>
-            <th>
-                Product Name
-            </th>
-            <th>
-                Materials
-            </th>
-            <th>
-                Selling Price
-            </th>
-            <th>
-                Total Material Cost
-            </th>
-            <th>
-                Wage Per Hour
-            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                <div>
+                    @foreach (var material in item.MaterialForProduct)
+                    {
+                        <p>@material.Material.MaterialName</p>
+                    }
+                </div>
 
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SellingPrice) €
+            </td>
+            <td>
+                @{var total = item.TotalMaterialCost().ToString("0.00") + " €";}
+                @total
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WagePerHour) €
+            </td>
 
-            <th></th>
-        </tr>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @{
+                    var tm = "#myModal" + item.Id;
+                    var mid = "myModal" + item.Id;
+                }
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@tm">
+                    Delete
+                </button>
 
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                </td>
-                <td>
-                    <div>
-                        @foreach (var material in item.MaterialForProduct)
-                        {
-                            <p>@material.Material.MaterialName</p>
-                        }
+                <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure want to remove this product?
+                            </div>
+                            <div class="modal-footer">
+                                <form asp-action="Delete" method="post">
+                                    <input type="hidden" name="id" value="@item.Id" />
+                                    <input type="submit" value="Delete" class="btn btn-danger" />
+                                </form>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </td>
+        </tr>
+    }
 
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SellingPrice) €
-                </td>
-                <td>
-                    @{var total = item.TotalMaterialCost().ToString("0.00") + " €";}
-                    @total
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.WagePerHour) €
-                </td>
-
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
-            </tr>
-        }
-
-    </table>
+</table>
