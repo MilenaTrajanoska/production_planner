@@ -17,11 +17,13 @@ namespace ProductionPlanner.Domain.Models
         [Required(ErrorMessage = "The quantity of the ordered products is required")]
         public int Quantity { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The start date of processing is required")]
         public DateTime StartDate { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+        [DataType(DataType.Date)]
         [Required(ErrorMessage = "The end date of processing is required")]
         public DateTime EndDate { get; set; }
         public bool IsValid { get; set; }

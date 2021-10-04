@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using ProductionPlanner.Domain.Models;
 using ProductionPlanner.Repository.Implementation;
 using ProductionPlanner.Service.Interface;
@@ -15,11 +16,14 @@ namespace ProductionPlanner.Web.Controllers
     {
         private readonly IOrderService orderService;
         private readonly IRepository<ProductHistory> productHistoryRepository;
+        private readonly IProductService productService;
+        
 
-        public OrderController(IOrderService _orderService, IRepository<ProductHistory> _productHistoryRepository)
+        public OrderController(IOrderService _orderService, IRepository<ProductHistory> _productHistoryRepository, IProductService _productService)
         {
             orderService = _orderService;
             productHistoryRepository = _productHistoryRepository;
+            productService =_productService;
         }
 
         //discuss usage
@@ -95,6 +99,83 @@ namespace ProductionPlanner.Web.Controllers
 
             return View("Create", new Order());
             
+        }
+
+        [HttpGet]
+        public IActionResult Edit(long id)
+        {
+            ViewBag.Products = productService.GetAllProducts().Select(o => new SelectListItem
+            {
+                Value = o.ProductName,
+                Text = o.ProductName
+            }).ToList();
+
+            
+
+            var order = orderService.GetOrder(id);
+            if(order != null)
+            {
+                return View(order);
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Order order)
+        {
+            if (ModelState.IsValid)
+            {
+                var product = productHistoryRepository
+                    .getEntities()
+                    .Include(p=>p.ReferencedProduct)
+                    .Where(ph => ph.isValid && ph.ReferencedProduct.ProductName == order.OrderedProduct.ProductName)
+                    .FirstOrDefault();
+
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                order.OrderedProduct = product;
+                order.ProductId = product.Id;
+                orderService.UpdateExistingOrder(order);
+                ViewBag.Message = "Successfully updated the order";
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Delete(long id)
+        {
+            var order = orderService.GetOrder(id);
+            if (order == null)
+            {
+                ViewBag.Errors = new List<string>() { "Could not delete a product that does not exist." };
+            }
+            else
+            {
+                orderService.DeleteOrder(id);
+                ViewBag.Message = "Successfully deleted product.";
+            }
+            return View("Index", orderService.GetAllOrders());
+        }
+
+        [HttpGet]
+        public IActionResult Details(long id)
+        {
+            var order = orderService.GetOrder(id);
+
+            ViewBag.Products = productService.GetAllProducts().Select(o => new SelectListItem
+            {
+                Value = o.ProductName,
+                Text = o.ProductName
+            }).ToList();
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return View(order);
         }
     }
 }

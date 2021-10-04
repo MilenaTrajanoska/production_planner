@@ -44,6 +44,7 @@ namespace ProductionPlanner.Service.Implementation
 
         public void UpdateExistingOrder(Order order)
         {
+            order.IsValid = true;
             this.orderRepository.Update(order);
         }
 
@@ -107,5 +108,7 @@ namespace ProductionPlanner.Service.Implementation
 
             return errorMessages;
         }
+
+
     }
 }

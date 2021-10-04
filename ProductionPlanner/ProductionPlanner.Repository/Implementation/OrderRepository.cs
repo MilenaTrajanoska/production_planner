@@ -31,8 +31,9 @@ namespace ProductionPlanner.Repository.Implementation
         {
             return orders
                 .Include(o => o.OrderedProduct)
-                .Include("OrderedProduct.MaterialForProduct")
-                .Include("OrderedProduct.MaterialForProduct.Material")
+                .Include("OrderedProduct.ReferencedProduct")
+                .Include("OrderedProduct.ReferencedProduct.MaterialForProduct")
+                .Include("OrderedProduct.ReferencedProduct.MaterialForProduct.Material")
                 .SingleOrDefault(o => o.Id == id && o.IsValid);
         }
 

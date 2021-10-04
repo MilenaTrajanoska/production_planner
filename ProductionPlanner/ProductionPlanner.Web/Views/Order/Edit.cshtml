@@ -1,0 +1,89 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+    EDIT ORDER
+*@
+@model ProductionPlanner.Domain.Models.Order
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="pt-5 px-5 row">
+    <div class="w-50">
+        <form asp-controller="Order" asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (ViewBag.Message != null)
+            {
+                <div class="alert alert-success">
+                    <p>@ViewBag.Message</p>
+                </div>
+            }
+            <div class="pb-3">
+                <h1 class="text-center">
+                    <b>
+                        Edit order
+                    </b>
+
+                </h1>
+                <br /><br />
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="OrderName" class="control-label">Order id:</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="OrderName" type="text" style="max-width: 55% !important" />
+                        <span asp-validation-for="OrderName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="OrderedProduct.ProductName" class="control-label">Product name:</label>
+                    </div>
+                    <div class="col-8">
+                        <select class="form-control" asp-for="OrderedProduct.ProductName" asp-items="@ViewBag.Products" style="max-width: 55% !important"></select>
+                        <span asp-validation-for="OrderedProduct.ProductName" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="Quantity" class="control-label">Quantity</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="Quantity" type="number" style="max-width: 55% !important" />
+                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="StartDate" class="control-label">Start date: </label>
+                    </div>
+                    <div class="col-6">
+                        <input class="form-control" type="date" value="@Model.StartDate.ToString("yyyy-MM-dd")" asp-for="StartDate">
+                        <span asp-validation-for="StartDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="EndDate" class="control-label">End date: </label>
+                    </div>
+                    <div class="col-6">
+                        <input class="form-control" type="date" value="@Model.EndDate.ToString("yyyy-MM-dd")" asp-for="EndDate">
+                        <span asp-validation-for="EndDate" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save changes" class="btn btn-primary w-75" />
+            </div>
+        </form>
+    </div>
+
+
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+}
