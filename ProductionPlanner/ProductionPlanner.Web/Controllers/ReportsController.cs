@@ -17,12 +17,6 @@ namespace ProductionPlanner.Web.Controllers
         private readonly IThroughputTimeDistributionCalculationService throughputTimeDistributionCalculationService;
         private readonly IScheduleReliabilityCalculationService scheduleReliabilityCalculationService;
 
-        //private readonly ThroughputCalculationService throughputCalculationService;
-        //private readonly LogisticOperatingCurveCalculationService logisticOperatingCurveCalculationService;
-        //private readonly WorkContentDistributionCalculationService workContentDistributionCalculationService;
-        //private readonly ThroughputTimeDistributionCalculationService throughputTimeDistributionCalculationService;
-        //private readonly ScheduleReliabilityCalculationService scheduleReliabilityCalculationService;
-
         public ReportsController(
             IThroughputCalculationService _throughputCalculationService,
             ILogisticOperatingCurveCalculationService _logisticOperatingCurveCalculationService,
@@ -41,51 +35,28 @@ namespace ProductionPlanner.Web.Controllers
         public IActionResult Index()
         {
             List<DateTime> datesWeekly = this.LastWeekDates();
-
-            //List<double> input = throughputCalculationService.calculateInputSeries(datesWeekly);
-            //List<double> output = throughputCalculationService.calculateOutputSeries(datesWeekly);
-            //List<double> wip = throughputCalculationService.calculateWIPSeries(datesWeekly);
-            //double tCapacity = throughputCalculationService.getCapacity(datesWeekly);
-            //ThroughputDiagram throughputDiagramModel = new ThroughputDiagram(input, output, wip, tCapacity);
-
-            //List<double> wcdClasses = workContentDistributionCalculationService.getXAxisValues(datesWeekly);
-            //List<double> wcdRel = workContentDistributionCalculationService.getYAxisValues(datesWeekly);
-            //WorkContentDistributionDiagramModel workContentDistributionDiagramModel = new WorkContentDistributionDiagramModel(wcdClasses, wcdRel);
-
-            //List<double> outputRate = logisticOperatingCurveCalculationService.getOutputRateXAxisValues(datesWeekly);
-            //List<double> throughputTime = logisticOperatingCurveCalculationService.getThroughputTimeXAxisValues(datesWeekly);
-            //double range = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(datesWeekly);
-            //List<double> locCapacity = logisticOperatingCurveCalculationService.getCapacityXAxisValues(datesWeekly);
-            //List<double> opOperatingPoin = logisticOperatingCurveCalculationService.getOPOperatingPointXAxisValues(datesWeekly);
-            //double opRange = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(datesWeekly);
-            //double opThroughputTime = logisticOperatingCurveCalculationService.getOPThroughputTimeXAxisValues(datesWeekly);
-            //LodisticOperatingCurvesDiagramModel lodisticOperatingCurvesDiagramModel = new LodisticOperatingCurvesDiagramModel(outputRate, throughputTime, range, locCapacity, opOperatingPoin, opRange, opThroughputTime);
-
-            //List<double> ttdClasses = throughputTimeDistributionCalculationService.getXAxisValues(datesWeekly);
-            //List<double> ttdRel = throughputTimeDistributionCalculationService.getYAxisValues(datesWeekly);
-            //ThroughputTimeDistributionDiagramModel throughputTimeDistributionDiagramModel = new ThroughputTimeDistributionDiagramModel(ttdClasses, ttdRel);
-
-            //List<double> scheduleReliability = scheduleReliabilityCalculationService.getXAxisScheduleReliability(datesWeekly);
-            //List<double> meanWIP = scheduleReliabilityCalculationService.getXAxisMeanWIP(datesWeekly);
-            //ScheduleReliabilityOperatingCurveDiagramModel scheduleReliabilityOperatingCurveDiagramModel = new ScheduleReliabilityOperatingCurveDiagramModel(scheduleReliability, meanWIP);
-
-            //Diagram diagram = new Diagram(throughputDiagramModel, workContentDistributionDiagramModel, lodisticOperatingCurvesDiagramModel, throughputTimeDistributionDiagramModel, scheduleReliabilityOperatingCurveDiagramModel);
-
-            //return View(diagram);
+            DateTime minDate = datesWeekly.FirstOrDefault();
+            DateTime maxDate = datesWeekly.LastOrDefault();
+            //Diagram diagram = this.GetDiagram(minDate, maxDate);
             return View();
         }
 
         public IActionResult MonthReports()
         {
             List<DateTime> datesMonthly = this.LastMonthDates();
+            DateTime minDate = datesMonthly.FirstOrDefault();
+            DateTime maxDate = datesMonthly.LastOrDefault();
+            //Diagram diagram = this.GetDiagram(minDate, maxDate);
             return View();
         }
 
         public IActionResult YearReports()
         {
             List<DateTime> datesYearly = this.YearDates(2021);
-
-            return View();
+            DateTime minDate = datesYearly.FirstOrDefault();
+            DateTime maxDate = datesYearly.LastOrDefault();
+            Diagram diagram = this.GetDiagram(minDate, maxDate);
+            return View(diagram);
         }
 
         private List<DateTime> LastWeekDates()
@@ -113,5 +84,58 @@ namespace ProductionPlanner.Web.Controllers
             var lastOfYear = DateTime.Today.AddDays(-1).AddYears(-yearsBack);
             return new List<DateTime> { firstOfYear, lastOfYear };
         }
+
+        private Diagram GetDiagram(DateTime minDate, DateTime maxDate)
+        {
+            ThroughputDiagram throughputDiagramModel = this.GetThroughputDiagram(minDate, maxDate);
+            WorkContentDistributionDiagramModel workContentDistributionDiagramModel = this.GetWorkContentDistributionDiagramModel(minDate, maxDate);
+            LodisticOperatingCurvesDiagramModel lodisticOperatingCurvesDiagramModel = this.GetLodisticOperatingCurvesDiagramModel(minDate, maxDate);
+            ThroughputTimeDistributionDiagramModel throughputTimeDistributionDiagramModel = this.GetThroughputTimeDistributionDiagramModel(minDate, maxDate);
+            ScheduleReliabilityOperatingCurveDiagramModel scheduleReliabilityOperatingCurveDiagramModel = this.GetScheduleReliabilityOperatingCurveDiagramModel(minDate, maxDate);
+            return new Diagram(throughputDiagramModel, workContentDistributionDiagramModel, lodisticOperatingCurvesDiagramModel, throughputTimeDistributionDiagramModel, scheduleReliabilityOperatingCurveDiagramModel);
+        }
+
+        private ThroughputDiagram GetThroughputDiagram(DateTime minDate, DateTime maxDate)
+        {
+            List<double> input = throughputCalculationService.calculateInputSeries(minDate, maxDate);
+            List<double> output = throughputCalculationService.calculateOutputSeries(minDate, maxDate);
+            List<double> wip = throughputCalculationService.calculateWIPSeries(minDate, maxDate);
+            double tCapacity = throughputCalculationService.getCapacity(minDate, maxDate);
+            return new ThroughputDiagram(input, output, wip, tCapacity);
+        }
+
+        private WorkContentDistributionDiagramModel GetWorkContentDistributionDiagramModel(DateTime minDate, DateTime maxDate)
+        {
+            List<double> wcdClasses = workContentDistributionCalculationService.getXAxisValues(minDate, maxDate);
+            List<double> wcdRel = workContentDistributionCalculationService.getYAxisValues(minDate, maxDate);
+            return new WorkContentDistributionDiagramModel(wcdClasses, wcdRel);
+        }
+
+        private LodisticOperatingCurvesDiagramModel GetLodisticOperatingCurvesDiagramModel(DateTime minDate, DateTime maxDate)
+        {
+            List<double> outputRate = logisticOperatingCurveCalculationService.getOutputRateXAxisValues(minDate, maxDate);
+            List<double> throughputTime = logisticOperatingCurveCalculationService.getThroughputTimeXAxisValues(minDate, maxDate);
+            double range = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(minDate, maxDate);
+            List<double> locCapacity = logisticOperatingCurveCalculationService.getCapacityXAxisValues(minDate, maxDate);
+            List<double> opOperatingPoin = logisticOperatingCurveCalculationService.getOPOperatingPointXAxisValues(minDate, maxDate);
+            double opRange = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(minDate, maxDate);
+            double opThroughputTime = logisticOperatingCurveCalculationService.getOPThroughputTimeXAxisValues(minDate, maxDate);
+            return new LodisticOperatingCurvesDiagramModel(outputRate, throughputTime, range, locCapacity, opOperatingPoin, opRange, opThroughputTime);
+        }
+
+        private ThroughputTimeDistributionDiagramModel GetThroughputTimeDistributionDiagramModel(DateTime minDate, DateTime maxDate)
+        {
+            List<double> ttdClasses = throughputTimeDistributionCalculationService.getXAxisValues(minDate, maxDate); ;
+            List<double> ttdRel = throughputTimeDistributionCalculationService.getYAxisValues(minDate, maxDate);
+            return new ThroughputTimeDistributionDiagramModel(ttdClasses, ttdRel);
+        }
+
+        private ScheduleReliabilityOperatingCurveDiagramModel GetScheduleReliabilityOperatingCurveDiagramModel(DateTime minDate, DateTime maxDate)
+        {
+            List<double> scheduleReliability = scheduleReliabilityCalculationService.getXAxisScheduleReliability(minDate, maxDate);
+            List<double> meanWIP = scheduleReliabilityCalculationService.getXAxisMeanWIP(minDate, maxDate);
+            return new ScheduleReliabilityOperatingCurveDiagramModel(scheduleReliability, meanWIP);
+        }
+
     }
 }
