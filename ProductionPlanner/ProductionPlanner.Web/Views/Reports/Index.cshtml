@@ -5,7 +5,7 @@
     ViewData["Title"] = "Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model ProductionPlanner.Domain.ViewModels.ThroughputDiagram
+@*@model ProductionPlanner.Domain.ViewModels.Diagram*@
 
 <br />
 <br />
@@ -41,6 +41,9 @@
         <div class="col-md-12 p-5">
             <div id="schedule_reliability_operating_curve "></div>
         </div>
+        <div class="col-md-12 p-5">
+            <svg></svg>
+        </div>
     </div>
     <br />
     <br />
@@ -55,34 +58,52 @@
     //    .append("svg")
     //    .attr("width", 1000)
     //    .attr("height", 300)
-    //var x = d3.scaleBand()
+    //var x1 = d3.scaleBand()
+    //    // domain = hosrizontal labels
     //    .domain(["A", "B", "C", "D", "E"])       // This is what is written on the Axis: from 0 to 100
     //    .range([100, 800])                       // This is where the axis is placed: from 100 px to 800px
     //    .padding([0.8])                          // Goes between 0 and 1. Default is 0
     //svg1
     //    .append("g")
     //    .attr("transform", "translate(0,250)")      // This controls the vertical position of the Axis
-    //    .call(d3.axisBottom(x));
+    //    .call(d3.axisBottom(x1));
+    ////svg1
+    ////    .append("g")
+    ////    .attr("transform", "translate(0,250)")      // This controls the vertical position of the Axis
+    ////    .call(d3.axisLeft(d3.scaleLinear().domain([0, 1]).range([1000,0])));
     //svg1
     //    .append("rect")
-    //    .attr("x", x("C"))
+    //    .attr("x", x1("C"))
     //    .attr("y", 100)
     //    .attr("height", 150)
-    //    .attr("width", x.bandwidth())
-    //    .style("fill", "#69b3a2")
-    //    .style("opacity", 0.5)
+    //    .attr("width", x1.bandwidth())
+    ////    .style("fill", "#69b3a2")
+    //////    .style("opacity", 0.5)
 
 
+   @*
+    var ThroughputDiagram = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram))');
+    var WorkContentDistributionDiagramModel = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel))');
+    var LodisticOperatingCurvesDiagramModel = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel))');
+    var ThroughputTimeDistributionDiagramModel = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputTimeDistributionDiagramModel))');
+    var ScheduleReliabilityOperatingCurveDiagramModel = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel))');
 
-    var input = JSON.parse('@Html.Raw(Json.Serialize(Model.Input))');
-    var output = JSON.parse('@Html.Raw(Json.Serialize(Model.Output))');
-    var wip = JSON.parse('@Html.Raw(Json.Serialize(Model.WIP))');
-    var capacity = JSON.parse('@Html.Raw(Json.Serialize(Model.Capacity))');
+    console.log(ThroughputDiagram);
+    console.log(WorkContentDistributionDiagramModel);
+    console.log(LodisticOperatingCurvesDiagramModel);
+    console.log(ThroughputTimeDistributionDiagramModel);
+    console.log(ScheduleReliabilityOperatingCurveDiagramModel);*@
 
-    console.log(input);
-    console.log(output);
-    console.log(wip);
-    console.log(capacity);
+    const DUMMY_DATA = [
+        { value: 10, label: 'asd' },
+        { value: 0, label: 'asd2' },
+        { value: 0, label: 'asd3' },
+        { value: 0, label: 'asd4' },
+        { value: 10, label: '1255' },
+        { value: 11, label: '12AAS6' },
+        { value: 12, label: 'ASD7' },
+        { value: 6, label: '001238' },
+    ];
 
     const WIDTH = 400;
     const HEIGHT = 300;
@@ -95,18 +116,18 @@
         .append('g')
         .attr('transform', 'translate(' + MARGIN.left + ',' + MARGIN.top + ')');
 
-    const x = d3.scaleLinear().domain([0, 1]).range([0, INNER_WIDTH]);
-    const y = d3.scaleLinear().domain([0, 1]).range([INNER_HEIGHT, 0]);
-    const xAxis = d3.axisBottom(x).ticks(10);
-    const yAxis = d3.axisLeft(y).ticks(10);
-    const xAxisGrid = d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat('').ticks(10);
-    const yAxisGrid = d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat('').ticks(10);
+    const x = d3.scaleBand().domain(DUMMY_DATA.map(d => d.label)).range([0, INNER_WIDTH]);
+    const y = d3.scaleLinear().domain([0, 30]).range([INNER_HEIGHT, 0]);
+    const xAxis = d3.axisBottom(x);
+    const yAxis = d3.axisLeft(y).ticks(30/6);
+    //const xAxisGrid = d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat('').ticks(10);
+    const yAxisGrid = d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat('').ticks(30 / 6);
 
     // Create grids.
-    svg.append('g')
-        .attr('class', 'x axis-grid')
-        .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
-        .call(xAxisGrid);
+    //svg.append('g')
+    //    .attr('class', 'x axis-grid')
+    //    .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
+    //    .call(xAxisGrid);
     svg.append('g')
         .attr('class', 'y axis-grid')
         .call(yAxisGrid);
@@ -118,6 +139,124 @@
     svg.append('g')
         .attr('class', 'y axis')
         .call(yAxis);
+    // Add data
+    svg.selectAll('.bar').data(DUMMY_DATA).enter()
+        .append('rect').classed('bar', true)
+        .attr('width', 10)
+        .attr('height', data => INNER_HEIGHT - y(data.value))
+        .style('fill', 'green')
+        .attr('x', data => x(data.label) + x.bandwidth()/2-5)
+        .attr('y', data => y(data.value));
+
+   
+    //const MARGINS = { top: 20, bottom: 10 };
+    //const CHART_WIDTH = 600;
+    //const CHART_HEIGHT = 400 - MARGINS.top - MARGINS.bottom;
+
+    //const xScale = d3.scaleBand().rangeRound([0, CHART_WIDTH]).padding(0.1);
+    //const yScale = d3.scaleLinear().range([CHART_HEIGHT, 0]);
+
+    //xScale.domain(DUMMY_DATA.map(d => d.label));
+    ////yScale.domain(DUMMY_DATA.map(d => d.value));
+    //yScale.domain([0, d3.max(DUMMY_DATA,d =>  d.value+3 )]);
+
+    //const chartContainer = d3.select('svg')
+    //    .attr('width', CHART_WIDTH)
+    //    .attr('height', CHART_HEIGHT + MARGINS.top + MARGINS.bottom);
+
+    // //const xAxis = d3.axisBottom(x);
+    ////const yAxis = d3.axisLeft(y).ticks(30/6);
+
+    //const chart = chartContainer.append("g");
+    //chart.append('g')
+    //    .call(d3.axisBottom(xScale))
+    //    .attr('transform', `translate(0,${CHART_HEIGHT})`)
+    //    .attr('color', 'gray');
+    //chart.append('g')
+    //    .call(d3.axisLeft(yScale))//.ticks(30 / 6)
+    //    .attr('color', 'gray');
+    //chart.selectAll('.bar').data(DUMMY_DATA).enter()
+    //    .append('rect').classed('bar', true)
+    //    .attr('width', xScale.bandwidth())
+    //    .attr('height', data => CHART_HEIGHT - yScale(data.value))
+    //    .style('fill', 'green')
+    //    .attr('x', data => xScale(data.label))
+    //    .attr('y', data => yScale(data.value));
+    //chart.selectAll('.label').data(DUMMY_DATA).enter()
+    //    .append('text').text(data => data.value)
+    //    .attr('x', data => xScale(data.label) + xScale.bandwidth() / 2)
+    //    .attr('y', data => yScale(data.value) - 20)
+    //    .attr('text-anchor', 'middle').style('fill', 'green');
+
+
+    //const container = d3.select('#work_content_distribution').append("svg")
+    //    .attr('width', 100)
+    //    .attr('height', 100).style('border', '1px solid red');
+    //const bars = container.selectAll('.bar').data(DUMMY_DATA).enter()
+    //    .append("rect")
+    //    .attr("width", xScale.bandwidth())
+    //    .attr("height", (data) => 200 - yScale(data.value))
+    //    .attr("x", (data) => xScale(data.value))
+    //    .attr("x", (data) => yScale(data.value));
+
+    //setTimeout(() => {
+    //    bars.data(DUMMY_DATA.slice(0, 2)).exit().remove();
+    //})
+
+
+    //// set the dimensions and margins of the graph
+    //var margin = { top: 10, right: 30, bottom: 30, left: 40 },
+    //    width = 460 - margin.left - margin.right,
+    //    height = 400 - margin.top - margin.bottom;
+
+    //// append the svg object to the body of the page
+    //var svg1 = d3.select("#lodistic_operating_curves")
+    //    .append("svg")
+    //    .attr("width", width + margin.left + margin.right)
+    //    .attr("height", height + margin.top + margin.bottom)
+    //    .append("g")
+    //    .attr("transform",
+    //        "translate(" + margin.left + "," + margin.top + ")");
+
+    //// get the data
+    //d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function (data) {
+
+    //    // X axis: scale and draw:
+    //    var x = d3.scaleLinear()
+    //        .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+    //        .range([0, width]);
+    //    svg1.append("g")
+    //        .attr("transform", "translate(0," + height + ")")
+    //        .call(d3.axisBottom(x));
+
+    //    // set the parameters for the histogram
+    //    var histogram = d3.histogram()
+    //        .value(function (d) { return d.price; })   // I need to give the vector of value
+    //        .domain(x.domain())  // then the domain of the graphic
+    //        .thresholds(x.ticks(70)); // then the numbers of bins
+
+    //    // And apply this function to data to get the bins
+    //    var bins = histogram(data);
+
+    //    // Y axis: scale and draw:
+    //    var y = d3.scaleLinear()
+    //        .range([height, 0]);
+    //    y.domain([0, d3.max(bins, function (d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
+    //    svg1.append("g")
+    //        .call(d3.axisLeft(y));
+
+    //    // append the bar rectangles to the svg element
+    //    svg1.selectAll("rect")
+    //        .data(bins)
+    //        .enter()
+    //        .append("rect")
+    //        .attr("x", 1)
+    //        .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
+    //        .attr("width", function (d) { return x(d.x1) - x(d.x0) - 1; })
+    //        .attr("height", function (d) { return height - y(d.length); })
+    //        .style("fill", "#69b3a2")
+
+    //});
 
     //###############################################################
 
