@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ProductionPlanner.Domain.Models;
 using ProductionPlanner.Domain;
 using ProductionPlanner.Service.Interface;
 using ProductionPlanner.Domain.ViewModels;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ProductionPlanner.Web.Controllers
 {
@@ -19,13 +17,15 @@ namespace ProductionPlanner.Web.Controllers
         private readonly ICalculationService _calculationService;
         private readonly IOrderService _orderService;
         private readonly IScheduleReliabilityCalculationService _scheduleReliabilityCalculationService;
+        private IMemoryCache _cache;
 
         public HomeController(
             ILogger<HomeController> logger, 
             ICompanyService companyService,
             ICalculationService calculationService, 
             IOrderService orderService,
-            IScheduleReliabilityCalculationService scheduleReliabilityCalculationService
+            IScheduleReliabilityCalculationService scheduleReliabilityCalculationService,
+            IMemoryCache cache
             )
         {
             _logger = logger;
@@ -33,15 +33,15 @@ namespace ProductionPlanner.Web.Controllers
             _calculationService = calculationService;
             _orderService = orderService;
             _scheduleReliabilityCalculationService = scheduleReliabilityCalculationService;
+            _cache = cache;
         }
 
-        public IActionResult Index()
+        private GlobalPerformanceViewModel setGlobalPerformance()
         {
             var year = DateTime.Now.Year - 1;
             DateTime minDate = new DateTime(year, 1, 1);
 
             var company = _companyService.GetCompany();
-            ViewBag.Company = company;
 
             var performance = new GlobalPerformanceViewModel();
             var num_orders = _orderService.GetAllOrders()
@@ -64,7 +64,28 @@ namespace ProductionPlanner.Web.Controllers
                 performance.AverageUtilizationRate = _calculationService.calculateAverageUtilizationGlobal();
                 performance.ScheduleReliability = _scheduleReliabilityCalculationService.getYAxisScheduleReliability(minDate, DateTime.Now).Max();
             }
+            return performance;
+        }
+        public IActionResult Index()
+        {
 
+            var company = _companyService.GetCompany();
+            ViewBag.Company = company;
+
+            GlobalPerformanceViewModel performance;
+            if (!_cache.TryGetValue(CacheKeys.GlobalPerformance, out performance))
+            {
+                // Key not in cache, so get data.
+                performance = setGlobalPerformance();
+
+                // Set cache options.
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    // Keep in cache for this time, reset time if accessed.
+                    .SetSlidingExpiration(TimeSpan.FromHours(6));
+
+                // Save data in cache.
+                _cache.Set(CacheKeys.GlobalPerformance, performance, cacheEntryOptions);
+            }
             ViewBag.PerformanceFeatures = performance;
             return View();
         }
