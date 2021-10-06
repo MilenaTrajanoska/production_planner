@@ -7,8 +7,11 @@
 }
 @model List<ProductionPlanner.Domain.Models.Material>
 <br>
-<h1><b>All materials</b></h1>
-<br>
+<div class="mx-auto text-center">
+    <h1><b>Materials</b></h1>
+</div>
+
+
 @if (ViewBag.Errors != null)
 {
     @foreach (var err in ViewBag.Errors)
@@ -25,37 +28,44 @@
         @ViewBag.Message
     </div>
 }
-<div class="row">
-    <div class="col-md-6 m-4">
-        <a asp-action="Index" asp-controller="Material" class="btn btn-primary">Create New Material</a>
+<br />
+<div class="row mx-auto">
+    <div class="mx-auto">
+        <a asp-action="Index" asp-controller="Material" class="btn btn-primary">Create new material</a>
     </div>
 </div>
-<table class="table">
-    <tr>
-        <th>
-           Material Name
-        </th>
-        <th>
-            Cost per Unit
-        </th>
+<br />
+<br />
+<div class="w-50 mx-auto">
 
-        <th></th>
-    </tr>
 
-    @foreach (var item in Model)
-    {
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.MaterialName)
-            </td>
-            <td>
-                @item.CostPerUnit.ToString("0.00") €
-            </td>
+            <th>
+                Material Name
+            </th>
+            <th>
+                Cost per Unit
+            </th>
 
-            <td>
-               <a asp-action="Edit" asp-controller="Material" asp-route-id="@item.Id" class="btn btn-link">Edit</a>
-            </td>
+            <th></th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaterialName)
+                </td>
+                <td>
+                    @item.CostPerUnit.ToString("0.00") €
+                </td>
+
+                <td>
+                    <a asp-action="Edit" asp-controller="Material" asp-route-id="@item.Id" class="btn text-light" style="background-color: #61c97d">Edit</a>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

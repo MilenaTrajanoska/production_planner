@@ -52,25 +52,40 @@
                 @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
         @Html.ActionLink("Details", "Details", new { id = item.Id }) |
         @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @{
-                    var tm = "#myModal" + item.Id;
-                    var mid = "myModal" + item.Id;
-                }
+                
+
+                <button type="button" class="btn" style="background-color: #61c97d">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { style = "text-decoration:none; color:white" })  
+                </button>
+
+                <button type="button" class="btn" style="background-color: #bf75ff ">
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { style = "text-decoration:none; color:white" })
+                    @{
+                        var tm = "#myModal" + item.Id;
+                        var mid = "myModal" + item.Id;
+                    }
+                </button>
+
+                
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@tm">
                     Delete
                 </button>
 
                 <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog text-center">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                <div class="mx-auto">
+                                    @*<div class="float-right" style="display:block">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                    </div>
+
+                                    <br /><br />*@
+                                    <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                Are you sure want to remove this product?
+                            <div class="modal-body text-center">
+                                Are you sure want to remove this order?
                             </div>
                             <div class="modal-footer">
                                 <form asp-action="Delete" method="post">

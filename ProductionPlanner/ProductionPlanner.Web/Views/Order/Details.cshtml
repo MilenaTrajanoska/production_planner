@@ -7,14 +7,6 @@
 }
 @model ProductionPlanner.Domain.Models.Order
 
-<div class="row">
-    <div class="col-md-3">
-        <a asp-action="Index" asp-controller="Order" class="btn btn-link">Back to Order List</a>
-    </div>
-    <div class="col-md-6">
-        <h2>Order: @Model.OrderName</h2>
-    </div>
-</div>
 
 @if (ViewBag.Errors != null)
 {
@@ -32,12 +24,24 @@
         @ViewBag.Message
     </div>
 }
-
+<div class=" row">
+    <div class="">
+        <a asp-action="Index" asp-controller="Order" class="btn btn-link">Back to Order List</a>
+    </div>
+</div>
 <div class="pt-5 px-5 row">
-    <div class="col-6">
+    <div class="w-50 mx-auto">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-10">
+                <h2>Order: @Model.OrderName</h2>
+            </div>
+            <div class="col-2"></div>
+        </div>
+
         <form asp-controller="Order" asp-action="Details" method="post">
             <div class="pb-3">
-                
+
                 <br />
                 <div class="row form-group pl-4">
                     <div class="col-4">
@@ -45,7 +49,7 @@
                     </div>
                     <div class="col-8">
                         <p>@Model.OrderName  </p>
-                        
+
                     </div>
                 </div>
                 <div class="row form-group pl-4">
@@ -79,8 +83,8 @@
                     </div>
                     <div class="col-8">
                         <p>@Model.EndDate.ToString("dd/MM/yyyy")</p>
+                    </div>
                 </div>
-            </div>
-            
+
         </form>
     </div>
