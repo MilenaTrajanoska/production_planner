@@ -63,11 +63,18 @@ namespace ProductionPlanner.Web.Controllers
                 var product = productHistoryRepository.GetAll().Where(p => p.ProductName == order.OrderedProduct.ProductName).FirstOrDefault();
                 if (product != null)
                 {
-                    order.ProductId = product.Id;
-                    order.OrderedProduct = product;
-                    orderService.CreateNewOrder(order);
-                    ViewBag.Success = "Successfully created order";
-                    
+                    var oldOrder = orderService.GetAllOrders().Where(o => o.OrderName == order.OrderName).FirstOrDefault();
+                    if (oldOrder == null)
+                    {
+                        order.ProductId = product.Id;
+                        order.OrderedProduct = product;
+                        orderService.CreateNewOrder(order);
+                        ViewBag.Success = "Successfully created order";
+                    }
+                    else
+                    {
+                        ViewBag.Error = "An order with the same number already exists.";
+                    }
                 }
                 else
                 {
@@ -82,10 +89,17 @@ namespace ProductionPlanner.Web.Controllers
 
             if (file != null)
             {
-                List<string> errors = orderService.ImportOrdersFromExcel(file);
+                List<string> errors = new List<string>();
+                try
+                {
+                    errors = orderService.ImportOrdersFromExcel(file);
+                }catch (Exception e){
+                    errors = new List<string>() { "Could not open file." };
+                }
+                
                 if (errors.Count > 0)
                 {
-                    ViewBag.Messages = errors;
+                    ViewBag.Error = errors;
                 }
                 else
                 {
@@ -94,7 +108,7 @@ namespace ProductionPlanner.Web.Controllers
             }
             else
             {
-                ViewBag.Messages = new List<string>() { "Please upload an excel file." };
+                ViewBag.Error = new List<string>() { "Please upload an excel file." };
             }
 
             return View("Create", new Order());

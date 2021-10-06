@@ -1,13 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@model ProductionPlanner.Domain.Models.Company
+@using ProductionPlanner.Domain.ViewModels
+@{
+    Company company = ViewBag.Company;
+    GlobalPerformanceViewModel performance = ViewBag.PerformanceFeatures;
+}
 <div class="row px-5 pb-5 pt-3">
-    <h1 class="display-2 col-6 pl-5 text-right">Welcome!</h1>
-    <p class="small col-6"><br /><br />Fill in the following properties so <br />you can use the production planner better.</p>
+    <h5 class="display-4 text-right">Dashboard</h5>
+    @*<p class="small col-6"><br /><br />Fill in the following properties so <br />you can use the production planner better.</p>*@
 </div>
 <div class="px-5">
-    <form asp-controller="Home" asp-action="Index" method="post">
         <div class="row px-5">
             <div class="col-6 form-group">
                 <div class=" pb-3" style="color: #04396c !important">
@@ -15,20 +18,23 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-6">
-                        <label asp-for="NumberOfWS" class="control-label">Number of workstations</label>
+                        <label class="control-label">Number of workstations</label>
                     </div>
                     <div class="col-6">
-                        <input class="form-control" asp-for="NumberOfWS" type="number" style="max-width: 50% !important; display:inline-block " />
-                        <span asp-validation-for="NumberOfWS" class="text-danger"></span>
+                        <!-- <input class="form-control" asp-for="NumberOfWS" type="number" style="max-width: 50% !important; display:inline-block " />
+
+     <span asp-validation-for="NumberOfWS" class="text-danger"></span>-->
+                        <p>@company.NumberOfWS</p>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-6">
-                        <label asp-for="WSCapacity" class="control-label">Capacity of workstation</label>
+                        <label class="control-label">Capacity of workstation</label>
                     </div>
                     <div class="col-6">
-                        <input class="form-control" asp-for="WSCapacity" type="number" style="max-width: 50% !important; display:inline-block " /> hours
-                        <span asp-validation-for="WSCapacity" class="text-danger"></span>
+                        @*<input class="form-control" asp-for="WSCapacity" type="number" style="max-width: 50% !important; display:inline-block " /> hours
+                        <span asp-validation-for="WSCapacity" class="text-danger"></span>*@
+                        <p>@company.WSCapacity</p>
                     </div>
                 </div>
 
@@ -39,37 +45,38 @@
                 </div>
                 <div class="row form-group">
                     <div class="col-6">
-                        <label asp-for="InterOpTime" class="control-label">Inter-operation time</label>
+                        <label class="control-label">Inter-operation time</label>
                     </div>
                     <div class="col-6">
-                        <input class="form-control" asp-for="InterOpTime" type="number" style="max-width: 50% !important; display:inline-block " />
-                        <span asp-validation-for="InterOpTime" class="text-danger"></span>
+                        @*<input class="form-control" asp-for="InterOpTime" type="number" style="max-width: 50% !important; display:inline-block " />
+                        <span asp-validation-for="InterOpTime" class="text-danger"></span>*@
+                        <p>@company.InterOpTime</p>
                     </div>
                 </div>
                 <div class="row form-group">
                     <div class="col-6">
-                        <label asp-for="TransportantionAndStorageTime" class="control-label">Time for transportation and storage</label>
+                        <label class="control-label">Time for transportation and storage</label>
                     </div>
                     <div class="col-6">
-                        <input class="form-control" asp-for="TransportantionAndStorageTime" type="number" style="max-width: 50% !important; display:inline-block " />
-                        <span asp-validation-for="TransportantionAndStorageTime" class="text-danger"></span>
+                        @*<input class="form-control" asp-for="TransportantionAndStorageTime" type="number" style="max-width: 50% !important; display:inline-block " />
+                        <span asp-validation-for="TransportantionAndStorageTime" class="text-danger"></span>*@
+                        <p>@company.TransportantionAndStorageTime</p>
                     </div>
                 </div>
             </div>
         </div>
         <br />
 
-        <div class="form-group row">
+        @*<div class="form-group row">
             <div class="col-4"></div>
             <div class="col-4"><input type="submit" value="Save changes" class="btn btn-primary w-100" style="background-color: #04396c !important" /></div>
             <div class="col-4"></div>
 
-        </div>
-    </form>
+        </div>*@
     <br />
     <br />
     <div>
-        <div class="card">
+        <div class="card rounded">
             <div class="card-header" style="background-color:white !important">
                 Featured performance
             </div>
@@ -78,13 +85,13 @@
                     <div class="col-4">
                         <div class="row align-items-center">
                             <div class="col-2">
-                                <span class="fa-stack fa-lg" >
+                                <span class="fa-stack fa-lg">
                                     <i class="fa fa-circle fa-stack-2x"></i>
-                                    <i class="fa fa fa-calendar-o fa-stack-1x fa-inverse rounded-circle"  style="background-color:yellowgreen"></i>
+                                    <i class="fa fa fa-calendar-o fa-stack-1x fa-inverse rounded-circle" style="background-color:yellowgreen"></i>
                                 </span>
                             </div>
                             <div class="col-10 text-left">
-                                <p><small class="text-secondary">Schedule reliability</small><br /><b style="font-size: 30px">78.4%</b></p>               
+                                <p><small class="text-secondary">Schedule reliability</small><br /><b style="font-size: 30px">@performance.ScheduleReliability.ToString("0.00") %</b></p>
                             </div>
                         </div>
                     </div>
@@ -97,7 +104,7 @@
                                 </span>
                             </div>
                             <div class="col-10 text-left">
-                                <p><small class="text-secondary">Average work content</small><br /><b style="font-size: 30px">791.13 hrs</b></p>
+                                <p><small class="text-secondary">Average work content</small><br /><b style="font-size: 30px">@performance.AverageWorkContent.ToString("0.00") hrs</b></p>
                             </div>
                         </div>
                     </div>
@@ -110,7 +117,7 @@
                                 </span>
                             </div>
                             <div class="col-10 text-left">
-                                <p><small class="text-secondary">Average throughput time</small><br /><b style="font-size: 30px">3.02 SCD</b></p>
+                                <p><small class="text-secondary">Average throughput time</small><br /><b style="font-size: 30px">@performance.AverageThroughputTime.ToString("0.00") SCD</b></p>
                             </div>
                         </div>
                     </div>
@@ -125,7 +132,7 @@
                                 </span>
                             </div>
                             <div class="col-10 text-left">
-                                <p><small class="text-secondary">Average utilization rate</small><br /><b style="font-size: 30px">74.3%</b></p>
+                                <p><small class="text-secondary">Average utilization rate</small><br /><b style="font-size: 30px">@performance.AverageUtilizationRate.ToString("0.00") %</b></p>
                             </div>
                         </div>
                     </div>
@@ -138,7 +145,7 @@
                                 </span>
                             </div>
                             <div class="col-10 text-left">
-                                <p><small class="text-secondary">Maximum output rate</small><br /><b style="font-size: 30px">301.68 hrs/SCD</b></p>
+                                <p><small class="text-secondary">Maximum output rate</small><br /><b style="font-size: 30px">@performance.MaximumOutputRate.ToString("0.00") hrs/SCD</b></p>
                             </div>
                         </div>
                     </div>
@@ -151,7 +158,89 @@
                                 </span>
                             </div>
                             <div class="col-10 text-left">
-                                <p><small class="text-secondary">Average range</small><br /><b style="font-size: 30px">3.04 SCD</b></p>
+                                <p><small class="text-secondary">Average range</small><br /><b style="font-size: 30px">@performance.AverageRange.ToString("0.00") SCD</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row invisible_row hidden">
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-pie-chart fa-stack-1x fa-inverse rounded-circle" style="background-color:yellow"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Standard deviation work content</small><br /><b style="font-size: 30px">@performance.StdWorkContent.ToString("0.00") hrs</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-level-up fa-stack-1x fa-inverse rounded-circle" style="background-color:lightblue"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Average output rate</small><br /><b style="font-size: 30px">@performance.AverageOutputRate.ToString("0.00") hrs/SCD</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-arrows-h fa-stack-1x fa-inverse rounded-circle" style="background-color:lightseagreen"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Capacity</small><br /><b style="font-size: 30px">@performance.Capacity hrs/SCD</b></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row invisible_row hidden">
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-pie-chart fa-stack-1x fa-inverse rounded-circle" style="background-color:yellow"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Average work in process level</small><br /><b style="font-size: 30px">@performance.AverageWIPLevel.ToString("0.00") hrs</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-level-up fa-stack-1x fa-inverse rounded-circle" style="background-color:lightblue"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Ideal minimum work in process level</small><br /><b style="font-size: 30px">@performance.WIPIMin.ToString("0.00") hrs</b></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row align-items-center">
+                            <div class="col-2">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa fa-arrows-h fa-stack-1x fa-inverse rounded-circle" style="background-color:lightseagreen"></i>
+                                </span>
+                            </div>
+                            <div class="col-10 text-left">
+                                <p><small class="text-secondary">Relative work in process</small><br /><b style="font-size: 30px">@performance.WIPRel %</b></p>
                             </div>
                         </div>
                     </div>

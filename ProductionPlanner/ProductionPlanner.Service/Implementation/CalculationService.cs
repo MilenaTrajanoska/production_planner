@@ -28,7 +28,7 @@ namespace ProductionPlanner.Service.Implementation
         }
         public double calculateAverageUtilizationFromT(double t)
         {
-            return 1 - Math.Pow(1 - Math.Pow(t, C_NORM), 1 / C_NORM);
+            return (1 - Math.Pow(1 - Math.Pow(t, C_NORM), 1 / C_NORM)) * 100;
         }
 
         public double calculateAverageUtilizationGlobal()
@@ -71,7 +71,7 @@ namespace ProductionPlanner.Service.Implementation
             }
 
             double WCavg = calculateAverageWorkContent(minDate, maxDate);
-            double wc = orders.Select(o => Math.Sqrt(WCavg - o.getWorkContent()))
+            double wc = orders.Select(o => Math.Sqrt(Math.Pow(WCavg - o.getWorkContent(), 2)))
                 .ToList()
                 .Sum();
 
@@ -96,13 +96,12 @@ namespace ProductionPlanner.Service.Implementation
                 .Where(o => o.StartDate.Date.CompareTo(minDate.Date)>=0 && o.EndDate.Date.CompareTo(maxDate.Date) <= 0)
                 .ToList();
             double sumWC = orders.Select(o => o.getWorkContent()).Sum();
-            DateTime startMinDate = orders.Select(o => o.StartDate.Date).Min();
-            DateTime endMaxDate = orders.Select(o => o.EndDate.Date).Max();
-            if (startMinDate == null || endMaxDate == null)
+            
+            if (orders.Count == 0)
             {
                 return 0;
             }
-            return sumWC / (endMaxDate.Subtract(startMinDate).TotalDays + 1);
+            return sumWC / (maxDate.Subtract(minDate).TotalDays + 1);
         }
 
         public double getNumberOfWorkStations()

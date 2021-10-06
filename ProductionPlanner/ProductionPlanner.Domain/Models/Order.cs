@@ -30,7 +30,7 @@ namespace ProductionPlanner.Domain.Models
 
         public double getWorkContent()
         {
-            return Quantity * OrderedProduct.InProcessTime + OrderedProduct.SetUpTime;
+            return Quantity * OrderedProduct.InProcessTime;
         }
 
         public double getThroughputTime()
