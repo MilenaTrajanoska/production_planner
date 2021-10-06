@@ -26,11 +26,51 @@ namespace ProductionPlanner.Web.Controllers
             productService =_productService;
         }
 
-        //discuss usage
-        public IActionResult Index()
+        private SelectList calculateYears(int minYear, int? selectedYear)
         {
-            var orders = orderService.GetAllOrders();
-            //DA SE DOPRAVI ORDER REPOSITORY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            List<SelectListItem> years = new List<SelectListItem>();
+            bool isSelected = false;
+            if (minYear == selectedYear)
+            {
+                isSelected = true;
+            }
+            years.Add(new SelectListItem { Value = minYear.ToString(), Text = minYear.ToString(), Selected = isSelected});
+            isSelected = false;
+            while(minYear < DateTime.Now.Year)
+            {
+                minYear += 1;
+                if (minYear == selectedYear)
+                {
+                    isSelected = true;
+                }
+                years.Add(new SelectListItem { Value = minYear.ToString(), Text = minYear.ToString(), Selected = isSelected});
+                isSelected = false;
+            }
+            return new SelectList(years, "Value", "Text", selectedYear);
+        }
+        public IActionResult Index(int? year)
+        {
+            if(year == null)
+            {
+                year = DateTime.Now.Year;
+            }
+
+            var ordersYears = orderService.GetAllOrders().Select(o => o.StartDate.Year).ToList();
+            int minYear;
+            if (ordersYears.Count == 0)
+            {
+                minYear = 2019;
+            }
+            else
+            {
+                minYear = ordersYears.Min();
+            }
+
+            ViewBag.Years = calculateYears(minYear, year);
+
+            var orders = orderService.GetAllOrders()
+                .Where(o => o.StartDate.Year == year)
+                .ToList();
             return View(orders);
             
         }

@@ -7,6 +7,19 @@
 <br>
 <h1><b>All orders</b></h1>
 <br>
+<div class="row m-5">
+    <div class="col-md-12">
+        <form asp-controller="Order" asp-action="Index">
+            <div class="input-group mb-3 w-50">
+                <span> Year: &nbsp;&nbsp;&nbsp;</span><select name="year" asp-items="ViewBag.Years" class="form-control"></select>
+                <div class="input-group-append">
+                    <input type="submit" value="Select Year" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div>
 <table id="orders-table" class="table table-striped" style="width:100%">
     <thead>
         <tr>
@@ -104,6 +117,7 @@
         }
     </tbody>
 </table>
+    </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
