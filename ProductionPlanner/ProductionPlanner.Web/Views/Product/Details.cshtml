@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="">
-        <a asp-action="Index" asp-controller="Product" class="btn btn-link">Back to Product List</a>
+        <a asp-action="Index" asp-controller="Product" class="btn btn-link"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Product List</a>
     </div>
     
 </div>
@@ -30,7 +30,7 @@
     <div class="row mx-auto">
         <div class="col-4"></div>
         <div class="col-4">
-            <h2>Product: @Model.ProductName</h2>
+            <h2><b>Product: @Model.ProductName</b></h2>
         </div>
         <div class="col-4"></div>
     </div>
@@ -133,14 +133,14 @@
       <hr />
 <div class="row">
     <div class="col-md-6 pl-5">
-        <h4>Materials</h4>
+        <h4><b>Materials</b></h4>
     </div>
     <div class="col-md-6">
         <a asp-controller="Product" asp-action="AddMaterialToProduct" asp-route-id="@Model.Id" class="btn btn-primary">Add Materials to Product</a>
     </div>
 </div>
 <br />
-<div class="row">
+<div class="row mx-auto" style="width:95%">
     <table class="table">
         <thead class="thead-light">
             <tr>
@@ -196,8 +196,9 @@
     </table>
 
 </div>
-<div class="row">
-    <div class="col-md-6">
-        Total material cost: @Model.TotalMaterialCost().ToString("0.00") €
+<div class="row mx-auto" style="width:95%">
+    <div class="">
+        <h5><b>Total material cost:</b> @Model.TotalMaterialCost().ToString("0.00") € </h5>
     </div>
 </div>
+<br />
