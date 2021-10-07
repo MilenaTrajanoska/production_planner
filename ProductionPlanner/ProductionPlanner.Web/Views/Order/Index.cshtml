@@ -6,8 +6,8 @@
 @model List<ProductionPlanner.Domain.Models.Order>
 <br>
 <h1><b>All orders</b></h1>
-<br>
-<div class="row m-5">
+<br />
+<div class="row mx-auto">
     <div class="col-md-12">
         <form asp-controller="Order" asp-action="Index">
             <div class="input-group mb-3 w-50">
@@ -19,6 +19,7 @@
         </form>
     </div>
 </div>
+<br />
 <div>
 <table id="orders-table" class="table table-striped" style="width:100%">
     <thead>

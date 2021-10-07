@@ -4,6 +4,7 @@
     Create new material
 *@
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model ProductionPlanner.Domain.Models.Material
 <br />
@@ -31,24 +32,24 @@
 </h1>
 <br />
 <br />
-<div class="mx-auto w-25">
+<div class="mx-auto" style="width:35%">
     <form asp-controller="Material" asp-action="Index" method="post">
         <div class="row form-group">
-            <div class="col-6">
+            <div class="col-4">
                 <label asp-for="MaterialName" class="control-label">Material name</label>
             </div>
-            <div class="col-6">
-                <input asp-for="MaterialName" type="text" class="form-control" />
+            <div class="col-8">
+                <input asp-for="MaterialName" type="text" placeholder="Enter material name" class="form-control" />
                 <span asp-validation-for="MaterialName" class="text-danger"></span>
             </div>
         </div>
 
         <div class="row form-group">
-            <div class="col-6">
+            <div class="col-4">
                 <label asp-for="CostPerUnit" class="control-label">Cost per unit</label>
             </div>
-            <div class="col-6">
-                <input asp-for="CostPerUnit" type="text" class="form-control" />
+            <div class="col-8">
+                <input asp-for="CostPerUnit" type="text" class="form-control" style="max-width:80% ;display: inline-block" /> €
                 <span asp-validation-for="CostPerProduct" class="text-danger"></span>
             </div>
         </div>
