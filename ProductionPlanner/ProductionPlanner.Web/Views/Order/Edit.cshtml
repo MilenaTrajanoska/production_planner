@@ -8,6 +8,11 @@
 
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class=" row">
+    <div class="">
+        <a asp-action="Index" asp-controller="Order" class="btn btn-link"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Order List</a>
+    </div>
+</div>
 <div class="pt-5 px-5 row">
     <div class="w-50 mx-auto">
         <form asp-controller="Order" asp-action="Edit" method="post">
