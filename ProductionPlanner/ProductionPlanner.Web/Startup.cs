@@ -37,6 +37,7 @@ namespace ProductionPlanner.Web
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<ICalculationService, CalculationService>();
+            services.AddTransient<IInMemoryCacheService, InMemoryCacheService>();
             services.AddTransient<ICompanyService, CompanyService>();
             services.AddTransient<ILogisticOperatingCurveCalculationService, LogisticOperatingCurveCalculationService>();
             services.AddTransient<IMaterialService, MaterialService>();
