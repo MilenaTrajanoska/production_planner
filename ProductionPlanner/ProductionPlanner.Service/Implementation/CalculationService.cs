@@ -193,7 +193,7 @@ namespace ProductionPlanner.Service.Implementation
             DateTime endDate;
             if (maxDate == null)
             {
-                endDate = getMinStartDate();
+                endDate = getMaxEndDate();
             }
             else
             {

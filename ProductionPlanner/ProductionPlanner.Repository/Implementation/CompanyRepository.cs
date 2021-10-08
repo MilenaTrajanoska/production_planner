@@ -21,6 +21,8 @@ namespace ProductionPlanner.Repository.Implementation
 
         public void Create(Company company)
         {
+            company.isValid = true;
+            company.IsSet = true;
             companies.Add(company);
             context.SaveChanges();
         }
@@ -30,20 +32,34 @@ namespace ProductionPlanner.Repository.Implementation
             return companies.Where(c => c.isValid).FirstOrDefault();
         }
 
+        //this is a transaction, will complete if all steps are executed successfully, else it will rollback
         public void Update(Company company)
         {
-            var presentCompany = companies.Where(c => c.isValid).FirstOrDefault();
-            
-            if (presentCompany == null)
+            try
             {
-                throw new InvalidOperationException(errorMessage);
-            }
+                using var transaction = context.Database.BeginTransaction();
+                var presentCompany = companies.Where(c => c.isValid).FirstOrDefault();
 
-            presentCompany.isValid = false;
-            companies.Update(presentCompany);
-            company.isValid = true;
-            companies.Add(company);
-            context.SaveChanges();
+                if (presentCompany == null)
+                {
+                    throw new InvalidOperationException(errorMessage);
+                }
+
+                presentCompany.isValid = false;
+                companies.Update(presentCompany);
+                context.SaveChanges();
+
+                company.Id = 0;
+                company.isValid = true;
+                company.IsSet = true;
+                companies.Add(company);
+                context.SaveChanges();
+                transaction.Commit();
+            }catch
+            {
+                throw new Exception("Could not update company values.");
+            }
+            
         }
     }
 }

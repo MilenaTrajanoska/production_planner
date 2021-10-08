@@ -45,20 +45,24 @@ namespace ProductionPlanner.Service.Implementation
                 .ToList()
                 .Count;
             performance.CompletedOrders = num_orders;
+            DateTime maxDate = DateTime.Now;
+
             if (num_orders != 0)
             {
-                performance.AverageWorkContent = _calculationService.calculateAverageWorkContent(minDate, DateTime.Now);
-                performance.StdWorkContent = _calculationService.calculateSdWorkContent(minDate, DateTime.Now);
-                performance.AverageThroughputTime = _calculationService.getThroughputTimes(minDate, DateTime.Now).Average();
-                performance.AverageRange = _calculationService.getListOfWIP(minDate, DateTime.Now).Average() / _calculationService.calculateAverageRout(minDate, DateTime.Now);
-                performance.AverageOutputRate = _calculationService.calculateAverageRout(minDate, DateTime.Now);
-                performance.MaximumOutputRate = _calculationService.calculateRoutMax(minDate, DateTime.Now) * company.NumberOfWS;
+                minDate = _orderService.GetAllOrders().Select(o => o.StartDate).Min();
+                maxDate = _orderService.GetAllOrders().Select(o => o.EndDate).Max();
+                performance.AverageWorkContent = _calculationService.calculateAverageWorkContent(minDate, maxDate);
+                performance.StdWorkContent = _calculationService.calculateSdWorkContent(minDate, maxDate);
+                performance.AverageThroughputTime = _calculationService.getThroughputTimes(minDate, maxDate).Average();
+                performance.AverageRange = _calculationService.getListOfWIP(minDate, maxDate).Average() / _calculationService.calculateAverageRout(minDate, maxDate);
+                performance.AverageOutputRate = _calculationService.calculateAverageRout(minDate, maxDate);
+                performance.MaximumOutputRate = _calculationService.calculateRoutMax(minDate, maxDate) * company.NumberOfWS;
                 performance.Capacity = company.NumberOfWS * company.WSCapacity;
-                performance.AverageWIPLevel = _calculationService.getListOfWIP(minDate, DateTime.Now).Average();
-                performance.WIPIMin = _calculationService.calculateWipiMin(minDate, DateTime.Now);
-                performance.WIPRel = _calculationService.calculateWIPRel(minDate, DateTime.Now);
+                performance.AverageWIPLevel = _calculationService.getListOfWIP(minDate, maxDate).Average();
+                performance.WIPIMin = _calculationService.calculateWipiMin(minDate, maxDate);
+                performance.WIPRel = _calculationService.calculateWIPRel(minDate, maxDate);
                 performance.AverageUtilizationRate = _calculationService.calculateAverageUtilizationGlobal();
-                performance.ScheduleReliability = _scheduleReliabilityCalculationService.getYAxisScheduleReliability(minDate, DateTime.Now).Max();
+                performance.ScheduleReliability = _scheduleReliabilityCalculationService.getYAxisScheduleReliability(minDate, maxDate).Max();
             }
             return performance;
         }

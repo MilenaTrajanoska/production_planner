@@ -6,7 +6,8 @@ using Microsoft.Extensions.Logging;
 using ProductionPlanner.Domain;
 using ProductionPlanner.Service.Interface;
 using ProductionPlanner.Domain.ViewModels;
-
+using ProductionPlanner.Domain.Models;
+using System.Collections.Generic;
 
 namespace ProductionPlanner.Web.Controllers
 {
@@ -39,6 +40,38 @@ namespace ProductionPlanner.Web.Controllers
 
             ViewBag.PerformanceFeatures = performance;
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Edit()
+        {
+            var company = _companyService.GetCompany();
+            return View(company);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int NumberOfWS, double WSCapacity, double InterOpTime, double TransportantionAndStorageTime)
+        {
+            var company = Company.getInstance();
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    
+                    company.NumberOfWS = NumberOfWS;
+                    company.WSCapacity = WSCapacity;
+                    company.InterOpTime = InterOpTime;
+                    company.TransportantionAndStorageTime = TransportantionAndStorageTime;
+                      
+                    _companyService.UpdateCompany(company);
+                    ViewBag.Message = "Successfully updated the company";
+                }catch
+               {
+                    ViewBag.Errors = new List<string>() { "Could not update the company values.\nPlease try again later"};
+               }
+                
+            }
+            return View(company);
         }
 
         public IActionResult Privacy()

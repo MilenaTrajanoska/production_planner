@@ -22,8 +22,7 @@ namespace ProductionPlanner.Repository.Implementation
 
         public void Delete(Order entity)
         {
-            entity.IsValid = false;
-            orders.Update(entity);
+            orders.Remove(entity);
             context.SaveChanges();
         }
 
@@ -50,6 +49,7 @@ namespace ProductionPlanner.Repository.Implementation
 
         public Order Insert(Order entity)
         {
+            entity.IsValid = true;
             var order = orders.Add(entity);
             context.SaveChanges();
             return order.Entity;

@@ -17,16 +17,6 @@ namespace ProductionPlanner.Service.Implementation
             this.companyRepository = _companyRepository;
         }
 
-        public void CreateNewCompany(Company company)
-        {
-            if(companyRepository.Get().IsSet)
-            {
-                throw new InvalidOperationException(errorMessage);
-            }
-
-            this.companyRepository.Create(company);
-        }
-
         public Company GetCompany()
         {
             return this.companyRepository.Get();

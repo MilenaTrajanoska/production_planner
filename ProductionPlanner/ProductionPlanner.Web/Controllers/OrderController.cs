@@ -8,7 +8,6 @@ using ProductionPlanner.Service.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ProductionPlanner.Web.Controllers
 {
@@ -199,19 +198,33 @@ namespace ProductionPlanner.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Delete(long id)
+        public IActionResult Delete(long id, int year)
         {
             var order = orderService.GetOrder(id);
             if (order == null)
             {
-                ViewBag.Errors = new List<string>() { "Could not delete a product that does not exist." };
+                ViewBag.Errors = new List<string>() { "Could not delete an order that does not exist." };
             }
             else
             {
                 orderService.DeleteOrder(id);
-                ViewBag.Message = "Successfully deleted product.";
+                ViewBag.Message = "Successfully deleted order.";
             }
-            return View("Index", orderService.GetAllOrders());
+
+            var ordersYears = orderService.GetAllOrders().Select(o => o.StartDate.Year).ToList();
+            int minYear;
+            if (ordersYears.Count == 0)
+            {
+                minYear = 2019;
+            }
+            else
+            {
+                minYear = ordersYears.Min();
+            }
+
+            ViewBag.Years = calculateYears(minYear, year);
+
+            return View("Index", orderService.GetAllOrders().Where(o => o.StartDate.Year == year).ToList());
         }
 
         [HttpGet]

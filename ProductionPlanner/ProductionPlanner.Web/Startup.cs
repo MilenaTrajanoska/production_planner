@@ -51,6 +51,7 @@ namespace ProductionPlanner.Web
             services.AddTransient<ICompanyRepository, CompanyRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IProductRepository), typeof(ProductRepository));
 
 
             services.AddControllersWithViews();

@@ -54,9 +54,17 @@ namespace ProductionPlanner.Web.Controllers
                     ViewBag.Errors = new List<string>() { "A product with the same name already exists." };
                     return View(product);
                 }
-                var prod = productService.CreateNewProduct(product);
-                ViewBag.Message = "Succesfully created the product.";
-                return RedirectToAction("AddMaterialToProduct", new { id = prod.Id });   
+                try
+                {
+                    var prod = productService.CreateNewProduct(product);
+                    ViewBag.Message = "Succesfully created the product.";
+                    return RedirectToAction("AddMaterialToProduct", new { id = prod.Id });
+                }
+                catch (Exception e) {
+                    ViewBag.Errors = new List<string>() { "Could not create the product.\nPlease try again later." };
+                }
+
+                return View("Index", productService.GetAllProducts());
             }
 
             ViewBag.Errors = new List<string>() { "Could not create  the product.\nPlease check the values you have entered." };
@@ -87,12 +95,17 @@ namespace ProductionPlanner.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                productService.UpdateExistingProduct(product);
-                ViewBag.Message = "Successfully updated product";
+                try
+                {
+                    productService.UpdateExistingProduct(product);
+                    ViewBag.Message = "Successfully updated product";
+                }catch (Exception e)
+                {
+                    ViewBag.Errors = new List<String>() { e.Message };
+                }
             }
 
             return View(product);
-
         }
 
         public IActionResult AddMaterialToProduct(long id)
@@ -196,8 +209,15 @@ namespace ProductionPlanner.Web.Controllers
             } 
             else
             {
-                productService.DeleteProduct(id);
-                ViewBag.Message = "Successfully deleted product.";
+                try
+                {
+                    productService.DeleteProduct(id);
+                    ViewBag.Message = "Successfully deleted product.";
+                } catch
+                {
+                    ViewBag.Errors = "Could not delete product.\nPlease try again later.";
+                }
+                
             }
             return View("Index", productService.GetAllProducts());
         }

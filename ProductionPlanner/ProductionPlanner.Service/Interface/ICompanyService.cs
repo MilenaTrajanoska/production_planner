@@ -7,7 +7,7 @@ namespace ProductionPlanner.Service.Interface
 {
     public interface ICompanyService
     {
-        void CreateNewCompany(Company company);
         Company GetCompany();
+        public void UpdateCompany(Company company);
     }
 }
