@@ -26,7 +26,7 @@
     <br />
     <br />
     <div class="row">
-        <div class="col-md-12 p-5">
+        @*<div class="col-md-12 p-5">
             <div id="throughput_diagram"></div>
         </div>
         <div class="col-md-12 p-5">
@@ -42,235 +42,649 @@
             <div id="schedule_reliability_operating_curve "></div>
         </div>
         <div class="col-md-12 p-5">
-            <svg></svg>
+            <svg id="visualisation" width="1000" height="500"></svg>
+        </div>*@
+        <div class="col-md-12 p-5">
+            <canvas id="throughput_diagram"></canvas>
+        </div>
+        <div class="col-md-12 p-5">
+            <canvas id="lodistic_operating_curves"></canvas>
+        </div>
+        <div class="col-md-12 p-5">
+            <canvas id="work_content_distribution"></canvas>
+        </div>
+        <div class="col-md-12 p-5">
+            <canvas id="throughput_time_distribution"></canvas>
+        </div>
+        <div class="col-md-12 p-5">
+            <canvas id="schedule_reliability_operating_curve"></canvas>
         </div>
     </div>
     <br />
     <br />
 </div>
 
-<script src="https://d3js.org/d3.v7.min.js"></script>
+@*<script src="https://d3js.org/d3.v7.min.js"></script>*@
+
+<script src="https://d3js.org/d3.v4.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js%22%3E"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@*<script src="https://www.jsdelivr.com/package/npm/chart.js"></script>*@
+@*<script src="https://www.chartjs.org/samples/2.9.4/utils.js"></script>*@
+@*<script type="text/javascript" src="https://yourweb.com/inc/chart.utils.js"></script>*@
+
+
 <script>
-
-    // throughput_diagram
-    //var svg1 = d3.select("#throughput_diagram")
-    //    .append("svg")
-    //    .attr("width", 1000)
-    //    .attr("height", 300)
-    //var x1 = d3.scaleBand()
-    //    // domain = hosrizontal labels
-    //    .domain(["A", "B", "C", "D", "E"])       // This is what is written on the Axis: from 0 to 100
-    //    .range([100, 800])                       // This is where the axis is placed: from 100 px to 800px
-    //    .padding([0.8])                          // Goes between 0 and 1. Default is 0
-    //svg1
-    //    .append("g")
-    //    .attr("transform", "translate(0,250)")      // This controls the vertical position of the Axis
-    //    .call(d3.axisBottom(x1));
-    ////svg1
-    ////    .append("g")
-    ////    .attr("transform", "translate(0,250)")      // This controls the vertical position of the Axis
-    ////    .call(d3.axisLeft(d3.scaleLinear().domain([0, 1]).range([1000,0])));
-    //svg1
-    //    .append("rect")
-    //    .attr("x", x1("C"))
-    //    .attr("y", 100)
-    //    .attr("height", 150)
-    //    .attr("width", x1.bandwidth())
-    ////    .style("fill", "#69b3a2")
-    //////    .style("opacity", 0.5)
-
-
-   @*
-    var ThroughputDiagram = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram))');
-    var WorkContentDistributionDiagramModel = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel))');
-    var LodisticOperatingCurvesDiagramModel = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel))');
-    var ThroughputTimeDistributionDiagramModel = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputTimeDistributionDiagramModel))');
-    var ScheduleReliabilityOperatingCurveDiagramModel = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel))');
-
-    console.log(ThroughputDiagram);
-    console.log(WorkContentDistributionDiagramModel);
-    console.log(LodisticOperatingCurvesDiagramModel);
-    console.log(ThroughputTimeDistributionDiagramModel);
-    console.log(ScheduleReliabilityOperatingCurveDiagramModel);*@
-
-    const DUMMY_DATA = [
-        { value: 10, label: 'asd' },
-        { value: 0, label: 'asd2' },
-        { value: 0, label: 'asd3' },
-        { value: 0, label: 'asd4' },
-        { value: 10, label: '1255' },
-        { value: 11, label: '12AAS6' },
-        { value: 12, label: 'ASD7' },
-        { value: 6, label: '001238' },
-    ];
 
     const WIDTH = 400;
     const HEIGHT = 300;
-    const MARGIN = { top: 10, right: 10, bottom: 20, left: 30 };
-    const INNER_WIDTH = WIDTH - MARGIN.left - MARGIN.right;
-    const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom;
-    const svg = d3.select('#lodistic_operating_curves').append('svg')
-        .attr('width', WIDTH)
-        .attr('height', HEIGHT)
-        .append('g')
-        .attr('transform', 'translate(' + MARGIN.left + ',' + MARGIN.top + ')');
-
-    const x = d3.scaleBand().domain(DUMMY_DATA.map(d => d.label)).range([0, INNER_WIDTH]);
-    const y = d3.scaleLinear().domain([0, 30]).range([INNER_HEIGHT, 0]);
-    const xAxis = d3.axisBottom(x);
-    const yAxis = d3.axisLeft(y).ticks(30/6);
-    //const xAxisGrid = d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat('').ticks(10);
-    const yAxisGrid = d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat('').ticks(30 / 6);
-
-    // Create grids.
-    //svg.append('g')
-    //    .attr('class', 'x axis-grid')
-    //    .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
-    //    .call(xAxisGrid);
-    svg.append('g')
-        .attr('class', 'y axis-grid')
-        .call(yAxisGrid);
-    // Create axes.
-    svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
-        .call(xAxis);
-    svg.append('g')
-        .attr('class', 'y axis')
-        .call(yAxis);
-    // Add data
-    svg.selectAll('.bar').data(DUMMY_DATA).enter()
-        .append('rect').classed('bar', true)
-        .attr('width', 10)
-        .attr('height', data => INNER_HEIGHT - y(data.value))
-        .style('fill', 'green')
-        .attr('x', data => x(data.label) + x.bandwidth()/2-5)
-        .attr('y', data => y(data.value));
-
-   
-    //const MARGINS = { top: 20, bottom: 10 };
-    //const CHART_WIDTH = 600;
-    //const CHART_HEIGHT = 400 - MARGINS.top - MARGINS.bottom;
-
-    //const xScale = d3.scaleBand().rangeRound([0, CHART_WIDTH]).padding(0.1);
-    //const yScale = d3.scaleLinear().range([CHART_HEIGHT, 0]);
-
-    //xScale.domain(DUMMY_DATA.map(d => d.label));
-    ////yScale.domain(DUMMY_DATA.map(d => d.value));
-    //yScale.domain([0, d3.max(DUMMY_DATA,d =>  d.value+3 )]);
-
-    //const chartContainer = d3.select('svg')
-    //    .attr('width', CHART_WIDTH)
-    //    .attr('height', CHART_HEIGHT + MARGINS.top + MARGINS.bottom);
-
-    // //const xAxis = d3.axisBottom(x);
-    ////const yAxis = d3.axisLeft(y).ticks(30/6);
-
-    //const chart = chartContainer.append("g");
-    //chart.append('g')
-    //    .call(d3.axisBottom(xScale))
-    //    .attr('transform', `translate(0,${CHART_HEIGHT})`)
-    //    .attr('color', 'gray');
-    //chart.append('g')
-    //    .call(d3.axisLeft(yScale))//.ticks(30 / 6)
-    //    .attr('color', 'gray');
-    //chart.selectAll('.bar').data(DUMMY_DATA).enter()
-    //    .append('rect').classed('bar', true)
-    //    .attr('width', xScale.bandwidth())
-    //    .attr('height', data => CHART_HEIGHT - yScale(data.value))
-    //    .style('fill', 'green')
-    //    .attr('x', data => xScale(data.label))
-    //    .attr('y', data => yScale(data.value));
-    //chart.selectAll('.label').data(DUMMY_DATA).enter()
-    //    .append('text').text(data => data.value)
-    //    .attr('x', data => xScale(data.label) + xScale.bandwidth() / 2)
-    //    .attr('y', data => yScale(data.value) - 20)
-    //    .attr('text-anchor', 'middle').style('fill', 'green');
 
 
-    //const container = d3.select('#work_content_distribution').append("svg")
-    //    .attr('width', 100)
-    //    .attr('height', 100).style('border', '1px solid red');
-    //const bars = container.selectAll('.bar').data(DUMMY_DATA).enter()
-    //    .append("rect")
-    //    .attr("width", xScale.bandwidth())
-    //    .attr("height", (data) => 200 - yScale(data.value))
-    //    .attr("x", (data) => xScale(data.value))
-    //    .attr("x", (data) => yScale(data.value));
-
-    //setTimeout(() => {
-    //    bars.data(DUMMY_DATA.slice(0, 2)).exit().remove();
-    //})
 
 
-    //// set the dimensions and margins of the graph
-    //var margin = { top: 10, right: 30, bottom: 30, left: 40 },
-    //    width = 460 - margin.left - margin.right,
-    //    height = 400 - margin.top - margin.bottom;
+    ////const DUMMY_DATA = [
+    ////    { value: 10, label: 'asd' },
+    ////    { value: 0, label: 'asd2' },
+    ////    { value: 0, label: 'asd3' },
+    ////    { value: 0, label: 'asd4' },
+    ////    { value: 10, label: '1255' },
+    ////    { value: 11, label: '12AAS6' },
+    ////    { value: 12, label: 'ASD7' },
+    ////    { value: 6, label: '001238' },
+    ////];
 
-    //// append the svg object to the body of the page
-    //var svg1 = d3.select("#lodistic_operating_curves")
-    //    .append("svg")
-    //    .attr("width", width + margin.left + margin.right)
-    //    .attr("height", height + margin.top + margin.bottom)
-    //    .append("g")
-    //    .attr("transform",
-    //        "translate(" + margin.left + "," + margin.top + ")");
 
-    //// get the data
-    //d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/1_OneNum.csv", function (data) {
+    ////const MARGIN = { top: 10, right: 10, bottom: 20, left: 30 };
+    ////const INNER_WIDTH = WIDTH - MARGIN.left - MARGIN.right;
+    ////const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom;
+    ////const svgLOC = d3.select('#lodistic_operating_curves').append('svg')
+    ////    .attr('width', WIDTH)
+    ////    .attr('height', HEIGHT)
+    ////    .append('g')
+    ////    .attr('transform', 'translate(' + MARGIN.left + ',' + MARGIN.top + ')');
 
-    //    // X axis: scale and draw:
-    //    var x = d3.scaleLinear()
-    //        .domain([0, 1000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
-    //        .range([0, width]);
-    //    svg1.append("g")
-    //        .attr("transform", "translate(0," + height + ")")
-    //        .call(d3.axisBottom(x));
+    ////const x = d3.scaleBand().domain(DUMMY_DATA.map(d => d.label)).range([0, INNER_WIDTH]);
+    ////const y = d3.scaleLinear().domain([0, 30]).range([INNER_HEIGHT, 0]);
+    ////const xAxis = d3.axisBottom(x);
+    ////const yAxis = d3.axisLeft(y).ticks(30 / 6);
+    //////const xAxisGrid = d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat('').ticks(10);
+    ////const yAxisGrid = d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat('').ticks(30 / 6);
 
-    //    // set the parameters for the histogram
-    //    var histogram = d3.histogram()
-    //        .value(function (d) { return d.price; })   // I need to give the vector of value
-    //        .domain(x.domain())  // then the domain of the graphic
-    //        .thresholds(x.ticks(70)); // then the numbers of bins
+    ////// Create grids.
+    //////svgLOC.append('g')
+    //////    .attr('class', 'x axis-grid')
+    //////    .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
+    //////    .call(xAxisGrid);
+    ////svgLOC.append('g')
+    ////    .attr('class', 'y axis-grid')
+    ////    .call(yAxisGrid);
+    ////// Create axes.
+    ////svgLOC.append('g')
+    ////    .attr('class', 'x axis')
+    ////    .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
+    ////    .call(xAxis);
+    ////svgLOC.append('g')
+    ////    .attr('class', 'y axis')
+    ////    .call(yAxis);
+    ////// Add data
+    ////svgLOC.selectAll('.bar').data(DUMMY_DATA).enter()
+    ////    .append('rect').classed('bar', true)
+    ////    .attr('width', 10)
+    ////    .attr('height', data => INNER_HEIGHT - y(data.value))
+    ////    .style('fill', 'green')
+    ////    .attr('x', data => x(data.label) + x.bandwidth() / 2 - 5)
+    ////    .attr('y', data => y(data.value));
 
-    //    // And apply this function to data to get the bins
-    //    var bins = histogram(data);
 
-    //    // Y axis: scale and draw:
-    //    var y = d3.scaleLinear()
-    //        .range([height, 0]);
-    //    y.domain([0, d3.max(bins, function (d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
-    //    svg1.append("g")
-    //        .call(d3.axisLeft(y));
 
-    //    // append the bar rectangles to the svg element
-    //    svg1.selectAll("rect")
-    //        .data(bins)
-    //        .enter()
-    //        .append("rect")
-    //        .attr("x", 1)
-    //        .attr("transform", function (d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
-    //        .attr("width", function (d) { return x(d.x1) - x(d.x0) - 1; })
-    //        .attr("height", function (d) { return height - y(d.length); })
-    //        .style("fill", "#69b3a2")
+    //////###############################################################
 
-    //});
+
+    ////// set the dimensions and margins of the graph
+    ////var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+    ////    width = 460 - margin.left - margin.right,
+    ////    height = 400 - margin.top - margin.bottom;
+
+    ////// append the svg object to the body of the page
+    ////var svg = d3.select("#work_content_distribution")
+    ////    .append("svg")
+    ////    .attr('width', WIDTH)
+    ////    .attr('height', HEIGHT)
+    ////    .append("g")
+    ////    .attr("transform",
+    ////        "translate(" + margin.left + "," + margin.top + ")");
+
+    //////Read the data
+    ////var legendsData = [];
+    ////d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv", function (data) {
+
+
+    ////    // group the data: I want to draw one line per group
+    ////    var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
+    ////        .key(d => d.name)
+    ////        .entries(data);
+
+    ////    // Add X axis --> it is a date format
+    ////    var x = d3.scaleLinear()
+    ////        .domain(d3.extent(data, d => d.year.toString()))
+    ////        .range([0, INNER_WIDTH]);
+    ////    svg.append("g")
+    ////        .attr("transform", "translate(0," + INNER_HEIGHT + ")")
+    ////        .call(d3.axisBottom(x).ticks(5));
+
+    ////    // Add Y axis
+    ////    var y = d3.scaleLinear()
+    ////        .domain([0, d3.max(data, d => +d.n)])
+    ////        .range([INNER_HEIGHT, 0]);
+    ////    svg.append("g")
+    ////        .call(d3.axisLeft(y));
+
+    ////    // color palette
+    ////    var res = sumstat.map(d => d.key) // list of group names
+    ////    var color = d3.scaleOrdinal()
+    ////        .domain(res)
+    ////        .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999'])
+
+    ////    // grid
+    ////    svg.append('g')
+    ////        .attr('class', 'x axis-grid')
+    ////        .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
+    ////        .call(d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat(''));
+    ////    svg.append('g')
+    ////        .attr('class', 'y axis-grid')
+    ////        .call(d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat(''));
+
+    ////    // Draw the line
+    ////    svg.selectAll(".line")
+    ////        .data(sumstat)
+    ////        .enter()
+    ////        .append("path")
+    ////        .attr("fill", "none")
+    ////        .attr("stroke", d => color(d.key))
+    ////        .attr("stroke-width", 1.5)
+    ////        .attr("d", function (d) {
+    ////            console.log(d)
+    ////            legendsData.push(d.key);
+    ////            return d3.line()
+    ////                .x(d => x(d.year))
+    ////                .y(d => y(+d.n))
+    ////                (d.values)
+    ////        })
+
+
+
+    ////    console.log(legendsData)
+
+    ////    var legend = svg.selectAll(".legend")
+    ////        .data(legendsData)
+    ////        .enter().append("g")
+    ////        .attr("class", "legend")
+    ////    //.attr("transform", function (d, i) {
+    ////    //    if (i === 0) {
+    ////    //        dataL = d.length + offset
+    ////    //        return "translate(0,0)"
+    ////    //    } else {
+    ////    //        var newdataL = dataL
+    ////    //        dataL += d.length + offset
+    ////    //        overallOffset = width - dataL
+    ////    //        return "translate(" + (newdataL) + ",0)"
+    ////    //    }
+    ////    //})
+    ////    //.attr("transform", function (d, i) {
+    ////    //    if (i === 0) {
+    ////    //        dataL = d.length + offset
+    ////    //        return "translate(" + (overallOffset + (offset / 4)) + ",0)"
+    ////    //    } else {
+    ////    //        var newdataL = dataL
+    ////    //        dataL += d.length + offset
+    ////    //        return "translate(" + (newdataL + overallOffset + (offset / 4)) + ",0)"
+    ////    //    }
+    ////    //})
+    ////    //.style("opacity", "0");
+
+    ////    legend.append('rect')
+    ////        .attr("x", 0)
+    ////        .attr("y", (height + 30))
+    ////        .attr("width", 10)
+    ////        .attr("height", 10)
+    ////        .style("fill",'red'
+    ////            //function (d, i) {
+    ////            //return color(d)
+    ////            //}
+    ////        )
+
+    ////    legend.append('text')
+    ////        .attr("x", 20)
+    ////        .attr("y", (height + 30 + 10))
+    ////        //.attr("dy", ".35em")
+    ////        .text(function (d, i) {
+    ////            return d
+    ////        })
+    ////        .attr("class", "textselected")
+    ////        .style("text-anchor", "start")
+    ////        .style("font-size", 12);
+
+    ////    legend.style("opacity", "1");
+
+    ////})
+
+
+
+
+
 
     //###############################################################
 
+
+    //const DATA_COUNT = 7;
+    //const NUMBER_CFG = { count: DATA_COUNT, min: -100, max: 100 };
+
+    //const labels = Utils.months({ count: 7 });
+    //const data = {
+    //    labels: labels,
+    //    datasets: [
+    //        {
+    //            label: 'Dataset 1',
+    //            data: Utils.numbers(NUMBER_CFG),
+    //            borderColor: Utils.CHART_COLORS.red,
+    //            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+    //            yAxisID: 'y',
+    //        },
+    //        {
+    //            label: 'Dataset 2',
+    //            data: Utils.numbers(NUMBER_CFG),
+    //            borderColor: Utils.CHART_COLORS.blue,
+    //            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
+    //            yAxisID: 'y1',
+    //        }
+    //    ]
+    //};
+
+    //const actions = [
+    //    {
+    //        name: 'Randomize',
+    //        handler(chart) {
+    //            chart.data.datasets.forEach(dataset => {
+    //                dataset.data = Utils.numbers({ count: chart.data.labels.length, min: -100, max: 100 });
+    //            });
+    //            chart.update();
+    //        }
+    //    },
+    //];
+
+    //const config = {
+    //    type: 'line',
+    //    data: data,
+    //    options: {
+    //        responsive: true,
+    //        interaction: {
+    //            mode: 'index',
+    //            intersect: false,
+    //        },
+    //        stacked: false,
+    //        plugins: {
+    //            title: {
+    //                display: true,
+    //                text: 'Chart.js Line Chart - Multi Axis'
+    //            }
+    //        },
+    //        scales: {
+    //            y: {
+    //                type: 'linear',
+    //                display: true,
+    //                position: 'left',
+    //            },
+    //            y1: {
+    //                type: 'linear',
+    //                display: true,
+    //                position: 'right',
+
+    //                // grid line settings
+    //                grid: {
+    //                    drawOnChartArea: false, // only want the grid lines for one axis to show up
+    //                },
+    //            },
+    //        }
+    //    },
+    //};
+
+
+
+    //###############################################################
+    //###############################################################
+    //###############################################################
+    //###############################################################
+
+    const labels = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+    ];
+
+    // throughput_diagram
+    const throughput_diagram_data = {
+        labels: labels,
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45],
+            cubicInterpolationMode: 'monotone',
+        },
+        {
+            label: 'My sec dataset',
+            backgroundColor: 'rgb(255, 0, 0)',
+            borderColor: 'rgb(255, 0, 0)',
+            data: [10, 30, 50, 20, 10, 10, 15],
+            cubicInterpolationMode: 'monotone',
+        }]
+    };
+
+    const throughput_diagram_config = {
+        type: 'line',
+        data: throughput_diagram_data,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Throughput Diagram'
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Time [SCD]'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Work Content [hrs]'
+                    },
+                }
+            },
+        },
+    };
+
+    var throughput_diagram_chart = document.getElementById('throughput_diagram');
+    throughput_diagram_chart.setAttribute("width", WIDTH);
+    throughput_diagram_chart.setAttribute("height", HEIGHT);
+    var throughput_diagram_myChart = new Chart(
+        throughput_diagram_chart,
+        throughput_diagram_config
+    );
+
+    //###############################################################
     // lodistic_operating_curves
+    const lodistic_operating_curves_data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Dataset 2',
+                backgroundColor: 'rgb(34,139,34)',
+                borderColor: 'rgb(34,139,34)',
+                data: [10, 30, 50, 20, 10, 10, 15],
+            }
+        ]
+    };
 
+    const lodistic_operating_curves_config = {
+        type: 'bar',
+        data: lodistic_operating_curves_data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'work content distribution'
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Work content (hrs)'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'frequency'
+                    },
+                }
+            },
+        },
+    };
 
+    var lodistic_operating_curves_chart = document.getElementById('lodistic_operating_curves');
+    lodistic_operating_curves_chart.setAttribute("width", WIDTH);
+    lodistic_operating_curves_chart.setAttribute("height", HEIGHT);
+    var lodistic_operating_curves_myChart = new Chart(
+        lodistic_operating_curves_chart,
+        lodistic_operating_curves_config
+    );
+
+    //###############################################################
     // work_content_distribution
 
+    const work_content_distribution_data = {
+        labels: labels,
+        datasets: [
+            {
+            label: 'My First dataset',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45],
+            cubicInterpolationMode: 'monotone',
+        },
+        {
+            type: 'bubble',
+            backgroundColor: 'rgb(255, 99, 0)',
+            borderColor: 'rgb(255, 99, 0)',
+            data: [
+                {
+                    x: 'May',
+                    y: 20,
+                    r: 15
+                },
+                {
+                    x: 'March',
+                    y: 20,
+                    r: 15
+                },
+            ],
+        },
+        {
+            label: 'My sec dataset',
+            backgroundColor: 'rgb(255, 0, 0)',
+            borderColor: 'rgb(255, 0, 0)',
+            data: [10, 30, 50, 20, 10, 10, 15],
+            cubicInterpolationMode: 'monotone',
+            }
+        ]
+    };
 
+    const work_content_distribution_config = {
+        type: 'line',
+        data: work_content_distribution_data,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Lodistic operating curves'
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Average Work in Process [hrs]'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Average output rate [SCD]'
+                    },
+                }
+            },
+        },
+    };
 
+    var work_content_distribution_chart = document.getElementById('work_content_distribution');
+    work_content_distribution_chart.setAttribute("width", WIDTH);
+    work_content_distribution_chart.setAttribute("height", HEIGHT);
+    var throughput_diagram_myChart = new Chart(
+        work_content_distribution_chart,
+        work_content_distribution_config
+    );
+
+    //###############################################################
     // throughput_time_distribution
 
+    const throughput_time_distribution_data = {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Dataset 2',
+                backgroundColor: 'rgb(34,139,34)',
+                borderColor: 'rgb(34,139,34)',
+                data: [10, 30, 50, 20, 10, 10, 15],
+            }
+        ]
+    };
 
+    const throughput_time_distribution_config = {
+        type: 'bar',
+        data: throughput_time_distribution_data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Throughput time distribution'
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'throughput'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'frequency'
+                    },
+                }
+            },
+        },
+    };
+
+    var throughput_time_distribution_chart = document.getElementById('throughput_time_distribution');
+    throughput_time_distribution_chart.setAttribute("width", WIDTH);
+    throughput_time_distribution_chart.setAttribute("height", HEIGHT);
+    var throughput_time_distribution_myChart = new Chart(
+        throughput_time_distribution_chart,
+        throughput_time_distribution_config
+    );
+
+    //###############################################################
     // schedule_reliability_operating_curve
+
+    const schedule_reliability_operating_curve_data = {
+        labels: labels,
+        datasets: [{
+            label: 'My First dataset',
+            backgroundColor: 'rgb(255, 99, 132)',
+            borderColor: 'rgb(255, 99, 132)',
+            data: [0, 10, 5, 2, 20, 30, 45],
+            cubicInterpolationMode: 'monotone',
+        },
+        {
+            label: 'My sec dataset',
+            backgroundColor: 'rgb(255, 0, 0)',
+            borderColor: 'rgb(255, 0, 0)',
+            data: [10, 30, 50, 20, 10, 10, 15],
+            cubicInterpolationMode: 'monotone',
+        }]
+    };
+
+    const schedule_reliability_operating_curve_config = {
+        type: 'line',
+        data: schedule_reliability_operating_curve_data,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Schedule Reliability Operating Curve '
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Mean WIP  [hrs]'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Schedule Reliability [%]'
+                    },
+                }
+            },
+        },
+    };
+
+    var schedule_reliability_operating_curve_chart = document.getElementById('schedule_reliability_operating_curve');
+    schedule_reliability_operating_curve_chart.setAttribute("width", WIDTH);
+    schedule_reliability_operating_curve_chart.setAttribute("height", HEIGHT);
+    var schedule_reliability_operating_curve_myChart = new Chart(
+        schedule_reliability_operating_curve_chart,
+        schedule_reliability_operating_curve_config
+    );
+
+    //###############################################################
+
+
 
 </script>
 <style>
