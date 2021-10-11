@@ -112,7 +112,13 @@ namespace ProductionPlanner.Service.Implementation
             var a = calculateLowerTIOBoundry(minDate, maxDate);
             var TIOms = calculateTIOm(minDate, maxDate);
 
-            var TIOs = Statistics.StandardDeviation(_calculationService.getThroughputTimes(minDate, maxDate));
+            var throughputs = _calculationService.getThroughputTimes(minDate, maxDate);
+            double TIOs = 0;
+            if (throughputs.Count > 0)
+            {
+                TIOs = Statistics.StandardDeviation(throughputs);
+            }
+            
             var phiListB = new List<double>();
             var phiListA = new List<double>();
 
@@ -191,11 +197,6 @@ namespace ProductionPlanner.Service.Implementation
             var WCa = _calculationService.calculateAverageWorkContent(minDate, maxDate);
             var WCv = _calculationService.calculateRelativeWorkContent(minDate, maxDate);
 
-            if (routMax == 0 || WS == 0)
-            {
-                return null;
-            }
-
             if(Um.Count != WIPms.Count)
             {
                 throw new Exception("A processing error occured!");
@@ -204,7 +205,7 @@ namespace ProductionPlanner.Service.Implementation
             var result = new List<double>();
             for(int i=0; i<WIPms.Count; i++)
             {
-                if (Um[i] == 0)
+                if (Um[i] == 0 || routMax == 0 || WS == 0 || WCv == 0)
                 {
                     result.Add(0);
                 }

@@ -14,30 +14,27 @@ namespace ProductionPlanner.Service.Implementation
         {
             _calculationService = calculationService;
         }
+        private DateTime getMinDate(DateTime date)
+        {
+            return date != null ? date : _calculationService.getMinStartDate();
+        }
+        private DateTime getMaxDate(DateTime date)
+        {
+            return date != null ? date : _calculationService.getMaxEndDate();
+        }
         public List<double> getXAxisValues(DateTime minDate, DateTime maxDate)
         {
-            DateTime startDate;
-            if(minDate == null)
-            {
-                startDate = _calculationService.getMinStartDate();
-            }
-            else
-            {
-                startDate = minDate;
-            }
-            DateTime endDate;
-            if (maxDate == null)
-            {
-                endDate = _calculationService.getMaxEndDate();
-            }
-            else
-            {
-                endDate = maxDate;
-            }
+            DateTime startDate = getMinDate(minDate);
+            DateTime endDate = getMaxDate(maxDate);
 
             var workContents = _calculationService.getWorkContents(startDate, endDate);
-            var minWC = workContents.Min();
-            var maxWC = workContents.Max();
+            double minWC = 0;
+            double maxWC = 0;
+            if (workContents.Count > 0)
+            {
+                minWC = workContents.Min();
+                maxWC = workContents.Max();
+            }
 
             var result = new List<double>();
             double prev = 0.0;
@@ -57,24 +54,8 @@ namespace ProductionPlanner.Service.Implementation
 
         public List<double> getYAxisValues(DateTime minDate, DateTime maxDate)
         {
-            DateTime startDate;
-            if (minDate == null)
-            {
-                startDate = _calculationService.getMinStartDate();
-            }
-            else
-            {
-                startDate = minDate;
-            }
-            DateTime endDate;
-            if (maxDate == null)
-            {
-                endDate = _calculationService.getMaxEndDate();
-            }
-            else
-            {
-                endDate = maxDate;
-            }
+            DateTime startDate = getMinDate(minDate);
+            DateTime endDate = getMaxDate(maxDate);
 
             var xVals = getXAxisValues(startDate, endDate);
             var workContents = _calculationService.getWorkContents(startDate, endDate);
@@ -89,7 +70,14 @@ namespace ProductionPlanner.Service.Implementation
 
             for(int i=1; i<frequencies.Count; i++)
             {
-                rel.Add((frequencies[i] - frequencies[i - 1] / numOrders));
+                if (numOrders != 0)
+                {
+                    rel.Add((frequencies[i] - frequencies[i - 1] / numOrders));
+                } else
+                {
+                    rel.Add(0);
+                }
+                
             }
 
             return rel;
