@@ -227,7 +227,7 @@ namespace ProductionPlanner.Service.Implementation
         public double getOPThroughputTimeXAxisValues(DateTime minDate, DateTime maxDate)
         {
             var opList = _calculationService.getListOfWIP(minDate, maxDate).ToList();
-            return return opList.Count != 0 ? opList.Average() : 0;
+            return opList.Count != 0 ? opList.Average() : 0;
         }
 
         public double getOPThroughputTimeYAxisValues(DateTime minDate, DateTime maxDate)
