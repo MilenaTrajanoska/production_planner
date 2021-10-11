@@ -28,15 +28,17 @@ namespace ProductionPlanner.Repository.Data
 
             Company company = Company.getInstance();
             company.Id = 1;
-            company.NumberOfWS = 0;
-            company.WSCapacity = 4;
+            company.NumberOfWS = 12;
+            company.WSCapacity = 24;
+            company.isValid = true;
+            company.IsSet = true;
 
-            builder.Entity<Product>()
-                .HasAlternateKey(p => p.ProductName);
-            builder.Entity<Order>()
-                .HasAlternateKey(o => o.OrderName);
-            builder.Entity<Material>()
-                .HasAlternateKey(m => m.MaterialName);
+            //builder.Entity<Product>()
+            //    .HasAlternateKey(p => p.ProductName);
+            //builder.Entity<Order>()
+            //    .HasAlternateKey(o => o.OrderName);
+            //builder.Entity<Material>()
+            //    .HasAlternateKey(m => m.MaterialName);
 
             builder.Entity<Company>().HasData(company);
 

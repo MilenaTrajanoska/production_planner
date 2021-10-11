@@ -4,56 +4,52 @@
     Create new material
 *@
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @model ProductionPlanner.Domain.Models.Material
 <br />
 <br />
 
-@if (ViewBag.ErrorMaterial != null)
+@if (ViewBag.Errors != null)
 {
-
-    <div class="alert alert-danger" role="alert">
-        @ViewBag.ErrorMaterial
-    </div>
+    @foreach (var err in ViewBag.Errors)
+    {
+        <div class="alert alert-danger" role="alert">
+            @err
+        </div>
+    }
 }
-@if (ViewBag.SuccessMaterial != null)
+@if (ViewBag.Message != null)
 {
 
     <div class="alert alert-success" role="alert">
-        @ViewBag.SuccessMaterial
+        @ViewBag.Message
     </div>
 }
-<div class=" row">
-    <div class="">
-        <a asp-action="AllMAterials" asp-controller="Material" class="btn btn-link"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Material List</a>
-    </div>
-</div>
 <h1 class="text-center">
     <b>
-        Create a new material
+        Edit material
     </b>
 
 </h1>
 <br />
 <br />
-<div class="mx-auto" style="width:35%">
-    <form asp-controller="Material" asp-action="Index" method="post">
+<div class="mx-auto w-25">
+    <form asp-controller="Material" asp-action="Edit" method="post">
         <div class="row form-group">
-            <div class="col-4">
+            <div class="col-6">
                 <label asp-for="MaterialName" class="control-label">Material name</label>
             </div>
-            <div class="col-8">
-                <input asp-for="MaterialName" type="text" placeholder="Enter material name" class="form-control" />
+            <div class="col-6">
+                <input asp-for="MaterialName" type="text" class="form-control" />
                 <span asp-validation-for="MaterialName" class="text-danger"></span>
             </div>
         </div>
 
         <div class="row form-group">
-            <div class="col-4">
+            <div class="col-6">
                 <label asp-for="CostPerUnit" class="control-label">Cost per unit</label>
             </div>
-            <div class="col-8">
+            <div class="col-6">
                 <input asp-for="CostPerUnit" type="text" class="form-control" style="max-width:80% ;display: inline-block" /> €
                 <span asp-validation-for="CostPerProduct" class="text-danger"></span>
             </div>
@@ -61,7 +57,7 @@
 
         <div class="form-group">
 
-            <input type="submit" value="Add material" class="btn btn-primary w-100" />
+            <input type="submit" value="Save Changes" class="btn btn-primary w-100" />
 
         </div>
     </form>

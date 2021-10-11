@@ -7,9 +7,13 @@ namespace ProductionPlanner.Domain.Models
     {
         [Key]
         public long Id { get; set; }
+        [Required(ErrorMessage = "The number of work stations is required")]
         public int NumberOfWS { get; set; }
+        [Required(ErrorMessage = "The capacity of work stations is required")]
         public double WSCapacity { get; set; }
+        [Required(ErrorMessage = "The inter operation time is required")]
         public double InterOpTime { get; set; }
+        [Required(ErrorMessage = "The transportation and storage time is required")]
         public double TransportantionAndStorageTime { get; set; }
         public int BeginningOfWIP { get; set; }
         public bool IsSet { get; set; }

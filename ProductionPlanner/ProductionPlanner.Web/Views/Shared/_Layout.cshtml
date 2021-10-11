@@ -7,13 +7,20 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    @*Font links:*@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="/js/" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm border-bottom box-shadow mb-3 text-decoration-none" style="background-color: #04396c; color:white">
             <div class="container">
-               
-                
+
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse text-decoration-none">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
@@ -27,7 +34,7 @@
                             <a class="text-decoration-none" asp-area="" asp-controller="Product" asp-action="Create" style="color:white !important"><i class="fa fa-inbox " style="background-color: transparent; color: white"></i> New product</a>
                         </li>
                         <li class="nav-item text-decoration-none px-3">
-                            <a class="text-decoration-none" asp-area="" asp-controller="Material" asp-action="Index" style="color:white !important"><i class="fa fa-puzzle-piece " style="background-color: transparent; color: white"></i> New material</a>
+                            <a class="text-decoration-none" asp-area="" asp-controller="Material" asp-action="AllMaterials" style="color:white !important"><i class="fa fa-puzzle-piece " style="background-color: transparent; color: white"></i> Materials</a>
                         </li>
                         <li class="nav-item text-decoration-none px-3">
                             <a class="text-decoration-none" asp-area="" asp-controller="Reports" asp-action="Index" style="color:white !important"><i class="fa fa-list" style="background-color: transparent; color: white"></i> Reports</a>
@@ -58,5 +65,29 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
+
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+        }
+
+        input.form-control {
+            border: none !important;
+            background-color: #f8f9fa !important;
+        }
+
+        .btn, .btn:hover, .btn:focus{
+            border: none;
+            outline: none;
+            font-weight:bold;
+        }
+
+            .btn:hover {
+                color: white;
+                background-color: #04396c !important;
+            }
+             
+    </style>
 </body>
+
 </html>

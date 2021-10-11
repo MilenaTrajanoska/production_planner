@@ -6,54 +6,149 @@
 @model List<ProductionPlanner.Domain.Models.Order>
 <br>
 <h1><b>All orders</b></h1>
-<br>
-<table class="table">
-    <tr>
-        <th>
-            Order Name
-        </th>
-        <th>
-            Product Name
-        </th>
-        <th>
-            Quantity
-        </th>
-        <th>
-            Start Date
-        </th>
-        <th>
-            End Date
-        </th>
-
-        
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
+<br />
+@if (ViewBag.Errors != null)
+{
+    @foreach (var err in ViewBag.Errors)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderName)
-            </td>
-            <td>
-                @item.OrderedProduct.ProductName
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
+        <div class="alert alert-danger" role="alert">
+            @err
+        </div>
     }
+}
+@if (ViewBag.Message != null)
+{
 
-</table>
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+<div class="row mx-auto">
+    <div class="col-md-12">
+        <form asp-controller="Order" asp-action="Index">
+            <div class="input-group mb-3 w-50">
+                <span> Year: &nbsp;&nbsp;&nbsp;</span><select name="year" asp-items="ViewBag.Years" class="form-control"></select>
+                <div class="input-group-append">
+                    <input type="submit" value="Select Year" class="btn btn-primary" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <table id="orders-table" class="table table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>
+                    Order Name
+                </th>
+                <th>
+                    Product Name
+                </th>
+                <th>
+                    Quantity
+                </th>
+                <th>
+                    Start Date
+                </th>
+                <th>
+                    End Date
+                </th>
+
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderName)
+                    </td>
+                    <td>
+                        @item.OrderedProduct.ProductName
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EndDate)
+                    </td>
+
+                    <td>
+                        @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+
+
+                        <button type="button" class="btn" style="background-color: #61c97d">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { style = "text-decoration:none; color:white" })
+                        </button>
+
+                        <button type="button" class="btn" style="background-color: #bf75ff ">
+                            @Html.ActionLink("Details", "Details", new { id = item.Id }, new { style = "text-decoration:none; color:white" })
+                            @{
+                                var tm = "#myModal" + item.Id;
+                                var mid = "myModal" + item.Id;
+                            }
+                        </button>
+
+
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@tm">
+                            Delete
+                        </button>
+
+                        <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog text-center">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <div class="mx-auto">
+                                            @*<div class="float-right" style="display:block">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                </div>
+
+                                                <br /><br />*@
+                                            <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        Are you sure want to remove this order?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form asp-action="Delete" method="post">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <input type="hidden" name="year" value="@ViewBag.Years.SelectedValue" />
+                                            <input type="submit" value="Delete" class="btn btn-danger" />
+                                        </form>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+@*<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css"></script>
+@*<script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>*@
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+
+<script>
+
+    $('#orders-table').DataTable();
+
+</script>

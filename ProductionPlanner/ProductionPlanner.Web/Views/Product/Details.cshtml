@@ -1,0 +1,204 @@
+﻿@model ProductionPlanner.Domain.Models.Product
+
+<div class="row">
+    <div class="">
+        <a asp-action="Index" asp-controller="Product" class="btn btn-link"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Product List</a>
+    </div>
+    
+</div>
+
+<br />
+
+@if (ViewBag.Errors != null)
+{
+    @foreach (var err in ViewBag.Errors)
+    {
+    <div class="alert alert-danger" role="alert">
+        @err
+    </div>
+    }
+}
+@if (ViewBag.Message != null)
+{
+
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+
+<div class="mx-auto w-75">
+    <div class="row mx-auto">
+        <div class="col-4"></div>
+        <div class="col-4">
+            <h2><b>Product: @Model.ProductName</b></h2>
+        </div>
+        <div class="col-4"></div>
+    </div>
+    
+    <br />
+    <div class="row">
+        <div class="col-6 border-right">
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="ProductName" class="control-label">Product name</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.ProductName</p>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="InProcessTime" class="control-label">Processing time</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.InProcessTime</p>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="SetUpTime" class="control-label">Set-up time</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.SetUpTime</p>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="PreProcessingWaitTime" class="control-label">Preprocessing waiting time</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.PreProcessingWaitTime</p>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="PostProcessingWaitTime" class="control-label">Postprocessing waiting time</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.PostProcessingWaitTime</p>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-6 border-left pl-5">
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="VariableOHPerDLHour" class="control-label">Variable OH Allocation per DL hour</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.VariableOHPerDLHour</p>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="FixedOHPerYear" class="control-label">Fixed OH per year</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.FixedOHPerYear</p>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="SellingPrice" class="control-label">Selling price</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.SellingPrice</p>
+                </div>
+            </div>
+
+
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="WagePerHour" class="control-label">Wage</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.WagePerHour</p>
+                </div>
+            </div>
+
+            <div class="row form-group">
+                <div class="col-6">
+                    <label asp-for="InterestRate" class="control-label">Interest rate</label>
+                </div>
+                <div class="col-6">
+                    <p style="max-width: 50% !important; display: inline-block">@Model.InterestRate</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+</div>
+
+      <hr />
+<div class="row">
+    <div class="col-md-6 pl-5">
+        <h4><b>Materials</b></h4>
+    </div>
+    <div class="col-md-6">
+        <a asp-controller="Product" asp-action="AddMaterialToProduct" asp-route-id="@Model.Id" class="btn btn-primary">Add Materials to Product</a>
+    </div>
+</div>
+<br />
+<div class="row mx-auto" style="width:95%">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col">Material</th>
+                <th scope="col">Cost Per Unit</th>
+                <th scope="col">Quantity</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.MaterialForProduct.Count; i++)
+            {
+                var relation = Model.MaterialForProduct.ElementAt(i);
+                var item = relation.Material;
+                <tr>
+                    <td>@item.MaterialName</td>
+                    <td>@item.CostPerUnit</td>
+                    <td>@relation.Quantity</td>
+                    <td>
+                        @{
+                            var tm = "#myModal" + item.Id;
+                            var mid = "myModal" + item.Id;
+                        }
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="@tm">
+                            Delete
+                        </button>
+
+                        <div class="modal fade" id="@mid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="myModalLabel">Delete Confirmation</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure want to remove this material from the model?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form asp-action="DeleteMaterialFromProduct" method="post">
+                                            <input type="hidden" name="materialId" value="@item.Id" />
+                                            <input type="hidden" name="productId" value="@Model.Id" />
+                                            <input type="submit" value="Delete" class="btn btn-danger" />
+                                        </form>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<div class="row mx-auto" style="width:95%">
+    <div class="">
+        <h5><b>Total material cost:</b> @Model.TotalMaterialCost().ToString("0.00") € </h5>
+    </div>
+</div>
+<br />

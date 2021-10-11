@@ -1,0 +1,97 @@
+﻿@model ProductionPlanner.Domain.Models.Company
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class=" row">
+    <div class="">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-link"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Dashboard</a>
+    </div>
+</div>
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">
+        <p>@ViewBag.Message</p>
+    </div>
+}
+@if (ViewBag.Errors != null)
+{
+@foreach (var err in ViewBag.Errors)
+{
+    <div class="alert alert-danger" role="alert">
+        @err
+    </div>
+}
+}
+<div class="pt-5 px-5 row">
+    <div class="w-50 mx-auto">
+        <form asp-controller="Home" asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div>
+                <div class="row">
+                    <div class="col-2"></div>
+                    <div class="col-10">
+                        <h1>
+                            <b>
+                                Edit company values
+                            </b>
+
+                        </h1>
+                    </div>
+                    <div class="col-2"></div>
+
+                </div>
+                <br /><br />
+                <div class="row form-group ">
+                    <div class="col-4">
+                        <label asp-for="NumberOfWS" class="control-label">Number of work stations:</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="NumberOfWS" type="text" style="max-width: 60% !important" />
+                        <span asp-validation-for="NumberOfWS" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row form-group ">
+                    <div class="col-4">
+                        <label asp-for="WSCapacity" class="control-label">Work station capacity:</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="WSCapacity" type="text" style="max-width: 60% !important" />
+                        <span asp-validation-for="WSCapacity" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="row form-group ">
+                    <div class="col-4">
+                        <label asp-for="InterOpTime" class="control-label">Inter opertaion time:</label>
+                    </div>
+                    <div class="col-8">
+                        <input class="form-control" asp-for="InterOpTime" type="number" style="max-width: 60% !important" />
+                        <span asp-validation-for="InterOpTime" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="row form-group ">
+                    <div class="col-4">
+                        <label asp-for="TransportantionAndStorageTime" class="control-label">Transportation and storage time: </label>
+                    </div>
+                    <div class="col-6">
+                        <input class="form-control" asp-for="TransportantionAndStorageTime" style="max-width: 60% !important" />
+                        <span asp-validation-for="TransportantionAndStorageTime" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save changes" class="btn btn-primary w-75" />
+            </div>
+        </form>
+    </div>
+
+
+
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

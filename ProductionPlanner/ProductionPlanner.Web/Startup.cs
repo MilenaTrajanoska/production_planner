@@ -37,6 +37,7 @@ namespace ProductionPlanner.Web
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddTransient<ICalculationService, CalculationService>();
+            services.AddTransient<IInMemoryCacheService, InMemoryCacheService>();
             services.AddTransient<ICompanyService, CompanyService>();
             services.AddTransient<ILogisticOperatingCurveCalculationService, LogisticOperatingCurveCalculationService>();
             services.AddTransient<IMaterialService, MaterialService>();
@@ -50,6 +51,7 @@ namespace ProductionPlanner.Web
             services.AddTransient<ICompanyRepository, CompanyRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IProductRepository), typeof(ProductRepository));
 
 
             services.AddControllersWithViews();

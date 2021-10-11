@@ -1,0 +1,90 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+    ORDER DETAILS
+*@
+@{
+}
+@model ProductionPlanner.Domain.Models.Order
+
+
+@if (ViewBag.Errors != null)
+{
+    @foreach (var err in ViewBag.Errors)
+    {
+        <div class="alert alert-danger" role="alert">
+            @err
+        </div>
+    }
+}
+@if (ViewBag.Message != null)
+{
+
+    <div class="alert alert-success" role="alert">
+        @ViewBag.Message
+    </div>
+}
+<div class=" row">
+    <div class="">
+        <a asp-action="Index" asp-controller="Order" class="btn btn-link"><i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Order List</a>
+    </div>
+</div>
+<div class="pt-5 px-5 row">
+    <div class="w-50 mx-auto">
+        <div class="row">
+            <div class="col-2"></div>
+            <div class="col-10">
+                <h2><b>Order: @Model.OrderName</b></h2>
+            </div>
+            <div class="col-2"></div>
+        </div>
+
+        <form asp-controller="Order" asp-action="Details" method="post">
+            <div class="pb-3">
+
+                <br />
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="OrderName" class="control-label">Order id:</label>
+                    </div>
+                    <div class="col-8">
+                        <p>@Model.OrderName  </p>
+
+                    </div>
+                </div>
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="OrderedProduct.ProductName" class="control-label">Product name:</label>
+                    </div>
+                    <div class="col-8">
+                        <p>@Model.OrderedProduct.ProductName</p>
+                    </div>
+
+                </div>
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="Quantity" class="control-label">Quantity</label>
+                    </div>
+                    <div class="col-8">
+                        <p>@Model.Quantity</p>
+                    </div>
+                </div>
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="StartDate" class="control-label">Start date: </label>
+                    </div>
+                    <div class="col-8">
+                        <p>@Model.StartDate.ToString("dd/MM/yyyy")</p>
+                    </div>
+                </div>
+                <div class="row form-group pl-4">
+                    <div class="col-4">
+                        <label asp-for="EndDate" class="control-label">End date: </label>
+                    </div>
+                    <div class="col-8">
+                        <p>@Model.EndDate.ToString("dd/MM/yyyy")</p>
+                    </div>
+                </div>
+
+        </form>
+    </div>

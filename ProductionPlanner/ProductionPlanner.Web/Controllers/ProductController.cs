@@ -48,12 +48,64 @@ namespace ProductionPlanner.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var p = productService.CreateNewProduct(product);
-                return RedirectToAction("AddMaterialToProduct", new { id = p.Id });
+                var p = productService.GetAllProducts().Where(p => p.ProductName == product.ProductName).FirstOrDefault();
+                if (p != null)
+                {
+                    ViewBag.Errors = new List<string>() { "A product with the same name already exists." };
+                    return View(product);
+                }
+                try
+                {
+                    var prod = productService.CreateNewProduct(product);
+                    ViewBag.Message = "Succesfully created the product.";
+                    return RedirectToAction("AddMaterialToProduct", new { id = prod.Id });
+                }
+                catch (Exception e) {
+                    ViewBag.Errors = new List<string>() { "Could not create the product.\nPlease try again later." };
+                }
+
+                return View("Index", productService.GetAllProducts());
             }
+
+            ViewBag.Errors = new List<string>() { "Could not create  the product.\nPlease check the values you have entered." };
             
             return View(product);
 
+        }
+
+        [HttpGet]
+        public IActionResult Edit(long id)
+        {
+            ViewBag.Materials = materialService.GetAllMaterials().Select(a =>
+                new SelectListItem
+                {
+                    Value = a.MaterialName,
+                    Text = a.MaterialName
+                }).ToList();
+            var product = productService.GetProduct(id);
+            if(product != null)
+            {
+                return View(product);
+            }
+            return NotFound();   
+        }
+
+        [HttpPost]
+        public IActionResult Edit(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    productService.UpdateExistingProduct(product);
+                    ViewBag.Message = "Successfully updated product";
+                }catch (Exception e)
+                {
+                    ViewBag.Errors = new List<String>() { e.Message };
+                }
+            }
+
+            return View(product);
         }
 
         public IActionResult AddMaterialToProduct(long id)
@@ -78,7 +130,7 @@ namespace ProductionPlanner.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddMaterialToProduct([Bind("ProductId", "MaterialName")] AddMaterialToProduct product)
+        public IActionResult AddMaterialToProduct([Bind("ProductId", "MaterialName", "Quantity")] AddMaterialToProduct product)
         {
             ViewBag.Materials = materialService.GetAllMaterials().Select(a =>
                  new SelectListItem
@@ -93,12 +145,14 @@ namespace ProductionPlanner.Web.Controllers
                 var material1 = materialService.GetAllMaterials().Where(m => m.MaterialName == product.MaterialName).FirstOrDefault();
                 if(product1!=null && material1 != null)
                 {
+                    product.SelectedProduct = product1;
                     var relation = new MaterialForProduct()
                     {
                         Material = material1,
                         MaterialId = material1.Id,
                         Product = product1,
-                        ProductId = product1.Id
+                        ProductId = product1.Id,
+                        Quantity = product.Quantity
 
                     };
                     product1.MaterialForProduct.Add(relation);
@@ -114,6 +168,58 @@ namespace ProductionPlanner.Web.Controllers
             }
             return View(product);
 
+        }
+
+        [HttpPost]
+        public IActionResult DeleteMaterialFromProduct(long productId, long materialId)
+        {
+            var material = materialService.GetMaterial(materialId);
+            var product = productService.GetProduct(productId);
+            if (material == null || product == null)
+            {
+                ViewBag.Errors = new List<string>() { "Could not remove material from product." };
+            } else
+            {
+                var relation = repositoryMaterial.getEntities().Where(e => e.MaterialId == materialId && e.ProductId == productId).FirstOrDefault();
+                repositoryMaterial.Delete(relation);
+                ViewBag.Message = "Successfully removed material from product";
+            }
+
+            return View("Details", product);
+        }
+
+        [HttpGet]
+        public IActionResult Details(long id)
+        {
+            var product = productService.GetProduct(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return View(product);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(long id)
+        {
+            var product = productService.GetProduct(id);
+            if (product == null)
+            {
+                ViewBag.Errors = new List<string>() { "Could not delete a product that does not exist." };
+            } 
+            else
+            {
+                try
+                {
+                    productService.DeleteProduct(id);
+                    ViewBag.Message = "Successfully deleted product.";
+                } catch
+                {
+                    ViewBag.Errors = "Could not delete product.\nPlease try again later.";
+                }
+                
+            }
+            return View("Index", productService.GetAllProducts());
         }
 
     }

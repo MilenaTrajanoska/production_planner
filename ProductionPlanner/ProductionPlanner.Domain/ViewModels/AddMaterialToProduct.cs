@@ -1,7 +1,4 @@
 ﻿using ProductionPlanner.Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ProductionPlanner.Domain.ViewModels
 {
@@ -13,6 +10,7 @@ namespace ProductionPlanner.Domain.ViewModels
         public Product SelectedProduct { get; set; }
 
         public string MaterialName { get; set; }
+        public double Quantity { get; set; }
 
     }
 }

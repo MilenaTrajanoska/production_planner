@@ -28,7 +28,6 @@ namespace ProductionPlanner.Service.Implementation
 
         public void CreateNewOrder(Order order)
         {
-            order.IsValid = true;
             this.orderRepository.Insert(order);
         }
 
@@ -44,6 +43,7 @@ namespace ProductionPlanner.Service.Implementation
 
         public void UpdateExistingOrder(Order order)
         {
+            order.IsValid = true;
             this.orderRepository.Update(order);
         }
 
@@ -86,20 +86,30 @@ namespace ProductionPlanner.Service.Implementation
                             {
                                 throw new ProductNotFoundException(String.Format("Product with name {0} could not be found.", productName));
                             }
-                            order = new Order
+                            var orderName = reader.GetValue(0).ToString();
+                            var oldOrder = GetAllOrders().Where(o => o.OrderName == orderName).FirstOrDefault();
+                            if (oldOrder == null)
                             {
-                                OrderName = reader.GetValue(0).ToString(),
-                                ProductId = product.Id,
-                                ProductVersion = product.Version,
-                                OrderedProduct = product,
-                                Quantity = Convert.ToInt32(reader.GetValue(2).ToString()),
-                                StartDate = DateTime.Parse(reader.GetValue(3).ToString()),
-                                EndDate = DateTime.Parse(reader.GetValue(4).ToString())
-                            };
-                            CreateNewOrder(order);
-                        }catch(Exception e)
+                                order = new Order
+                                {
+                                    OrderName = orderName,
+                                    ProductId = product.Id,
+                                    ProductVersion = product.Version,
+                                    OrderedProduct = product,
+                                    Quantity = Convert.ToInt32(reader.GetValue(2).ToString()),
+                                    StartDate = DateTime.Parse(reader.GetValue(3).ToString()),
+                                    EndDate = DateTime.Parse(reader.GetValue(4).ToString())
+                                };
+                                CreateNewOrder(order);
+                            }
+                            else
+                            {
+                                errorMessages.Add(String.Format("Order with number: {0} already exists.", orderName));
+                            }
+                        }catch(NullReferenceException e)
                         {
                             errorMessages.Add(e.Message);
+                            return errorMessages;
                         }
                     }
                 }
@@ -107,5 +117,7 @@ namespace ProductionPlanner.Service.Implementation
 
             return errorMessages;
         }
+
+
     }
 }

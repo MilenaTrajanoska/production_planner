@@ -118,8 +118,8 @@ namespace ProductionPlanner.Service.Implementation
 
             if (TIOs > 0)
             { 
-                phiListB = TIOms.Select(t => cumulativeNormalDistValue((b - t) / TIO)).ToList();
-                phiListA = TIOms.Select(t => cumulativeNormalDistValue((a - t) / TIO)).ToList();
+                phiListB = TIOms.Select(t => cumulativeNormalDistValue((b - t) / TIOs)).ToList();
+                phiListA = TIOms.Select(t => cumulativeNormalDistValue((a - t) / TIOs)).ToList();
             } 
             else
             {
@@ -127,7 +127,7 @@ namespace ProductionPlanner.Service.Implementation
                 phiListA = TIOms.Select(t => cumulativeNormalDistValue((a - t) / STD_VAL)).ToList();
             }
 
-            return phiListB.Zip(phiListA, (a, b) => (a - b) * 100).ToList();
+            return phiListB.Zip(phiListA, (phia, phib) => (phia - phib) * 100).ToList();
             
         }
 
@@ -154,7 +154,7 @@ namespace ProductionPlanner.Service.Implementation
         }
         private double cumulativeNormalDistValue(double variable)
         {
-            return Normal.CDF(1, 0, variable);
+            return Normal.CDF(0, 1, variable);
         }
 
         private double calculateUtilizationMean(double t)
@@ -210,9 +210,10 @@ namespace ProductionPlanner.Service.Implementation
                 }
                 else
                 {
-                    result.Add(WIPms[i] /
-                        (Um[i] * routMax * WS) - WCa /
-                        routMax * Math.Pow(WCv, 2));
+                    var value = WIPms[i] /
+                        (Um[i] * routMax * WS/100) - WCa /
+                        routMax * Math.Pow(WCv, 2);
+                    result.Add(value);
                 }
             }
 

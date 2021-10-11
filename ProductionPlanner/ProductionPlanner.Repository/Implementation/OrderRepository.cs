@@ -22,8 +22,7 @@ namespace ProductionPlanner.Repository.Implementation
 
         public void Delete(Order entity)
         {
-            entity.IsValid = false;
-            orders.Update(entity);
+            orders.Remove(entity);
             context.SaveChanges();
         }
 
@@ -31,8 +30,9 @@ namespace ProductionPlanner.Repository.Implementation
         {
             return orders
                 .Include(o => o.OrderedProduct)
-                .Include("OrderedProduct.MaterialForProduct")
-                .Include("OrderedProduct.MaterialForProduct.Material")
+                .Include("OrderedProduct.ReferencedProduct")
+                .Include("OrderedProduct.ReferencedProduct.MaterialForProduct")
+                .Include("OrderedProduct.ReferencedProduct.MaterialForProduct.Material")
                 .SingleOrDefault(o => o.Id == id && o.IsValid);
         }
 
@@ -49,6 +49,7 @@ namespace ProductionPlanner.Repository.Implementation
 
         public Order Insert(Order entity)
         {
+            entity.IsValid = true;
             var order = orders.Add(entity);
             context.SaveChanges();
             return order.Entity;
