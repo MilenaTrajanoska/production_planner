@@ -5,7 +5,7 @@
     ViewData["Title"] = "Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*@model ProductionPlanner.Domain.ViewModels.Diagram*@
+@model ProductionPlanner.Domain.ViewModels.Diagram
 
 <br />
 <br />
@@ -48,10 +48,10 @@
             <canvas id="throughput_diagram"></canvas>
         </div>
         <div class="col-md-12 p-5">
-            <canvas id="lodistic_operating_curves"></canvas>
+            <canvas id="work_content_distribution"></canvas>
         </div>
         <div class="col-md-12 p-5">
-            <canvas id="work_content_distribution"></canvas>
+            <canvas id="lodistic_operating_curves"></canvas>
         </div>
         <div class="col-md-12 p-5">
             <canvas id="throughput_time_distribution"></canvas>
@@ -354,7 +354,6 @@
     //###############################################################
     //###############################################################
     //###############################################################
-    //###############################################################
 
     const labels = [
         'January',
@@ -365,21 +364,43 @@
         'June',
     ];
 
+    var green_color = 'rgb(34,139,34)';
+
+    //###############################################################
     // throughput_diagram
+
+    var td_input = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Input))');
+    var td_output = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Output))');
+    var td_wip = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.WIP))');
+    var td_capacity = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Capacity))');
+
+    console.log('throughput_diagram');
+    console.log(td_input);
+    console.log(td_output);
+    console.log(td_wip);
+    console.log(td_capacity);
+
     const throughput_diagram_data = {
-        labels: labels,
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'asd'],
         datasets: [{
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45],
+            label: 'Input',
+            backgroundColor: 'rgb(192, 80, 77)',
+            borderColor: 'rgb(192, 80, 77)',
+            data: td_input,
             cubicInterpolationMode: 'monotone',
         },
         {
-            label: 'My sec dataset',
+            label: 'Output',
+            backgroundColor: 'rgb(128, 100, 162)',
+            borderColor: 'rgb(128, 100, 162)',
+            data: td_output,
+            cubicInterpolationMode: 'monotone',
+        },
+        {
+            label: 'WIP',
             backgroundColor: 'rgb(255, 0, 0)',
             borderColor: 'rgb(255, 0, 0)',
-            data: [10, 30, 50, 20, 10, 10, 15],
+            data: td_wip,
             cubicInterpolationMode: 'monotone',
         }]
     };
@@ -426,23 +447,31 @@
         throughput_diagram_config
     );
 
+
     //###############################################################
-    // lodistic_operating_curves
-    const lodistic_operating_curves_data = {
-        labels: labels,
+    // work_content_distribution
+
+    var wcd_Classes = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel.Classes))');
+    var wcd_Rel = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel.Rel))');
+    console.log('work_content_distribution');
+    console.log(wcd_Classes);
+    console.log(wcd_Rel);
+
+    const work_content_distribution_data = {
+        labels: wcd_Classes,
         datasets: [
             {
                 label: 'Dataset 2',
                 backgroundColor: 'rgb(34,139,34)',
                 borderColor: 'rgb(34,139,34)',
-                data: [10, 30, 50, 20, 10, 10, 15],
+                data: wcd_Rel,
             }
         ]
     };
 
-    const lodistic_operating_curves_config = {
+    const work_content_distribution_config = {
         type: 'bar',
-        data: lodistic_operating_curves_data,
+        data: work_content_distribution_data,
         options: {
             responsive: true,
             plugins: {
@@ -473,57 +502,94 @@
         },
     };
 
-    var lodistic_operating_curves_chart = document.getElementById('lodistic_operating_curves');
-    lodistic_operating_curves_chart.setAttribute("width", WIDTH);
-    lodistic_operating_curves_chart.setAttribute("height", HEIGHT);
-    var lodistic_operating_curves_myChart = new Chart(
-        lodistic_operating_curves_chart,
-        lodistic_operating_curves_config
+    var work_content_distribution_chart = document.getElementById('work_content_distribution');
+    work_content_distribution_chart.setAttribute("width", WIDTH);
+    work_content_distribution_chart.setAttribute("height", HEIGHT);
+    var throughput_diagram_myChart = new Chart(
+        work_content_distribution_chart,
+        work_content_distribution_config
     );
 
-    //###############################################################
-    // work_content_distribution
+     //###############################################################
+    // lodistic_operating_curves
 
-    const work_content_distribution_data = {
-        labels: labels,
+    var loc_Labels = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.Labels))');
+    var loc_output_rate = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OutputRate))');
+    var loc_throughput_time = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.ThroughputTime))');
+    var loc_rangeX = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.RangeX))');
+    var loc_rangeY = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.RangeY))');
+    var loc_capacity = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.Capacity))');
+    var loc_OPOperatingPoin = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPOperatingPoin))');
+    var loc_OPRangeX = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPRangeX))');
+    var loc_OPRangeY = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPRangeY))');
+    var loc_OPThroughputTimeX = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPThroughputTimeX))');
+    var loc_OPThroughputTimeY = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPThroughputTimeY))');
+    console.log('lodistic_operating_curves');
+    console.log(loc_Labels);
+    console.log(loc_output_rate);
+    console.log(loc_throughput_time);
+    console.log(loc_rangeX);
+    console.log(loc_rangeY);
+    console.log(loc_capacity);
+    console.log(loc_OPOperatingPoin);
+    console.log(loc_OPRangeX);
+    console.log(loc_OPRangeY);
+    console.log(loc_OPThroughputTimeX);
+    console.log(loc_OPThroughputTimeY);
+
+    const lodistic_operating_curves_data = {
+        labels: loc_Labels,
         datasets: [
             {
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45],
-            cubicInterpolationMode: 'monotone',
-        },
-        {
-            type: 'bubble',
-            backgroundColor: 'rgb(255, 99, 0)',
-            borderColor: 'rgb(255, 99, 0)',
-            data: [
-                {
-                    x: 'May',
-                    y: 20,
-                    r: 15
-                },
-                {
-                    x: 'March',
-                    y: 20,
-                    r: 15
-                },
-            ],
-        },
-        {
-            label: 'My sec dataset',
-            backgroundColor: 'rgb(255, 0, 0)',
-            borderColor: 'rgb(255, 0, 0)',
-            data: [10, 30, 50, 20, 10, 10, 15],
-            cubicInterpolationMode: 'monotone',
-            }
+                label: 'OutputRate',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: loc_output_rate,
+                cubicInterpolationMode: 'monotone',
+            },
+            {
+                label: 'Throughput Time',
+                backgroundColor: 'rgb(255, 0, 0)',
+                borderColor: 'rgb(255, 0, 0)',
+                data: loc_throughput_time,
+                cubicInterpolationMode: 'monotone',
+            },
+            {
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 99, 0)',
+                borderColor: 'rgb(255, 99, 0)',
+                data: [{ x: loc_rangeX, y: loc_rangeY,r: 15 }],
+            },
+            {
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 0, 99)',
+                borderColor: 'rgb(255, 0 99)',
+                data: [{ x: loc_capacity[0], y: loc_capacity[1], r: 15 }],
+            },
+            {
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 99, 99)',
+                borderColor: 'rgb(255, 99, 99)',
+                data: [{ x: loc_OPOperatingPoin[0], y: loc_OPOperatingPoin[1], r: 15 }],
+            },
+            {
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 0, 255)',
+                borderColor: 'rgb(255, 0 255)',
+                data: [{ x: loc_OPRangeX, y: loc_OPRangeY, r: 15 }],
+            },
+            {
+                type: 'bubble',
+                backgroundColor: 'rgb(0, 0, 255)',
+                borderColor: 'rgb(0, 0, 255)',
+                data: [{ x: loc_OPThroughputTimeX, y: loc_OPThroughputTimeY, r: 15 }],
+            },
         ]
     };
 
-    const work_content_distribution_config = {
+    const lodistic_operating_curves_config = {
         type: 'line',
-        data: work_content_distribution_data,
+        data: lodistic_operating_curves_data,
         options: {
             plugins: {
                 title: {
@@ -555,25 +621,31 @@
         },
     };
 
-    var work_content_distribution_chart = document.getElementById('work_content_distribution');
-    work_content_distribution_chart.setAttribute("width", WIDTH);
-    work_content_distribution_chart.setAttribute("height", HEIGHT);
-    var throughput_diagram_myChart = new Chart(
-        work_content_distribution_chart,
-        work_content_distribution_config
+    var lodistic_operating_curves_chart = document.getElementById('lodistic_operating_curves');
+    lodistic_operating_curves_chart.setAttribute("width", WIDTH);
+    lodistic_operating_curves_chart.setAttribute("height", HEIGHT);
+    var lodistic_operating_curves_myChart = new Chart(
+        lodistic_operating_curves_chart,
+        lodistic_operating_curves_config
     );
 
     //###############################################################
     // throughput_time_distribution
 
+    var ttd_Classes = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputTimeDistributionDiagramModel.Classes))');
+    var ttd_Rel = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputTimeDistributionDiagramModel.Rel))');
+    console.log('throughput_time_distribution');
+    console.log(ttd_Classes);
+    console.log(ttd_Rel);
+
     const throughput_time_distribution_data = {
-        labels: labels,
+        labels: ttd_Classes,
         datasets: [
             {
                 label: 'Dataset 2',
                 backgroundColor: 'rgb(34,139,34)',
                 borderColor: 'rgb(34,139,34)',
-                data: [10, 30, 50, 20, 10, 10, 15],
+                data: ttd_Rel,
             }
         ]
     };
@@ -622,20 +694,28 @@
     //###############################################################
     // schedule_reliability_operating_curve
 
+    var sroc_Labels = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.Labels))');
+    var sroc_ScheduleReliability = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.ScheduleReliability))');
+    var sroc_MeanWIP = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.MeanWIP))');
+    console.log('schedule_reliability_operating_curve');
+    console.log(sroc_Labels);
+    console.log(sroc_ScheduleReliability);
+    console.log(sroc_MeanWIP);
+
     const schedule_reliability_operating_curve_data = {
         labels: labels,
         datasets: [{
-            label: 'My First dataset',
-            backgroundColor: 'rgb(255, 99, 132)',
-            borderColor: 'rgb(255, 99, 132)',
-            data: [0, 10, 5, 2, 20, 30, 45],
+            label: 'Schedule Reliability',
+            backgroundColor: 'rgb(0, 0, 255)',
+            borderColor: 'rgb(0, 0, 255)',
+            data: sroc_ScheduleReliability,
             cubicInterpolationMode: 'monotone',
         },
         {
-            label: 'My sec dataset',
+            label: 'Mean WIP',
             backgroundColor: 'rgb(255, 0, 0)',
             borderColor: 'rgb(255, 0, 0)',
-            data: [10, 30, 50, 20, 10, 10, 15],
+            data: sroc_MeanWIP,
             cubicInterpolationMode: 'monotone',
         }]
     };
