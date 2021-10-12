@@ -14,28 +14,19 @@ namespace ProductionPlanner.Service.Implementation
             _calculationService = calculationService;
         }
 
+        private DateTime getMinDate(DateTime date)
+        {
+            return date != null ? date : _calculationService.getMinStartDate();
+        }
+        private DateTime getMaxDate(DateTime date)
+        {
+            return date != null ? date : _calculationService.getMaxEndDate();
+        }
+
         public List<DateTime> calculateThroughputDiagramXAxis(DateTime from, DateTime to)
         {
-            DateTime startMin;
-
-            if (from != null)
-            {
-                startMin = from;
-            }
-            else
-            {
-                startMin = _calculationService.getMinStartDate();
-            }
-
-            DateTime endDate;
-            if (to != null)
-            {
-                endDate = to;
-            }
-            else
-            {
-                endDate = _calculationService.getMaxEndDate();
-            }
+            DateTime startMin = getMinDate(from);
+            DateTime endDate = getMaxDate(to);
 
             List<DateTime> result = new List<DateTime>();
             

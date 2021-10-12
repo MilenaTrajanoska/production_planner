@@ -46,7 +46,12 @@ namespace ProductionPlanner.Service.Implementation
 
         public double calculateAverageWorkContent(DateTime minDate, DateTime maxDate)
         {
-            return getWorkContents(minDate, maxDate).Average();
+             var workContents = getWorkContents(minDate, maxDate);
+            if (workContents.Count > 0)
+            {
+                return workContents.Average();
+            }
+            return 0;
         }
 
         public double calculateRelativeWorkContent(DateTime minDate, DateTime maxDate)
@@ -95,12 +100,12 @@ namespace ProductionPlanner.Service.Implementation
             var orders = _orderRepository.GetAll()
                 .Where(o => o.StartDate.Date.CompareTo(minDate.Date)>=0 && o.EndDate.Date.CompareTo(maxDate.Date) <= 0)
                 .ToList();
-            double sumWC = orders.Select(o => o.getWorkContent()).Sum();
             
             if (orders.Count == 0)
             {
                 return 0;
             }
+            double sumWC = orders.Select(o => o.getWorkContent()).Sum();
             return sumWC / (maxDate.Subtract(minDate).TotalDays + 1);
         }
 
@@ -116,55 +121,69 @@ namespace ProductionPlanner.Service.Implementation
 
         public DateTime getMinStartDate()
         {
-            return _orderRepository.GetAll()
+            var orderDates = _orderRepository.GetAll()
                 .Select(o => o.StartDate)
-                .ToList()
-                .Min();
+                .ToList();
+            if (orderDates.Count > 0)
+            {
+                return orderDates.Min();
+            }
+            return DateTime.Now;
         }
 
         public DateTime getMaxEndDate()
         {
-            if (_orderRepository.GetAll().Count() == 0)
-            {
-                return DateTime.Now;
-            }
-            return _orderRepository.GetAll()
+            var orderDates = _orderRepository.GetAll()
                 .Select(o => o.EndDate)
-                .ToList()
-                .Max();
+                .ToList();
+            if (orderDates.Count > 0)
+            {
+                return orderDates.Max();
+            }
+            return DateTime.Now;
         }
         public double calculateInputForDate(DateTime from, DateTime to)
         {
-            return _orderRepository.GetAll()
+            var workContents = _orderRepository.GetAll()
                 .Where(o => o.StartDate.Date.CompareTo(from.Date) >= 0
                             && o.StartDate.Date.CompareTo(to.Date) <= 0)
                 .Select(o => o.getWorkContent())
-                .ToList()
-                .Sum();
+                .ToList();
+            if (workContents.Count > 0)
+            {
+                return workContents.Sum();
+            }
+            return 0;
         }
         public double calculateOutputForDate(DateTime from, DateTime to)
         {
-            return _orderRepository.GetAll()
+            var workContents = _orderRepository.GetAll()
                 .Where(o => o.StartDate.Date.CompareTo(from.Date) >= 0
                             && o.EndDate.Date.CompareTo(to.Date) <= 0)
                 .Select(o => o.getWorkContent())
-                .ToList()
-                .Sum();
+                .ToList();
+            if (workContents.Count > 0)
+            {
+                return workContents.Sum();
+            }
+            return 0;
+        }
+        private DateTime getMinDate(DateTime date)
+        {
+            return date != null ? date : getMinStartDate();
+        }
+
+        private DateTime getMaxDate(DateTime date)
+        {
+            return date != null ? date : getMaxEndDate();
         }
         public double getWIPForDate(DateTime startDate, DateTime endDate)
         {
-            DateTime start;
-            if (startDate == null)
-            {
-                start = getMinStartDate();
-            }
-            else
-            {
-                start = startDate;
-            }
-
-            var input = calculateInputForDate(start, endDate);
-            var output = calculateOutputForDate(start, endDate);
+            DateTime start = getMinDate(startDate);
+            DateTime end = getMaxDate(endDate);
+            
+            var input = calculateInputForDate(start, end);
+            var output = calculateOutputForDate(start, end);
             return input-output;
         }
 
@@ -184,25 +203,10 @@ namespace ProductionPlanner.Service.Implementation
 
         public List<double> getThroughputTimes(DateTime minDate, DateTime maxDate)
         {
-            DateTime startDate;
-            if(minDate == null)
-            {
-                startDate = getMinStartDate();
-            }
-            else
-            {
-                startDate = minDate;
-            }
+            DateTime startDate = getMinDate(minDate);
 
-            DateTime endDate;
-            if (maxDate == null)
-            {
-                endDate = getMaxEndDate();
-            }
-            else
-            {
-                endDate = maxDate;
-            }
+            DateTime endDate = getMaxDate(maxDate);
+
             return _orderRepository.GetAll()
                     .Where(o => o.StartDate.Date.CompareTo(startDate.Date) >= 0 && o.EndDate.Date.CompareTo(endDate.Date) <= 0)
                     .Select(o => o.getThroughputTime())
@@ -216,6 +220,10 @@ namespace ProductionPlanner.Service.Implementation
             var avgThroughputTimes = throughputTimes.Average();
             var stdThroughputTimes = Statistics.StandardDeviation(throughputTimes.AsEnumerable());
 
+            if (avgUtilization == 1) {
+                return 0; 
+            }
+
             return (avgThroughputTimes * avgUtilization / 100) 
                 * ((1 + Math.Pow(stdThroughputTimes, 2)) / 2) 
                 / (1 - avgUtilization / 100);
@@ -227,36 +235,25 @@ namespace ProductionPlanner.Service.Implementation
             double WIPrel = calculateWIPRel(minDate, maxDate);
             var Routavg = calculateAverageRout(minDate, maxDate);
             var WS = getNumberOfWorkStations();
+            
+            if (WS == 0) return 0;
 
             if (WIPrel > (ALPHA + 1) * 100)
             {
                 return Routavg / WS;
             }
+            
             var Ua = calculateAverageUtilizationFromT(T_CALC);
+            if (Ua == 0) return 0;
+
             return Routavg * 100 / (WS * Ua);
         }
 
         private List<DateTime> calculateDates(DateTime from, DateTime to)
         {
-            DateTime startMin;
+            DateTime startMin = getMinDate(from);
 
-            if (from != null)
-            {
-                startMin = from;
-            }
-            else
-            {
-                startMin = getMinStartDate();
-            }
-
-            DateTime endMax;
-            if (to != null)
-            {
-                endMax = to;
-            }else
-            {
-                endMax = getMaxEndDate();
-            }
+            DateTime endMax = getMaxDate(to);
             
             List<DateTime> result = new List<DateTime>();
 
