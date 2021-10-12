@@ -37,7 +37,7 @@ namespace ProductionPlanner.Web.Controllers
             List<DateTime> datesWeekly = this.LastWeekDates();
             DateTime minDate = datesWeekly.FirstOrDefault();
             DateTime maxDate = datesWeekly.LastOrDefault();
-            //Diagram diagram = this.GetDiagram(minDate, maxDate);
+            Diagram diagram = this.GetDiagram(minDate, maxDate);
             return View();
         }
 
@@ -46,7 +46,7 @@ namespace ProductionPlanner.Web.Controllers
             List<DateTime> datesMonthly = this.LastMonthDates();
             DateTime minDate = datesMonthly.FirstOrDefault();
             DateTime maxDate = datesMonthly.LastOrDefault();
-            //Diagram diagram = this.GetDiagram(minDate, maxDate);
+         //   Diagram diagram = this.GetDiagram(minDate, maxDate);
             return View();
         }
 
@@ -55,8 +55,8 @@ namespace ProductionPlanner.Web.Controllers
             List<DateTime> datesYearly = this.YearDates(2021);
             DateTime minDate = datesYearly.FirstOrDefault();
             DateTime maxDate = datesYearly.LastOrDefault();
-            Diagram diagram = this.GetDiagram(minDate, maxDate);
-            return View(diagram);
+        //    Diagram diagram = this.GetDiagram(minDate, maxDate);
+            return View();
         }
 
         private List<DateTime> LastWeekDates()
@@ -70,10 +70,10 @@ namespace ProductionPlanner.Web.Controllers
         {
             var dateNow = DateTime.Now;
             var dateLastMonth = DateTime.Now.AddMonths(-1);
-            var daysInMonth = DateTime.DaysInMonth(dateNow.Year, dateNow.Month);
-            var daysInLastMonth = DateTime.DaysInMonth(dateLastMonth.Year, dateLastMonth.Month);
-            var firstOfMonth = DateTime.Now.AddDays(-(int)dateNow.Day - daysInLastMonth + 1);
-            var lastOfMonth = DateTime.Now.AddDays(-(int)daysInMonth + 1);
+            //var daysInMonth = DateTime.DaysInMonth(dateNow.Year, dateNow.Month);
+            //var daysInLastMonth = DateTime.DaysInMonth(dateLastMonth.Year, dateLastMonth.Month);
+            var firstOfMonth = DateTime.Now.AddDays(-(int)dateNow.Day  + 1).AddMonths(-1);
+            var lastOfMonth = DateTime.Now.AddDays(-(int)dateNow.Day);
             return new List<DateTime> { firstOfMonth, lastOfMonth };
         }
 
@@ -87,6 +87,7 @@ namespace ProductionPlanner.Web.Controllers
 
         private Diagram GetDiagram(DateTime minDate, DateTime maxDate)
         {
+
             ThroughputDiagram throughputDiagramModel = this.GetThroughputDiagram(minDate, maxDate);
             WorkContentDistributionDiagramModel workContentDistributionDiagramModel = this.GetWorkContentDistributionDiagramModel(minDate, maxDate);
             LodisticOperatingCurvesDiagramModel lodisticOperatingCurvesDiagramModel = this.GetLodisticOperatingCurvesDiagramModel(minDate, maxDate);
