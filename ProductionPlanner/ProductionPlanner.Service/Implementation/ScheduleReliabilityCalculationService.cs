@@ -114,11 +114,13 @@ namespace ProductionPlanner.Service.Implementation
 
             var throughputs = _calculationService.getThroughputTimes(minDate, maxDate);
             double TIOs = 0;
-            if (throughputs.Count > 0)
+            if (throughputs.Count == 0)
             {
-                TIOs = Statistics.StandardDeviation(throughputs);
+                return new List<double>() { 0 };
             }
-            
+
+            TIOs = Statistics.StandardDeviation(throughputs);
+
             var phiListB = new List<double>();
             var phiListA = new List<double>();
 
@@ -174,7 +176,12 @@ namespace ProductionPlanner.Service.Implementation
         }
         private double calculateLowerTIOBoundry(DateTime minDate, DateTime maxDate)
         {
-            return _calculationService.calculateTIO(minDate, maxDate) - 1;
+            var tio = _calculationService.calculateTIO(minDate, maxDate);
+            if (tio == 0)
+            {
+                return 0;
+            }
+            return tio - 1;
         }
         private List<double> calculateTIOm(DateTime minDate, DateTime maxDate)
         {
@@ -184,7 +191,7 @@ namespace ProductionPlanner.Service.Implementation
 
             if (TTPms == null || routMax==0)
             {
-                return null; 
+                return new List<double>() { 0 };
             }
             return TTPms.Select(t => t - WCa / routMax).ToList();
         }
