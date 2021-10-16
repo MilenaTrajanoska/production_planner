@@ -454,6 +454,8 @@
     var wcd_Classes = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel.Classes))');
     var wcd_Rel = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel.Rel))');
     console.log('work_content_distribution');
+    //format
+   // wcd_Classes = wcd_Classes.map(st=>st.toString().)
     console.log(wcd_Classes);
     console.log(wcd_Rel);
 
@@ -700,10 +702,12 @@
     console.log('schedule_reliability_operating_curve');
     console.log(sroc_Labels);
     console.log(sroc_ScheduleReliability);
+
+    // prava linija!
     console.log(sroc_MeanWIP);
 
     const schedule_reliability_operating_curve_data = {
-        labels: labels,
+        labels: sroc_Labels,
         datasets: [{
             label: 'Schedule Reliability',
             backgroundColor: 'rgb(0, 0, 255)',

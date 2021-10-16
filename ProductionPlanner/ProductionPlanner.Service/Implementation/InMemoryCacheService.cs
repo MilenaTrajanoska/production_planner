@@ -86,5 +86,21 @@ namespace ProductionPlanner.Service.Implementation
             return performance;
         }
 
+        public Diagram GetDiagram(Diagram diagram, String key)
+        {
+            if (!_cache.TryGetValue(key, out diagram))
+            {
+                // Set cache options.
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    // Keep in cache for this time, reset time if accessed.
+                    .SetSlidingExpiration(cacheExpirationPeriod);
+
+                // Save data in cache.
+                _cache.Set(key, diagram, cacheEntryOptions);
+            }
+            return diagram;
+        }
+
+
     }
 }

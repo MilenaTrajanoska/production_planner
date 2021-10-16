@@ -16,8 +16,12 @@ namespace ProductionPlanner.Web.Controllers
         private readonly IWorkContentDistributionCalculationService workContentDistributionCalculationService;
         private readonly IThroughputTimeDistributionCalculationService throughputTimeDistributionCalculationService;
         private readonly IScheduleReliabilityCalculationService scheduleReliabilityCalculationService;
+        private readonly IOrderService orderService;
+        private readonly IInMemoryCacheService inMemoryCacheService;
 
         public ReportsController(
+            IOrderService orderService,
+            IInMemoryCacheService inMemoryCacheService,
             IThroughputCalculationService _throughputCalculationService,
             ILogisticOperatingCurveCalculationService _logisticOperatingCurveCalculationService,
             IWorkContentDistributionCalculationService _workContentDistributionCalculationService,
@@ -25,6 +29,8 @@ namespace ProductionPlanner.Web.Controllers
             IScheduleReliabilityCalculationService _scheduleReliabilityCalculationService
             )
         {
+            this.orderService = orderService;
+            this.inMemoryCacheService = inMemoryCacheService;
             throughputCalculationService = _throughputCalculationService;
             logisticOperatingCurveCalculationService = _logisticOperatingCurveCalculationService;
             workContentDistributionCalculationService = _workContentDistributionCalculationService;
@@ -34,11 +40,13 @@ namespace ProductionPlanner.Web.Controllers
 
         public IActionResult Index()
         {
+            
             List<DateTime> datesWeekly = this.LastWeekDates();
-            DateTime minDate = datesWeekly.FirstOrDefault();
-            DateTime maxDate = datesWeekly.LastOrDefault();
+            DateTime minDate = this.orderService.GetAllOrders().Select(order => order.StartDate).Min();
+            DateTime maxDate = this.orderService.GetAllOrders().Select(order => order.StartDate).Max();
             Diagram diagram = this.GetDiagram(minDate, maxDate);
-            return View();
+            return View(diagram);
+            //GetDiagram
         }
 
         public IActionResult MonthReports()
@@ -46,7 +54,7 @@ namespace ProductionPlanner.Web.Controllers
             List<DateTime> datesMonthly = this.LastMonthDates();
             DateTime minDate = datesMonthly.FirstOrDefault();
             DateTime maxDate = datesMonthly.LastOrDefault();
-         //   Diagram diagram = this.GetDiagram(minDate, maxDate);
+            //   Diagram diagram = this.GetDiagram(minDate, maxDate);
             return View();
         }
 
@@ -55,7 +63,7 @@ namespace ProductionPlanner.Web.Controllers
             List<DateTime> datesYearly = this.YearDates(2021);
             DateTime minDate = datesYearly.FirstOrDefault();
             DateTime maxDate = datesYearly.LastOrDefault();
-        //    Diagram diagram = this.GetDiagram(minDate, maxDate);
+            //    Diagram diagram = this.GetDiagram(minDate, maxDate);
             return View();
         }
 
@@ -72,7 +80,7 @@ namespace ProductionPlanner.Web.Controllers
             var dateLastMonth = DateTime.Now.AddMonths(-1);
             //var daysInMonth = DateTime.DaysInMonth(dateNow.Year, dateNow.Month);
             //var daysInLastMonth = DateTime.DaysInMonth(dateLastMonth.Year, dateLastMonth.Month);
-            var firstOfMonth = DateTime.Now.AddDays(-(int)dateNow.Day  + 1).AddMonths(-1);
+            var firstOfMonth = DateTime.Now.AddDays(-(int)dateNow.Day + 1).AddMonths(-1);
             var lastOfMonth = DateTime.Now.AddDays(-(int)dateNow.Day);
             return new List<DateTime> { firstOfMonth, lastOfMonth };
         }
@@ -87,7 +95,6 @@ namespace ProductionPlanner.Web.Controllers
 
         private Diagram GetDiagram(DateTime minDate, DateTime maxDate)
         {
-
             ThroughputDiagram throughputDiagramModel = this.GetThroughputDiagram(minDate, maxDate);
             WorkContentDistributionDiagramModel workContentDistributionDiagramModel = this.GetWorkContentDistributionDiagramModel(minDate, maxDate);
             LodisticOperatingCurvesDiagramModel lodisticOperatingCurvesDiagramModel = this.GetLodisticOperatingCurvesDiagramModel(minDate, maxDate);
@@ -114,14 +121,18 @@ namespace ProductionPlanner.Web.Controllers
 
         private LodisticOperatingCurvesDiagramModel GetLodisticOperatingCurvesDiagramModel(DateTime minDate, DateTime maxDate)
         {
-            List<double> outputRate = logisticOperatingCurveCalculationService.getOutputRateXAxisValues(minDate, maxDate);
-            List<double> throughputTime = logisticOperatingCurveCalculationService.getThroughputTimeXAxisValues(minDate, maxDate);
-            double range = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(minDate, maxDate);
-            List<double> locCapacity = logisticOperatingCurveCalculationService.getCapacityXAxisValues(minDate, maxDate);
-            List<double> opOperatingPoin = logisticOperatingCurveCalculationService.getOPOperatingPointXAxisValues(minDate, maxDate);
-            double opRange = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(minDate, maxDate);
-            double opThroughputTime = logisticOperatingCurveCalculationService.getOPThroughputTimeXAxisValues(minDate, maxDate);
-            return new LodisticOperatingCurvesDiagramModel(outputRate, throughputTime, range, locCapacity, opOperatingPoin, opRange, opThroughputTime);
+            List<double> labels = logisticOperatingCurveCalculationService.getOutputRateXAxisValues(minDate, maxDate);
+            List<double> outputRate = logisticOperatingCurveCalculationService.getOutputRateYAxisValues(minDate, maxDate);
+            List<double> throughputTime = logisticOperatingCurveCalculationService.getThroughputTimeYAxisValues(minDate, maxDate);
+            double rangeX = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(minDate, maxDate);
+            double rangeY = logisticOperatingCurveCalculationService.getOPRangeYAxisValues(minDate, maxDate);
+            List<double> locCapacity = logisticOperatingCurveCalculationService.getCapacityYAxisValues(minDate, maxDate);
+            List<double> opOperatingPoin = logisticOperatingCurveCalculationService.getOPOperatingPointYAxisValues(minDate, maxDate);
+            double opRangeX = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(minDate, maxDate);
+            double opRangeY = logisticOperatingCurveCalculationService.getOPRangeYAxisValues(minDate, maxDate);
+            double opThroughputTimeX = logisticOperatingCurveCalculationService.getOPThroughputTimeXAxisValues(minDate, maxDate);
+            double opThroughputTimeY = logisticOperatingCurveCalculationService.getOPThroughputTimeYAxisValues(minDate, maxDate);
+            return new LodisticOperatingCurvesDiagramModel(labels, outputRate, throughputTime, rangeX, rangeY, locCapacity, opOperatingPoin, opRangeX, opRangeY, opThroughputTimeX, opThroughputTimeY);
         }
 
         private ThroughputTimeDistributionDiagramModel GetThroughputTimeDistributionDiagramModel(DateTime minDate, DateTime maxDate)
@@ -133,9 +144,11 @@ namespace ProductionPlanner.Web.Controllers
 
         private ScheduleReliabilityOperatingCurveDiagramModel GetScheduleReliabilityOperatingCurveDiagramModel(DateTime minDate, DateTime maxDate)
         {
-            List<double> scheduleReliability = scheduleReliabilityCalculationService.getXAxisScheduleReliability(minDate, maxDate);
-            List<double> meanWIP = scheduleReliabilityCalculationService.getXAxisMeanWIP(minDate, maxDate);
-            return new ScheduleReliabilityOperatingCurveDiagramModel(scheduleReliability, meanWIP);
+            List<double> labels = scheduleReliabilityCalculationService.getXAxisScheduleReliability(minDate, maxDate);
+            List<double> scheduleReliability = scheduleReliabilityCalculationService.getYAxisScheduleReliability(minDate, maxDate);
+            List<double> meanWIP = scheduleReliabilityCalculationService.getYAxisMeanWIP(minDate, maxDate);
+            List<double> meanWIPx = scheduleReliabilityCalculationService.getXAxisMeanWIP(minDate, maxDate);
+            return new ScheduleReliabilityOperatingCurveDiagramModel(labels, scheduleReliability, meanWIP);
         }
 
     }
