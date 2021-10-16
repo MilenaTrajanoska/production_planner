@@ -218,12 +218,13 @@ namespace ProductionPlanner.Service.Implementation
         {
             var throughputTimes = getThroughputTimes(minDate, maxDate);
             var avgUtilization = calculateAverageUtilizationFromT(T_CALC);
-            var avgThroughputTimes = throughputTimes.Average();
-            var stdThroughputTimes = Statistics.StandardDeviation(throughputTimes.AsEnumerable());
 
-            if (avgUtilization == 1) {
+            if (throughputTimes.Count == 0 || avgUtilization == 1) {
                 return 0; 
             }
+
+            double avgThroughputTimes = throughputTimes.Average();
+            double stdThroughputTimes = Statistics.StandardDeviation(throughputTimes.AsEnumerable());
 
             return (avgThroughputTimes * avgUtilization / 100) 
                 * ((1 + Math.Pow(stdThroughputTimes, 2)) / 2) 

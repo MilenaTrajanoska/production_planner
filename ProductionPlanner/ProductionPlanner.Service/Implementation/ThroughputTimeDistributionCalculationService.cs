@@ -28,11 +28,11 @@ namespace ProductionPlanner.Service.Implementation
 
             var throughputTimes = _calculationService.getThroughputTimes(startDate, endDate);
             double maxTT = 0;
-            if (throughputTimes.Count != 0)
+            if (throughputTimes.Count == 0)
             {
-                maxTT = throughputTimes.Max();
+                return new List<double>() { 0 };
             }
-            
+            maxTT = throughputTimes.Max();
 
             var result = new List<double>();
             double prev = 0.0;

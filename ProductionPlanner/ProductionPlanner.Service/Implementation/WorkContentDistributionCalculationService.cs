@@ -30,11 +30,13 @@ namespace ProductionPlanner.Service.Implementation
             var workContents = _calculationService.getWorkContents(startDate, endDate);
             double minWC = 0;
             double maxWC = 0;
-            if (workContents.Count > 0)
+            if (workContents.Count == 0)
             {
-                minWC = workContents.Min();
-                maxWC = workContents.Max();
+                return new List<double>() { 0 };
             }
+
+            minWC = workContents.Min();
+            maxWC = workContents.Max();
 
             var result = new List<double>();
             double prev = 0.0;
