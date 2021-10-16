@@ -40,7 +40,7 @@ namespace ProductionPlanner.Web.Controllers
 
         public IActionResult Index()
         {
-            
+
             List<DateTime> datesWeekly = this.LastWeekDates();
             DateTime minDate = this.orderService.GetAllOrders().Select(order => order.StartDate).Min();
             DateTime maxDate = this.orderService.GetAllOrders().Select(order => order.StartDate).Max();
@@ -115,6 +115,7 @@ namespace ProductionPlanner.Web.Controllers
         private WorkContentDistributionDiagramModel GetWorkContentDistributionDiagramModel(DateTime minDate, DateTime maxDate)
         {
             List<double> wcdClasses = workContentDistributionCalculationService.getXAxisValues(minDate, maxDate);
+            wcdClasses = wcdClasses.Select(cls => Math.Round((Double)cls, 3)).ToList();
             List<double> wcdRel = workContentDistributionCalculationService.getYAxisValues(minDate, maxDate);
             return new WorkContentDistributionDiagramModel(wcdClasses, wcdRel);
         }
@@ -122,6 +123,7 @@ namespace ProductionPlanner.Web.Controllers
         private LodisticOperatingCurvesDiagramModel GetLodisticOperatingCurvesDiagramModel(DateTime minDate, DateTime maxDate)
         {
             List<double> labels = logisticOperatingCurveCalculationService.getOutputRateXAxisValues(minDate, maxDate);
+            labels = labels.Select(cls => Math.Round((Double)cls, 3)).ToList();
             List<double> outputRate = logisticOperatingCurveCalculationService.getOutputRateYAxisValues(minDate, maxDate);
             List<double> throughputTime = logisticOperatingCurveCalculationService.getThroughputTimeYAxisValues(minDate, maxDate);
             double rangeX = logisticOperatingCurveCalculationService.getOPRangeXAxisValues(minDate, maxDate);
@@ -137,7 +139,8 @@ namespace ProductionPlanner.Web.Controllers
 
         private ThroughputTimeDistributionDiagramModel GetThroughputTimeDistributionDiagramModel(DateTime minDate, DateTime maxDate)
         {
-            List<double> ttdClasses = throughputTimeDistributionCalculationService.getXAxisValues(minDate, maxDate); ;
+            List<double> ttdClasses = throughputTimeDistributionCalculationService.getXAxisValues(minDate, maxDate);
+            ttdClasses = ttdClasses.Select(cls => Math.Round((Double)cls, 3)).ToList();
             List<double> ttdRel = throughputTimeDistributionCalculationService.getYAxisValues(minDate, maxDate);
             return new ThroughputTimeDistributionDiagramModel(ttdClasses, ttdRel);
         }
@@ -145,10 +148,11 @@ namespace ProductionPlanner.Web.Controllers
         private ScheduleReliabilityOperatingCurveDiagramModel GetScheduleReliabilityOperatingCurveDiagramModel(DateTime minDate, DateTime maxDate)
         {
             List<double> labels = scheduleReliabilityCalculationService.getXAxisScheduleReliability(minDate, maxDate);
+            labels = labels.Select(cls => Math.Round((Double)cls, 3)).ToList();
             List<double> scheduleReliability = scheduleReliabilityCalculationService.getYAxisScheduleReliability(minDate, maxDate);
             List<double> meanWIP = scheduleReliabilityCalculationService.getYAxisMeanWIP(minDate, maxDate);
-            List<double> meanWIPx = scheduleReliabilityCalculationService.getXAxisMeanWIP(minDate, maxDate);
-            return new ScheduleReliabilityOperatingCurveDiagramModel(labels, scheduleReliability, meanWIP);
+            List<double> meanWIP_X = scheduleReliabilityCalculationService.getXAxisMeanWIP(minDate, maxDate);
+            return new ScheduleReliabilityOperatingCurveDiagramModel(labels, scheduleReliability, meanWIP, meanWIP_X);
         }
 
     }

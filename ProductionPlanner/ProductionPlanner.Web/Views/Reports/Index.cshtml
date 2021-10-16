@@ -59,6 +59,9 @@
         <div class="col-md-12 p-5">
             <canvas id="schedule_reliability_operating_curve"></canvas>
         </div>
+        <div class="col-md-12 p-5">
+            <canvas id="canvas"></canvas>
+        </div>
     </div>
     <br />
     <br />
@@ -463,7 +466,7 @@
         labels: wcd_Classes,
         datasets: [
             {
-                label: 'Dataset 2',
+                label: 'work content',
                 backgroundColor: 'rgb(34,139,34)',
                 borderColor: 'rgb(34,139,34)',
                 data: wcd_Rel,
@@ -557,30 +560,35 @@
                 cubicInterpolationMode: 'monotone',
             },
             {
+                label: 'Range',
                 type: 'bubble',
                 backgroundColor: 'rgb(255, 99, 0)',
                 borderColor: 'rgb(255, 99, 0)',
                 data: [{ x: loc_rangeX, y: loc_rangeY,r: 15 }],
             },
             {
+                label: 'Capacity',
                 type: 'bubble',
                 backgroundColor: 'rgb(255, 0, 99)',
                 borderColor: 'rgb(255, 0 99)',
                 data: [{ x: loc_capacity[0], y: loc_capacity[1], r: 15 }],
             },
             {
+                label: 'OP: Operating Poin',
                 type: 'bubble',
                 backgroundColor: 'rgb(255, 99, 99)',
                 borderColor: 'rgb(255, 99, 99)',
                 data: [{ x: loc_OPOperatingPoin[0], y: loc_OPOperatingPoin[1], r: 15 }],
             },
             {
+                label: 'OP: Range',
                 type: 'bubble',
                 backgroundColor: 'rgb(255, 0, 255)',
                 borderColor: 'rgb(255, 0 255)',
                 data: [{ x: loc_OPRangeX, y: loc_OPRangeY, r: 15 }],
             },
             {
+                label: 'OP: Throughput Time',
                 type: 'bubble',
                 backgroundColor: 'rgb(0, 0, 255)',
                 borderColor: 'rgb(0, 0, 255)',
@@ -644,7 +652,7 @@
         labels: ttd_Classes,
         datasets: [
             {
-                label: 'Dataset 2',
+                label: 'throughput time',
                 backgroundColor: 'rgb(34,139,34)',
                 borderColor: 'rgb(34,139,34)',
                 data: ttd_Rel,
@@ -699,29 +707,33 @@
     var sroc_Labels = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.Labels))');
     var sroc_ScheduleReliability = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.ScheduleReliability))');
     var sroc_MeanWIP = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.MeanWIP))');
+    var sroc_MeanWIP_X = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.MeanWIP_X))');
     console.log('schedule_reliability_operating_curve');
     console.log(sroc_Labels);
     console.log(sroc_ScheduleReliability);
+    console.log(sroc_MeanWIP_X);
 
     // prava linija!
     console.log(sroc_MeanWIP);
 
     const schedule_reliability_operating_curve_data = {
         labels: sroc_Labels,
-        datasets: [{
-            label: 'Schedule Reliability',
-            backgroundColor: 'rgb(0, 0, 255)',
-            borderColor: 'rgb(0, 0, 255)',
-            data: sroc_ScheduleReliability,
-            cubicInterpolationMode: 'monotone',
-        },
-        {
-            label: 'Mean WIP',
-            backgroundColor: 'rgb(255, 0, 0)',
-            borderColor: 'rgb(255, 0, 0)',
-            data: sroc_MeanWIP,
-            cubicInterpolationMode: 'monotone',
-        }]
+        datasets: [
+            {
+                label: 'Schedule Reliability',
+                backgroundColor: 'rgb(0, 0, 255)',
+                borderColor: 'rgb(0, 0, 255)',
+                data: sroc_ScheduleReliability,
+                cubicInterpolationMode: 'monotone',
+            },
+            //{
+            //    label: 'Mean WIP',
+            //    backgroundColor: 'rgb(255, 0, 0)',
+            //    borderColor: 'rgb(255, 0, 0)',
+            //    data: sroc_MeanWIP,
+            //    cubicInterpolationMode: 'monotone',
+            //}
+        ],
     };
 
     const schedule_reliability_operating_curve_config = {
@@ -765,6 +777,48 @@
         schedule_reliability_operating_curve_chart,
         schedule_reliability_operating_curve_config
     );
+
+
+
+
+    var config = {
+        type: 'line',
+        data: {
+            labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+            datasets: [
+                {
+                    data: [12, 3, 2, 1, 8, 8, 2, 2, 3, 5, 7, 1]
+                }
+            ],
+            lineAtIndex: 2
+        }
+    };
+
+    var originalLineDraw = Chart.controllers.line.prototype.draw;
+    Chart.helpers.extend(Chart.controllers.line.prototype, {
+        draw: function () {
+            originalLineDraw.apply(this, arguments);
+
+            var chart = this.chart;
+            var ctx = chart.chart.ctx;
+
+            var index = chart.config.data.lineAtIndex;
+            if (index) {
+                var xaxis = chart.scales['x-axis-0'];
+                var yaxis = chart.scales['y-axis-0'];
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top);
+                ctx.strokeStyle = '#ff0000';
+                ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+    });
+
+   
 
     //###############################################################
 
