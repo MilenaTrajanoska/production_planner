@@ -105,11 +105,12 @@ namespace ProductionPlanner.Web.Controllers
 
         private ThroughputDiagram GetThroughputDiagram(DateTime minDate, DateTime maxDate)
         {
+            List<string> labels = throughputCalculationService.calculateThroughputDiagramXAxis(minDate, maxDate).Select(t => t.ToString("dd.MM")).ToList();
             List<double> input = throughputCalculationService.calculateInputSeries(minDate, maxDate);
             List<double> output = throughputCalculationService.calculateOutputSeries(minDate, maxDate);
             List<double> wip = throughputCalculationService.calculateWIPSeries(minDate, maxDate);
             double tCapacity = throughputCalculationService.getCapacity(minDate, maxDate);
-            return new ThroughputDiagram(input, output, wip, tCapacity);
+            return new ThroughputDiagram(labels, input, output, wip, tCapacity);
         }
 
         private WorkContentDistributionDiagramModel GetWorkContentDistributionDiagramModel(DateTime minDate, DateTime maxDate)

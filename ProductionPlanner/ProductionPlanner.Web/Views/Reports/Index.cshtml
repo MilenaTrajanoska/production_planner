@@ -27,23 +27,23 @@
     <br />
     <div class="row">
         @*<div class="col-md-12 p-5">
-            <div id="throughput_diagram"></div>
-        </div>
-        <div class="col-md-12 p-5">
-            <div id="lodistic_operating_curves"></div>
-        </div>
-        <div class="col-md-12 p-5">
-            <div id="work_content_distribution"></div>
-        </div>
-        <div class="col-md-12 p-5">
-            <div id="throughput_time_distribution"></div>
-        </div>
-        <div class="col-md-12 p-5">
-            <div id="schedule_reliability_operating_curve "></div>
-        </div>
-        <div class="col-md-12 p-5">
-            <svg id="visualisation" width="1000" height="500"></svg>
-        </div>*@
+                <div id="throughput_diagram"></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <div id="lodistic_operating_curves"></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <div id="work_content_distribution"></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <div id="throughput_time_distribution"></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <div id="schedule_reliability_operating_curve "></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <svg id="visualisation" width="1000" height="500"></svg>
+            </div>*@
         <div class="col-md-12 p-5">
             <canvas id="throughput_diagram"></canvas>
         </div>
@@ -376,6 +376,7 @@
     var td_output = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Output))');
     var td_wip = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.WIP))');
     var td_capacity = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Capacity))');
+    var td_date_labels = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Labels))');
 
     console.log('throughput_diagram');
     console.log(td_input);
@@ -384,7 +385,7 @@
     console.log(td_capacity);
 
     const throughput_diagram_data = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'asd'],
+        labels: td_date_labels,
         datasets: [{
             label: 'Input',
             backgroundColor: 'rgb(192, 80, 77)',
@@ -624,7 +625,7 @@
                     display: true,
                     title: {
                         display: true,
-                        text: 'Average output rate [SCD]'
+                        text: 'Average output rate [SCD]',
                     },
                 }
             },
@@ -708,6 +709,7 @@
     var sroc_ScheduleReliability = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.ScheduleReliability))');
     var sroc_MeanWIP = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.MeanWIP))');
     var sroc_MeanWIP_X = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.MeanWIP_X))');
+
     console.log('schedule_reliability_operating_curve');
     console.log(sroc_Labels);
     console.log(sroc_ScheduleReliability);
@@ -721,11 +723,19 @@
         datasets: [
             {
                 label: 'Schedule Reliability',
+                type: 'line',
                 backgroundColor: 'rgb(0, 0, 255)',
                 borderColor: 'rgb(0, 0, 255)',
                 data: sroc_ScheduleReliability,
                 cubicInterpolationMode: 'monotone',
             },
+            {
+                label: 'Mean WIP',
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 99, 0)',
+                borderColor: 'rgb(255, 99, 0)',
+                data: [{ x: sroc_MeanWIP_X[0], y: 100, r: 5 }]
+            }
             //{
             //    label: 'Mean WIP',
             //    backgroundColor: 'rgb(255, 0, 0)',
@@ -733,7 +743,7 @@
             //    data: sroc_MeanWIP,
             //    cubicInterpolationMode: 'monotone',
             //}
-        ],
+        ]
     };
 
     const schedule_reliability_operating_curve_config = {
@@ -818,7 +828,7 @@
         }
     });
 
-   
+
 
     //###############################################################
 
