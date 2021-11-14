@@ -34,9 +34,14 @@ namespace ProductionPlanner.Web.Controllers
             var company = _companyService.GetCompany();
             ViewBag.Company = company;
 
+            var today = DateTime.Now;
+            var month = new DateTime(today.Year, today.Month, 1);
+            var first = month.AddMonths(-1);
+            var last = month.AddDays(-1);
+
             GlobalPerformanceViewModel performance = new GlobalPerformanceViewModel();
 
-            performance = _inMemoryCacheService.GetPerformanceViewModel(performance);
+            performance = _inMemoryCacheService.GetPerformanceViewModel(performance, first, last);
 
             ViewBag.PerformanceFeatures = performance;
             return View();

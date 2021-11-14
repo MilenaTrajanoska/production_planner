@@ -11,7 +11,7 @@ namespace ProductionPlanner.Domain.ViewModels
         public LodisticOperatingCurvesDiagramModel LodisticOperatingCurvesDiagramModel { get; set; }
         public ThroughputTimeDistributionDiagramModel ThroughputTimeDistributionDiagramModel { get; set; }
         public ScheduleReliabilityOperatingCurveDiagramModel ScheduleReliabilityOperatingCurveDiagramModel { get; set; }
-
+        public Diagram() { }
         public Diagram(
              ThroughputDiagram _throughputDiagram,
              WorkContentDistributionDiagramModel _workContentDistributionDiagramModel,

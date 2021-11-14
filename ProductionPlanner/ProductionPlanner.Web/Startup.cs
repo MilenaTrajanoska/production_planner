@@ -47,12 +47,12 @@ namespace ProductionPlanner.Web
             services.AddTransient<IThroughputCalculationService, ThroughputCalculationService>();
             services.AddTransient<IThroughputTimeDistributionCalculationService, ThroughputTimeDistributionCalculationService>();
             services.AddTransient<IWorkContentDistributionCalculationService, WorkContentDistributionCalculationService>();
+            services.AddTransient<IDiagramService, DiagramService>();
 
             services.AddTransient<ICompanyRepository, CompanyRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IProductRepository), typeof(ProductRepository));
-
 
             services.AddControllersWithViews();
             services.AddRazorPages();
