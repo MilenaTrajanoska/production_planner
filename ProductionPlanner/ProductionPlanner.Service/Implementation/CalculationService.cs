@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Statistics;
+using ProductionPlanner.Repository.Interface;
 
 namespace ProductionPlanner.Service.Implementation
 {
@@ -13,10 +14,10 @@ namespace ProductionPlanner.Service.Implementation
         public static double C_NORM = 0.25;
         public static double T_CALC = 0.006847701;
         public static double ALPHA = 10;
-        private readonly IRepository<Order> _orderRepository;
+        private readonly IOrderRepository _orderRepository;
         private readonly ICompanyService _companyService;
 
-        public CalculationService(IRepository<Order> orderRepository, ICompanyService companyService)
+        public CalculationService(IOrderRepository orderRepository, ICompanyService companyService)
         {
             _orderRepository = orderRepository;
             _companyService = companyService;

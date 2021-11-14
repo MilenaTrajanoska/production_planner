@@ -46,9 +46,9 @@ namespace ProductionPlanner.Service.Implementation
                 prev = current;
             }
 
-            if (result.Count > 0 && result[result.Count - 1] < maxTT)
+            if (result.Count > 0 && result[result.Count - 1] != maxTT)
             {
-                result[result.Count - 1] = maxTT;
+                result.Add(maxTT);
             }
 
             return result;
@@ -75,7 +75,7 @@ namespace ProductionPlanner.Service.Implementation
             {
                 if (numOrders != 0)
                 {
-                    rel.Add((frequencies[i] - frequencies[i - 1] / numOrders));
+                    rel.Add(((frequencies[i] - frequencies[i - 1]) / numOrders)*100);
                 }
                 else
                 {

@@ -5,27 +5,838 @@
     ViewData["Title"] = "Reports";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@model ProductionPlanner.Domain.ViewModels.Diagram
 
-
-<br /><br />
+<br />
+<br />
 <div class="navbar navbar-expand-lg text-decoration-none text-dark" style="background-color: white; ">
     <ul class="navbar-nav flex-grow-1">
         <li class="nav-item text-decoration-none  active ">
             <a class="text-decoration-none" style="background-color: white; border-radius: 20px 20px 0px 0px; border-top-style: solid; border-left-style: solid; border-right-style: solid; border-width: thin; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="Index">This week </a>
         </li>
         <li class="nav-item text-decoration-none">
-            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="MonthReports" > This month</a>
+            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="MonthReports"> This month</a>
         </li>
         <li class="nav-item text-decoration-none">
-            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="YearReports" > This year</a>
+            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="YearReports"> This year</a>
         </li>
     </ul>
 </div>
 <div style="border-bottom-style: solid; border-left-style: solid; border-width: thin; border-color: #dae2df; " class="mx-3">
     <br />
     <br />
-    Put graphs here
+    <div class="row">
+        @*<div class="col-md-12 p-5">
+                <div id="throughput_diagram"></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <div id="lodistic_operating_curves"></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <div id="work_content_distribution"></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <div id="throughput_time_distribution"></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <div id="schedule_reliability_operating_curve "></div>
+            </div>
+            <div class="col-md-12 p-5">
+                <svg id="visualisation" width="1000" height="500"></svg>
+            </div>*@
+        <div class="col-md-12 p-5">
+            <canvas id="throughput_diagram"></canvas>
+        </div>
+        <div class="col-md-12 p-5">
+            <canvas id="work_content_distribution"></canvas>
+        </div>
+        <div class="col-md-12 p-5">
+            <canvas id="lodistic_operating_curves"></canvas>
+        </div>
+        <div class="col-md-12 p-5">
+            <canvas id="throughput_time_distribution"></canvas>
+        </div>
+        <div class="col-md-12 p-5">
+            <canvas id="schedule_reliability_operating_curve"></canvas>
+        </div>
+        <div class="col-md-12 p-5">
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
     <br />
     <br />
 </div>
 
+@*<script src="https://d3js.org/d3.v7.min.js"></script>*@
+
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js%22%3E"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@*<script src="https://www.jsdelivr.com/package/npm/chart.js"></script>*@
+@*<script src="https://www.chartjs.org/samples/2.9.4/utils.js"></script>*@
+@*<script type="text/javascript" src="https://yourweb.com/inc/chart.utils.js"></script>*@
+
+
+<script>
+
+    const WIDTH = 400;
+    const HEIGHT = 300;
+
+
+
+
+    ////const DUMMY_DATA = [
+    ////    { value: 10, label: 'asd' },
+    ////    { value: 0, label: 'asd2' },
+    ////    { value: 0, label: 'asd3' },
+    ////    { value: 0, label: 'asd4' },
+    ////    { value: 10, label: '1255' },
+    ////    { value: 11, label: '12AAS6' },
+    ////    { value: 12, label: 'ASD7' },
+    ////    { value: 6, label: '001238' },
+    ////];
+
+
+    ////const MARGIN = { top: 10, right: 10, bottom: 20, left: 30 };
+    ////const INNER_WIDTH = WIDTH - MARGIN.left - MARGIN.right;
+    ////const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom;
+    ////const svgLOC = d3.select('#lodistic_operating_curves').append('svg')
+    ////    .attr('width', WIDTH)
+    ////    .attr('height', HEIGHT)
+    ////    .append('g')
+    ////    .attr('transform', 'translate(' + MARGIN.left + ',' + MARGIN.top + ')');
+
+    ////const x = d3.scaleBand().domain(DUMMY_DATA.map(d => d.label)).range([0, INNER_WIDTH]);
+    ////const y = d3.scaleLinear().domain([0, 30]).range([INNER_HEIGHT, 0]);
+    ////const xAxis = d3.axisBottom(x);
+    ////const yAxis = d3.axisLeft(y).ticks(30 / 6);
+    //////const xAxisGrid = d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat('').ticks(10);
+    ////const yAxisGrid = d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat('').ticks(30 / 6);
+
+    ////// Create grids.
+    //////svgLOC.append('g')
+    //////    .attr('class', 'x axis-grid')
+    //////    .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
+    //////    .call(xAxisGrid);
+    ////svgLOC.append('g')
+    ////    .attr('class', 'y axis-grid')
+    ////    .call(yAxisGrid);
+    ////// Create axes.
+    ////svgLOC.append('g')
+    ////    .attr('class', 'x axis')
+    ////    .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
+    ////    .call(xAxis);
+    ////svgLOC.append('g')
+    ////    .attr('class', 'y axis')
+    ////    .call(yAxis);
+    ////// Add data
+    ////svgLOC.selectAll('.bar').data(DUMMY_DATA).enter()
+    ////    .append('rect').classed('bar', true)
+    ////    .attr('width', 10)
+    ////    .attr('height', data => INNER_HEIGHT - y(data.value))
+    ////    .style('fill', 'green')
+    ////    .attr('x', data => x(data.label) + x.bandwidth() / 2 - 5)
+    ////    .attr('y', data => y(data.value));
+
+
+
+    //////###############################################################
+
+
+    ////// set the dimensions and margins of the graph
+    ////var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+    ////    width = 460 - margin.left - margin.right,
+    ////    height = 400 - margin.top - margin.bottom;
+
+    ////// append the svg object to the body of the page
+    ////var svg = d3.select("#work_content_distribution")
+    ////    .append("svg")
+    ////    .attr('width', WIDTH)
+    ////    .attr('height', HEIGHT)
+    ////    .append("g")
+    ////    .attr("transform",
+    ////        "translate(" + margin.left + "," + margin.top + ")");
+
+    //////Read the data
+    ////var legendsData = [];
+    ////d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv", function (data) {
+
+
+    ////    // group the data: I want to draw one line per group
+    ////    var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
+    ////        .key(d => d.name)
+    ////        .entries(data);
+
+    ////    // Add X axis --> it is a date format
+    ////    var x = d3.scaleLinear()
+    ////        .domain(d3.extent(data, d => d.year.toString()))
+    ////        .range([0, INNER_WIDTH]);
+    ////    svg.append("g")
+    ////        .attr("transform", "translate(0," + INNER_HEIGHT + ")")
+    ////        .call(d3.axisBottom(x).ticks(5));
+
+    ////    // Add Y axis
+    ////    var y = d3.scaleLinear()
+    ////        .domain([0, d3.max(data, d => +d.n)])
+    ////        .range([INNER_HEIGHT, 0]);
+    ////    svg.append("g")
+    ////        .call(d3.axisLeft(y));
+
+    ////    // color palette
+    ////    var res = sumstat.map(d => d.key) // list of group names
+    ////    var color = d3.scaleOrdinal()
+    ////        .domain(res)
+    ////        .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999'])
+
+    ////    // grid
+    ////    svg.append('g')
+    ////        .attr('class', 'x axis-grid')
+    ////        .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
+    ////        .call(d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat(''));
+    ////    svg.append('g')
+    ////        .attr('class', 'y axis-grid')
+    ////        .call(d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat(''));
+
+    ////    // Draw the line
+    ////    svg.selectAll(".line")
+    ////        .data(sumstat)
+    ////        .enter()
+    ////        .append("path")
+    ////        .attr("fill", "none")
+    ////        .attr("stroke", d => color(d.key))
+    ////        .attr("stroke-width", 1.5)
+    ////        .attr("d", function (d) {
+    ////            console.log(d)
+    ////            legendsData.push(d.key);
+    ////            return d3.line()
+    ////                .x(d => x(d.year))
+    ////                .y(d => y(+d.n))
+    ////                (d.values)
+    ////        })
+
+
+
+    ////    console.log(legendsData)
+
+    ////    var legend = svg.selectAll(".legend")
+    ////        .data(legendsData)
+    ////        .enter().append("g")
+    ////        .attr("class", "legend")
+    ////    //.attr("transform", function (d, i) {
+    ////    //    if (i === 0) {
+    ////    //        dataL = d.length + offset
+    ////    //        return "translate(0,0)"
+    ////    //    } else {
+    ////    //        var newdataL = dataL
+    ////    //        dataL += d.length + offset
+    ////    //        overallOffset = width - dataL
+    ////    //        return "translate(" + (newdataL) + ",0)"
+    ////    //    }
+    ////    //})
+    ////    //.attr("transform", function (d, i) {
+    ////    //    if (i === 0) {
+    ////    //        dataL = d.length + offset
+    ////    //        return "translate(" + (overallOffset + (offset / 4)) + ",0)"
+    ////    //    } else {
+    ////    //        var newdataL = dataL
+    ////    //        dataL += d.length + offset
+    ////    //        return "translate(" + (newdataL + overallOffset + (offset / 4)) + ",0)"
+    ////    //    }
+    ////    //})
+    ////    //.style("opacity", "0");
+
+    ////    legend.append('rect')
+    ////        .attr("x", 0)
+    ////        .attr("y", (height + 30))
+    ////        .attr("width", 10)
+    ////        .attr("height", 10)
+    ////        .style("fill",'red'
+    ////            //function (d, i) {
+    ////            //return color(d)
+    ////            //}
+    ////        )
+
+    ////    legend.append('text')
+    ////        .attr("x", 20)
+    ////        .attr("y", (height + 30 + 10))
+    ////        //.attr("dy", ".35em")
+    ////        .text(function (d, i) {
+    ////            return d
+    ////        })
+    ////        .attr("class", "textselected")
+    ////        .style("text-anchor", "start")
+    ////        .style("font-size", 12);
+
+    ////    legend.style("opacity", "1");
+
+    ////})
+
+
+
+
+
+
+    //###############################################################
+
+
+    //const DATA_COUNT = 7;
+    //const NUMBER_CFG = { count: DATA_COUNT, min: -100, max: 100 };
+
+    //const labels = Utils.months({ count: 7 });
+    //const data = {
+    //    labels: labels,
+    //    datasets: [
+    //        {
+    //            label: 'Dataset 1',
+    //            data: Utils.numbers(NUMBER_CFG),
+    //            borderColor: Utils.CHART_COLORS.red,
+    //            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
+    //            yAxisID: 'y',
+    //        },
+    //        {
+    //            label: 'Dataset 2',
+    //            data: Utils.numbers(NUMBER_CFG),
+    //            borderColor: Utils.CHART_COLORS.blue,
+    //            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
+    //            yAxisID: 'y1',
+    //        }
+    //    ]
+    //};
+
+    //const actions = [
+    //    {
+    //        name: 'Randomize',
+    //        handler(chart) {
+    //            chart.data.datasets.forEach(dataset => {
+    //                dataset.data = Utils.numbers({ count: chart.data.labels.length, min: -100, max: 100 });
+    //            });
+    //            chart.update();
+    //        }
+    //    },
+    //];
+
+    //const config = {
+    //    type: 'line',
+    //    data: data,
+    //    options: {
+    //        responsive: true,
+    //        interaction: {
+    //            mode: 'index',
+    //            intersect: false,
+    //        },
+    //        stacked: false,
+    //        plugins: {
+    //            title: {
+    //                display: true,
+    //                text: 'Chart.js Line Chart - Multi Axis'
+    //            }
+    //        },
+    //        scales: {
+    //            y: {
+    //                type: 'linear',
+    //                display: true,
+    //                position: 'left',
+    //            },
+    //            y1: {
+    //                type: 'linear',
+    //                display: true,
+    //                position: 'right',
+
+    //                // grid line settings
+    //                grid: {
+    //                    drawOnChartArea: false, // only want the grid lines for one axis to show up
+    //                },
+    //            },
+    //        }
+    //    },
+    //};
+
+
+
+    //###############################################################
+    //###############################################################
+    //###############################################################
+
+    const labels = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+    ];
+
+    var green_color = 'rgb(34,139,34)';
+
+    //###############################################################
+    // throughput_diagram
+
+    var td_input = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Input))');
+    var td_output = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Output))');
+    var td_wip = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.WIP))');
+    var td_capacity = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Capacity))');
+    var td_date_labels = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputDiagram.Labels))');
+
+    console.log('throughput_diagram');
+    console.log(td_input);
+    console.log(td_output);
+    console.log(td_wip);
+    console.log(td_capacity);
+
+    const throughput_diagram_data = {
+        labels: td_date_labels,
+        datasets: [{
+            label: 'Input',
+            backgroundColor: 'rgb(192, 80, 77)',
+            borderColor: 'rgb(192, 80, 77)',
+            data: td_input,
+            cubicInterpolationMode: 'monotone',
+        },
+        {
+            label: 'Output',
+            backgroundColor: 'rgb(128, 100, 162)',
+            borderColor: 'rgb(128, 100, 162)',
+            data: td_output,
+            cubicInterpolationMode: 'monotone',
+        },
+        {
+            label: 'WIP',
+            backgroundColor: 'rgb(255, 0, 0)',
+            borderColor: 'rgb(255, 0, 0)',
+            data: td_wip,
+            cubicInterpolationMode: 'monotone',
+        }]
+    };
+
+    const throughput_diagram_config = {
+        type: 'line',
+        data: throughput_diagram_data,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Throughput Diagram'
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Time [SCD]'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Work Content [hrs]'
+                    },
+                }
+            },
+        },
+    };
+
+    var throughput_diagram_chart = document.getElementById('throughput_diagram');
+    throughput_diagram_chart.setAttribute("width", WIDTH);
+    throughput_diagram_chart.setAttribute("height", HEIGHT);
+    var throughput_diagram_myChart = new Chart(
+        throughput_diagram_chart,
+        throughput_diagram_config
+    );
+
+
+    //###############################################################
+    // work_content_distribution
+
+    var wcd_Classes = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel.Classes))');
+    var wcd_Rel = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel.Rel))');
+    console.log('work_content_distribution');
+    //format
+   // wcd_Classes = wcd_Classes.map(st=>st.toString().)
+    console.log(wcd_Classes);
+    console.log(wcd_Rel);
+
+    const work_content_distribution_data = {
+        labels: wcd_Classes,
+        datasets: [
+            {
+                label: 'work content',
+                backgroundColor: 'rgb(34,139,34)',
+                borderColor: 'rgb(34,139,34)',
+                data: wcd_Rel,
+            }
+        ]
+    };
+
+    const work_content_distribution_config = {
+        type: 'bar',
+        data: work_content_distribution_data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'work content distribution'
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Work content (hrs)'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'frequency'
+                    },
+                }
+            },
+        },
+    };
+
+    var work_content_distribution_chart = document.getElementById('work_content_distribution');
+    work_content_distribution_chart.setAttribute("width", WIDTH);
+    work_content_distribution_chart.setAttribute("height", HEIGHT);
+    var throughput_diagram_myChart = new Chart(
+        work_content_distribution_chart,
+        work_content_distribution_config
+    );
+
+     //###############################################################
+    // lodistic_operating_curves
+
+    var loc_Labels = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.Labels))');
+    var loc_output_rate = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OutputRate))');
+    var loc_throughput_time = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.ThroughputTime))');
+    var loc_rangeX = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.RangeX))');
+    var loc_rangeY = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.RangeY))');
+    var loc_capacity = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.Capacity))');
+    var loc_OPOperatingPoin = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPOperatingPoin))');
+    var loc_OPRangeX = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPRangeX))');
+    var loc_OPRangeY = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPRangeY))');
+    var loc_OPThroughputTimeX = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPThroughputTimeX))');
+    var loc_OPThroughputTimeY = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPThroughputTimeY))');
+    console.log('lodistic_operating_curves');
+    console.log(loc_Labels);
+    console.log(loc_output_rate);
+    console.log(loc_throughput_time);
+    console.log(loc_rangeX);
+    console.log(loc_rangeY);
+    console.log(loc_capacity);
+    console.log(loc_OPOperatingPoin);
+    console.log(loc_OPRangeX);
+    console.log(loc_OPRangeY);
+    console.log(loc_OPThroughputTimeX);
+    console.log(loc_OPThroughputTimeY);
+
+    const lodistic_operating_curves_data = {
+        labels: loc_Labels,
+        datasets: [
+            {
+                label: 'OutputRate',
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: loc_output_rate,
+                cubicInterpolationMode: 'monotone',
+            },
+            {
+                label: 'Throughput Time',
+                backgroundColor: 'rgb(255, 0, 0)',
+                borderColor: 'rgb(255, 0, 0)',
+                data: loc_throughput_time,
+                cubicInterpolationMode: 'monotone',
+            },
+            {
+                label: 'Range',
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 99, 0)',
+                borderColor: 'rgb(255, 99, 0)',
+                data: [{ x: loc_rangeX, y: loc_rangeY,r: 15 }],
+            },
+            {
+                label: 'Capacity',
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 0, 99)',
+                borderColor: 'rgb(255, 0 99)',
+                data: [{ x: loc_capacity[0], y: loc_capacity[1], r: 15 }],
+            },
+            {
+                label: 'OP: Operating Poin',
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 99, 99)',
+                borderColor: 'rgb(255, 99, 99)',
+                data: [{ x: loc_OPOperatingPoin[0], y: loc_OPOperatingPoin[1], r: 15 }],
+            },
+            {
+                label: 'OP: Range',
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 0, 255)',
+                borderColor: 'rgb(255, 0 255)',
+                data: [{ x: loc_OPRangeX, y: loc_OPRangeY, r: 15 }],
+            },
+            {
+                label: 'OP: Throughput Time',
+                type: 'bubble',
+                backgroundColor: 'rgb(0, 0, 255)',
+                borderColor: 'rgb(0, 0, 255)',
+                data: [{ x: loc_OPThroughputTimeX, y: loc_OPThroughputTimeY, r: 15 }],
+            },
+        ]
+    };
+
+    const lodistic_operating_curves_config = {
+        type: 'line',
+        data: lodistic_operating_curves_data,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Lodistic operating curves'
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Average Work in Process [hrs]'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Average output rate [SCD]',
+                    },
+                }
+            },
+        },
+    };
+
+    var lodistic_operating_curves_chart = document.getElementById('lodistic_operating_curves');
+    lodistic_operating_curves_chart.setAttribute("width", WIDTH);
+    lodistic_operating_curves_chart.setAttribute("height", HEIGHT);
+    var lodistic_operating_curves_myChart = new Chart(
+        lodistic_operating_curves_chart,
+        lodistic_operating_curves_config
+    );
+
+    //###############################################################
+    // throughput_time_distribution
+
+    var ttd_Classes = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputTimeDistributionDiagramModel.Classes))');
+    var ttd_Rel = JSON.parse('@Html.Raw(Json.Serialize(Model.ThroughputTimeDistributionDiagramModel.Rel))');
+    console.log('throughput_time_distribution');
+    console.log(ttd_Classes);
+    console.log(ttd_Rel);
+
+    const throughput_time_distribution_data = {
+        labels: ttd_Classes,
+        datasets: [
+            {
+                label: 'throughput time',
+                backgroundColor: 'rgb(34,139,34)',
+                borderColor: 'rgb(34,139,34)',
+                data: ttd_Rel,
+            }
+        ]
+    };
+
+    const throughput_time_distribution_config = {
+        type: 'bar',
+        data: throughput_time_distribution_data,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Throughput time distribution'
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'throughput'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'frequency'
+                    },
+                }
+            },
+        },
+    };
+
+    var throughput_time_distribution_chart = document.getElementById('throughput_time_distribution');
+    throughput_time_distribution_chart.setAttribute("width", WIDTH);
+    throughput_time_distribution_chart.setAttribute("height", HEIGHT);
+    var throughput_time_distribution_myChart = new Chart(
+        throughput_time_distribution_chart,
+        throughput_time_distribution_config
+    );
+
+    //###############################################################
+    // schedule_reliability_operating_curve
+
+    var sroc_Labels = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.Labels))');
+    var sroc_ScheduleReliability = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.ScheduleReliability))');
+    var sroc_MeanWIP = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.MeanWIP))');
+    var sroc_MeanWIP_X = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.MeanWIP_X))');
+
+    console.log('schedule_reliability_operating_curve');
+    console.log(sroc_Labels);
+    console.log(sroc_ScheduleReliability);
+    console.log(sroc_MeanWIP_X);
+
+    // prava linija!
+    console.log(sroc_MeanWIP);
+
+    const schedule_reliability_operating_curve_data = {
+        labels: sroc_Labels,
+        datasets: [
+            {
+                label: 'Schedule Reliability',
+                type: 'line',
+                backgroundColor: 'rgb(0, 0, 255)',
+                borderColor: 'rgb(0, 0, 255)',
+                data: sroc_ScheduleReliability,
+                cubicInterpolationMode: 'monotone',
+            },
+            {
+                label: 'Mean WIP',
+                type: 'bubble',
+                backgroundColor: 'rgb(255, 99, 0)',
+                borderColor: 'rgb(255, 99, 0)',
+                data: [{ x: sroc_MeanWIP_X[0], y: 100, r: 5 }]
+            }
+            //{
+            //    label: 'Mean WIP',
+            //    backgroundColor: 'rgb(255, 0, 0)',
+            //    borderColor: 'rgb(255, 0, 0)',
+            //    data: sroc_MeanWIP,
+            //    cubicInterpolationMode: 'monotone',
+            //}
+        ]
+    };
+
+    const schedule_reliability_operating_curve_config = {
+        type: 'line',
+        data: schedule_reliability_operating_curve_data,
+        options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Schedule Reliability Operating Curve '
+                }
+            },
+            elements: {
+                point: {
+                    radius: 0
+                }
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Mean WIP  [hrs]'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Schedule Reliability [%]'
+                    },
+                }
+            },
+        },
+    };
+
+    var schedule_reliability_operating_curve_chart = document.getElementById('schedule_reliability_operating_curve');
+    schedule_reliability_operating_curve_chart.setAttribute("width", WIDTH);
+    schedule_reliability_operating_curve_chart.setAttribute("height", HEIGHT);
+    var schedule_reliability_operating_curve_myChart = new Chart(
+        schedule_reliability_operating_curve_chart,
+        schedule_reliability_operating_curve_config
+    );
+
+
+
+
+    var config = {
+        type: 'line',
+        data: {
+            labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+            datasets: [
+                {
+                    data: [12, 3, 2, 1, 8, 8, 2, 2, 3, 5, 7, 1]
+                }
+            ],
+            lineAtIndex: 2
+        }
+    };
+
+    var originalLineDraw = Chart.controllers.line.prototype.draw;
+    Chart.helpers.extend(Chart.controllers.line.prototype, {
+        draw: function () {
+            originalLineDraw.apply(this, arguments);
+
+            var chart = this.chart;
+            var ctx = chart.chart.ctx;
+
+            var index = chart.config.data.lineAtIndex;
+            if (index) {
+                var xaxis = chart.scales['x-axis-0'];
+                var yaxis = chart.scales['y-axis-0'];
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(xaxis.getPixelForValue(undefined, index), yaxis.top);
+                ctx.strokeStyle = '#ff0000';
+                ctx.lineTo(xaxis.getPixelForValue(undefined, index), yaxis.bottom);
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+    });
+
+
+
+    //###############################################################
+
+
+
+</script>
+<style>
+    .axis-grid line {
+        stroke: lightgray;
+    }
+</style>

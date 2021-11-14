@@ -35,7 +35,6 @@ namespace ProductionPlanner.Service.Implementation
                 return new List<double>() { 0 };
             }
 
-            minWC = workContents.Min();
             maxWC = workContents.Max();
 
             var result = new List<double>();
@@ -43,11 +42,16 @@ namespace ProductionPlanner.Service.Implementation
             result.Add(prev);
             double current = prev;
             
-            while(current <= maxWC)
+            while(current < maxWC)
             {
-                current = prev + minWC / 10;
+                current = prev + maxWC / 10;
                 result.Add(current);
                 prev = current;
+            }
+
+            if (result.Count > 0 && result[result.Count - 1] != maxWC)
+            {
+                result.Add(maxWC);
             }
 
             return result;
@@ -63,18 +67,24 @@ namespace ProductionPlanner.Service.Implementation
             var workContents = _calculationService.getWorkContents(startDate, endDate);
             var numOrders = workContents.Count;
             var frequencies = new List<double>();
-            foreach (var val in xVals)
+
+            if (xVals.Count <= 1)
+            {
+                return new List<double>() { 0 };
+            }
+
+            foreach (int val in xVals)
             {
                 frequencies.Add(workContents.Where(wc => wc <= val).LongCount());
             }
             var rel = new List<double>();
             rel.Add(0.0);
 
-            for(int i=1; i<frequencies.Count; i++)
+            for(int i=1; i < frequencies.Count; i++)
             {
                 if (numOrders != 0)
                 {
-                    rel.Add((frequencies[i] - frequencies[i - 1] / numOrders));
+                    rel.Add(((frequencies[i] - frequencies[i - 1] )/ numOrders)*100);
                 } else
                 {
                     rel.Add(0);

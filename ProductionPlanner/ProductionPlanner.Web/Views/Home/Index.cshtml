@@ -9,73 +9,77 @@
 <div class="row px-5 pb-5 pt-3">
     <h5 class="display-3 text-right"><b>Dashboard</b></h5>
     @*<p class="small col-6"><br /><br />Fill in the following properties so <br />you can use the production planner better.</p>*@
-    <a asp-action="Edit" asp-controller="Home">Edit company values</a>
 </div>
 <div class="px-5">
-        <div class="row px-5">
-            <div class="col-6 form-group">
-                <div class=" pb-3" style="color: #04396c !important">
-                    <h3><i class="fa fa-industry" aria-hidden="true"></i><b> Workstations</b> </h3>
-                </div>
-                <div class="row form-group">
-                    <div class="col-6">
-                        <label class="control-label">Number of workstations</label>
-                    </div>
-                    <div class="col-6">
-                        <!-- <input class="form-control" asp-for="NumberOfWS" type="number" style="max-width: 50% !important; display:inline-block " />
-
-     <span asp-validation-for="NumberOfWS" class="text-danger"></span>-->
-                        <p>@company.NumberOfWS</p>
-                    </div>
-                </div>
-                <div class="row form-group">
-                    <div class="col-6">
-                        <label class="control-label">Capacity of workstation</label>
-                    </div>
-                    <div class="col-6">
-                        @*<input class="form-control" asp-for="WSCapacity" type="number" style="max-width: 50% !important; display:inline-block " /> hours
-                        <span asp-validation-for="WSCapacity" class="text-danger"></span>*@
-                        <p>@company.WSCapacity</p>
-                    </div>
-                </div>
-
+    <div class="row px-5">
+        <div class="col-6 form-group">
+            <div class=" pb-3" style="color: #04396c !important">
+                <h3><i class="fa fa-industry" aria-hidden="true"></i><b> Workstations</b> </h3>
             </div>
-            <div class="col-6 form-group pl-5">
-                <div class="pb-3" style="color: #04396c !important">
-                    <h3><i class="fa fa-clock-o" aria-hidden="true"></i><b> Time</b></h3>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label class="control-label">Number of workstations</label>
                 </div>
-                <div class="row form-group">
-                    <div class="col-6">
-                        <label class="control-label">Inter-operation time</label>
-                    </div>
-                    <div class="col-6">
-                        @*<input class="form-control" asp-for="InterOpTime" type="number" style="max-width: 50% !important; display:inline-block " />
+                <div class="col-6">
+                    <!-- <input class="form-control" asp-for="NumberOfWS" type="number" style="max-width: 50% !important; display:inline-block " />
+
+                    <span asp-validation-for="NumberOfWS" class="text-danger"></span>-->
+                    <p>@company.NumberOfWS</p>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label class="control-label">Capacity of workstation</label>
+                </div>
+                <div class="col-6">
+                    @*<input class="form-control" asp-for="WSCapacity" type="number" style="max-width: 50% !important; display:inline-block " /> hours
+                        <span asp-validation-for="WSCapacity" class="text-danger"></span>*@
+                    <p>@company.WSCapacity</p>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-6 form-group pl-5">
+            <div class="pb-3" style="color: #04396c !important">
+                <h3><i class="fa fa-clock-o" aria-hidden="true"></i><b> Time</b></h3>
+            </div>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label class="control-label">Inter-operation time</label>
+                </div>
+                <div class="col-6">
+                    @*<input class="form-control" asp-for="InterOpTime" type="number" style="max-width: 50% !important; display:inline-block " />
                         <span asp-validation-for="InterOpTime" class="text-danger"></span>*@
-                        <p>@company.InterOpTime</p>
-                    </div>
+                    <p>@company.InterOpTime</p>
                 </div>
-                <div class="row form-group">
-                    <div class="col-6">
-                        <label class="control-label">Time for transportation and storage</label>
-                    </div>
-                    <div class="col-6">
-                        @*<input class="form-control" asp-for="TransportantionAndStorageTime" type="number" style="max-width: 50% !important; display:inline-block " />
+            </div>
+            <div class="row form-group">
+                <div class="col-6">
+                    <label class="control-label">Time for transportation and storage</label>
+                </div>
+                <div class="col-6">
+                    @*<input class="form-control" asp-for="TransportantionAndStorageTime" type="number" style="max-width: 50% !important; display:inline-block " />
                         <span asp-validation-for="TransportantionAndStorageTime" class="text-danger"></span>*@
-                        <p>@company.TransportantionAndStorageTime</p>
-                    </div>
+                    <p>@company.TransportantionAndStorageTime</p>
                 </div>
             </div>
         </div>
-        <br />
+    </div>
+    <br />
 
-        @*<div class="form-group row">
+    @*<div class="form-group row">
             <div class="col-4"></div>
             <div class="col-4"><input type="submit" value="Save changes" class="btn btn-primary w-100" style="background-color: #04396c !important" /></div>
             <div class="col-4"></div>
 
         </div>*@
     <br />
-    <br />
+
+    <div class="row m-4">
+        <a asp-action="Edit" asp-controller="Home">Edit company values</a>
+
+    </div>
+
     <div>
         <div class="card rounded">
             <div class="card-header" style="background-color:white !important">
@@ -248,7 +252,7 @@
                 </div>
             </div>
             <div class="card-footer text-muted text-center" style="background-color:white !important">
-                
+
                 <button type="button" id="button-complete-report" class="btn btn-primary rounded-pill px-4"> <i class="fa fa-circle-o-notch" aria-hidden="true"></i> View complete report</button>
             </div>
         </div>
