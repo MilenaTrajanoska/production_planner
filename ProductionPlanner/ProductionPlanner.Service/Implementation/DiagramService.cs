@@ -41,6 +41,9 @@ namespace ProductionPlanner.Service.Implementation
         }
         public Diagram GetDiagram(DateTime minDate, DateTime maxDate)
         {
+            minDate = this._orderService.GetAllOrders().Select(order => order.StartDate).Min();
+            maxDate = this._orderService.GetAllOrders().Select(order => order.StartDate).Max();
+
             ThroughputDiagram throughputDiagramModel = this.GetThroughputDiagram(minDate, maxDate);
             WorkContentDistributionDiagramModel workContentDistributionDiagramModel = this.GetWorkContentDistributionDiagramModel(minDate, maxDate);
             LodisticOperatingCurvesDiagramModel lodisticOperatingCurvesDiagramModel = this.GetLodisticOperatingCurvesDiagramModel(minDate, maxDate);

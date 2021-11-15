@@ -23,7 +23,7 @@ namespace ProductionPlanner.Service.Implementation
             _cache = cache;
         }
 
-        public  GlobalPerformanceViewModel GetPerformanceViewModel(GlobalPerformanceViewModel performance, DateTime minDate, DateTime maxDate)
+        public GlobalPerformanceViewModel GetPerformanceViewModel(GlobalPerformanceViewModel performance, DateTime minDate, DateTime maxDate)
         {
             if (!_cache.TryGetValue(CacheKeys.GlobalPerformance, out performance))
             {
@@ -43,6 +43,17 @@ namespace ProductionPlanner.Service.Implementation
             return performance;
         }
 
+        public void clearMonthlyKeys()
+        {
+            _cache.Remove(CacheKeys.Diagram_Monthly);
+            _cache.Remove(CacheKeys.GlobalPerformance);
+        }
+
+        public void clearYearlyKeys()
+        {
+            _cache.Remove(CacheKeys.Diagram_Yearly);
+        }
+
         public Diagram GetDiagram(Diagram diagram, DateTime minDate, DateTime maxDate, String key)
         {
             if (!_cache.TryGetValue(key, out diagram))
@@ -60,7 +71,6 @@ namespace ProductionPlanner.Service.Implementation
             }
             return diagram;
         }
-
 
     }
 }

@@ -31,6 +31,7 @@ namespace ProductionPlanner.Web.Controllers
             DateTime maxDate = this.orderService.GetAllOrders().Select(order => order.StartDate).Max();
             Diagram diagram = new Diagram();
             diagram = inMemoryCacheService.GetDiagram(diagram, minDate, maxDate, CacheKeys.Diagram_Monthly);
+            ViewBag.Active = true;
             return View(diagram);
             //GetDiagram
         }
@@ -46,11 +47,15 @@ namespace ProductionPlanner.Web.Controllers
 
         public IActionResult YearReports()
         {
-            List<DateTime> datesYearly = this.YearDates(2021);
-            DateTime minDate = datesYearly.FirstOrDefault();
-            DateTime maxDate = datesYearly.LastOrDefault();
-            //    Diagram diagram = this.GetDiagram(minDate, maxDate);
-            return View();
+            var today = DateTime.Now;
+            var year = new DateTime(today.Year, 1, 1);
+            var first = year.AddYears(-1);
+            var last = year.AddDays(-1);
+
+            Diagram diagram = new Diagram();
+            diagram = inMemoryCacheService.GetDiagram(diagram, first, last, CacheKeys.Diagram_Yearly);
+
+            return View("Index", diagram);
         }
 
         private List<DateTime> LastWeekDates()

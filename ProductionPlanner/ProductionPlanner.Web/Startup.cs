@@ -36,8 +36,10 @@ namespace ProductionPlanner.Web
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddHostedService<ScheduledReportService>();
+
             services.AddTransient<ICalculationService, CalculationService>();
-            services.AddTransient<IInMemoryCacheService, InMemoryCacheService>();
+            services.AddScoped<IInMemoryCacheService, InMemoryCacheService>();
             services.AddTransient<ICompanyService, CompanyService>();
             services.AddTransient<ILogisticOperatingCurveCalculationService, LogisticOperatingCurveCalculationService>();
             services.AddTransient<IMaterialService, MaterialService>();

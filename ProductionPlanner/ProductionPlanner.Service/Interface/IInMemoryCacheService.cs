@@ -9,5 +9,7 @@ namespace ProductionPlanner.Service.Interface
     {
         public GlobalPerformanceViewModel GetPerformanceViewModel(GlobalPerformanceViewModel performance, DateTime minDate, DateTime maxDate);
         public Diagram GetDiagram(Diagram diagram, DateTime minDate, DateTime maxDate, String key);
+        public void clearMonthlyKeys();
+        public void clearYearlyKeys();
     }
 }
