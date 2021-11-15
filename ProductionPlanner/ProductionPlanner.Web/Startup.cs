@@ -36,8 +36,10 @@ namespace ProductionPlanner.Web
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddHostedService<ScheduledReportService>();
+
             services.AddTransient<ICalculationService, CalculationService>();
-            services.AddTransient<IInMemoryCacheService, InMemoryCacheService>();
+            services.AddScoped<IInMemoryCacheService, InMemoryCacheService>();
             services.AddTransient<ICompanyService, CompanyService>();
             services.AddTransient<ILogisticOperatingCurveCalculationService, LogisticOperatingCurveCalculationService>();
             services.AddTransient<IMaterialService, MaterialService>();
@@ -47,12 +49,12 @@ namespace ProductionPlanner.Web
             services.AddTransient<IThroughputCalculationService, ThroughputCalculationService>();
             services.AddTransient<IThroughputTimeDistributionCalculationService, ThroughputTimeDistributionCalculationService>();
             services.AddTransient<IWorkContentDistributionCalculationService, WorkContentDistributionCalculationService>();
+            services.AddTransient<IDiagramService, DiagramService>();
 
             services.AddTransient<ICompanyRepository, CompanyRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IProductRepository), typeof(ProductRepository));
-
 
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -7,6 +7,9 @@ namespace ProductionPlanner.Service.Interface
 {
     public interface IInMemoryCacheService
     {
-        public GlobalPerformanceViewModel GetPerformanceViewModel(GlobalPerformanceViewModel performance);
+        public GlobalPerformanceViewModel GetPerformanceViewModel(GlobalPerformanceViewModel performance, DateTime minDate, DateTime maxDate);
+        public Diagram GetDiagram(Diagram diagram, DateTime minDate, DateTime maxDate, String key);
+        public void clearMonthlyKeys();
+        public void clearYearlyKeys();
     }
 }

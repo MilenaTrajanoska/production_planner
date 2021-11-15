@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Text;
 
 namespace ProductionPlanner.Service.Implementation
@@ -56,7 +55,7 @@ namespace ProductionPlanner.Service.Implementation
         public List<string> ImportOrdersFromExcel(IFormFile file)
         {
            
-            string filePath = $"{Directory.GetCurrentDirectory()}\\files\\{file.FileName}";
+            string filePath = $"{Directory.GetCurrentDirectory()}/files/{file.FileName}";
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             using (FileStream fileStream = File.Create(filePath))
@@ -78,6 +77,10 @@ namespace ProductionPlanner.Service.Implementation
                     {
                         try
                         {
+                            if(reader.GetValue(1) ==  null)
+                            {
+                                break;
+                            }
                             var productName = reader.GetValue(1).ToString();
                             var product = productHistoryRepository.GetAll()
                                 .Where(p => p.ProductName == productName && p.isValid)
