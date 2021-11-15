@@ -29,6 +29,7 @@ namespace ProductionPlanner.Web.Controllers
             List<DateTime> datesWeekly = this.LastWeekDates();
             DateTime minDate = this.orderService.GetAllOrders().Select(order => order.StartDate).Min();
             DateTime maxDate = this.orderService.GetAllOrders().Select(order => order.StartDate).Max();
+
             Diagram diagram = new Diagram();
             diagram = inMemoryCacheService.GetDiagram(diagram, minDate, maxDate, CacheKeys.Diagram_Monthly);
             ViewBag.Active = true;

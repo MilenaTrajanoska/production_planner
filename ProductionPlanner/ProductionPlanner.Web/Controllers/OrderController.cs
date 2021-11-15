@@ -129,16 +129,18 @@ namespace ProductionPlanner.Web.Controllers
             if (file != null)
             {
                 List<string> errors = new List<string>();
+                String error = "";
                 try
                 {
                     errors = orderService.ImportOrdersFromExcel(file);
+                    error = errors.Count > 0 ? errors.ElementAt(0) : "";
                 }catch (Exception e){
-                    errors = new List<string>() { "Could not open file." };
+                    error = "Could not open file." ;
                 }
                 
                 if (errors.Count > 0)
                 {
-                    ViewBag.Error = errors;
+                    ViewBag.Error = error;
                 }
                 else
                 {
@@ -147,7 +149,7 @@ namespace ProductionPlanner.Web.Controllers
             }
             else
             {
-                ViewBag.Error = new List<string>() { "Please upload an excel file." };
+                ViewBag.Error = "Please upload an excel file.";
             }
 
             return View("Create", new Order());

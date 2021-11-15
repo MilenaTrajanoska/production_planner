@@ -105,10 +105,10 @@ namespace ProductionPlanner.Service.Implementation
             return new ScheduleReliabilityOperatingCurveDiagramModel(labels, scheduleReliability, meanWIP, meanWIP_X);
         }
 
-        public GlobalPerformanceViewModel setGlobalPerformance(DateTime min, DateTime max)
+        public GlobalPerformanceViewModel setGlobalPerformance(DateTime minDate, DateTime maxDate)
         {
             var year = DateTime.Now.Year - 1;
-            DateTime minDate = new DateTime(year, 1, 1);
+            minDate = new DateTime(year, 1, 1);
 
             var company = _companyService.GetCompany();
 
@@ -118,7 +118,7 @@ namespace ProductionPlanner.Service.Implementation
                 .ToList()
                 .Count;
             performance.CompletedOrders = num_orders;
-            DateTime maxDate = DateTime.Now;
+            maxDate = DateTime.Now;
 
             if (num_orders != 0)
             {

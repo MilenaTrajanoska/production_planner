@@ -77,6 +77,10 @@ namespace ProductionPlanner.Service.Implementation
                     {
                         try
                         {
+                            if(reader.GetValue(1) ==  null)
+                            {
+                                break;
+                            }
                             var productName = reader.GetValue(1).ToString();
                             var product = productHistoryRepository.GetAll()
                                 .Where(p => p.ProductName == productName && p.isValid)
