@@ -9,6 +9,10 @@
 @{ 
     var first = "nav-item text-decoration-none ";
     var second = "nav-item text-decoration-none ";
+    var activeStyle = "background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important";
+    var notActiveStyle = "background-color: white; border-radius: 20px 20px 0px 0px; border-top-style: solid; border-left-style: solid; border-right-style: solid; border-width: thin; border-color: #dae2df; padding: 30px; color: black !important";
+    var firstStyle = activeStyle;
+    var secondStyle = notActiveStyle;
 } 
 <br />
 <br />
@@ -19,17 +23,22 @@
             if(ViewBag.Active == true)
             {
                 first += "active";
+                firstStyle = activeStyle;
+                secondStyle = notActiveStyle;
             }
         }
         else
         {
             second += "active";
+            firstStyle = notActiveStyle;
+            secondStyle = activeStyle;
+
         }
         <li class='@first'>
-            <a class="text-decoration-none" style="background-color: white; border-radius: 20px 20px 0px 0px; border-top-style: solid; border-left-style: solid; border-right-style: solid; border-width: thin; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="Index">Monthly </a>
+            <a class="text-decoration-none" style='@firstStyle' asp-area="" asp-controller="Reports" asp-action="Index">Monthly </a>
         </li>
         <li class='@second'>
-            <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="YearReports"> Annual</a>
+            <a class="text-decoration-none" style='@secondStyle' asp-area="" asp-controller="Reports" asp-action="YearReports"> Annual</a>
         </li>
         @*<li class="nav-item text-decoration-none">
             <a class="text-decoration-none" style="background-color: #e3f2fd; border-style: solid; border-width: thin; border-radius: 20px 20px 0px 0px; border-color: #dae2df; padding: 30px; color: black !important " asp-area="" asp-controller="Reports" asp-action="MonthReports"> This year</a>
