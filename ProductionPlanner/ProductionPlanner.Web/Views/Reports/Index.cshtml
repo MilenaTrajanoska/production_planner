@@ -107,280 +107,6 @@
     const HEIGHT = 300;
 
 
-
-
-    ////const DUMMY_DATA = [
-    ////    { value: 10, label: 'asd' },
-    ////    { value: 0, label: 'asd2' },
-    ////    { value: 0, label: 'asd3' },
-    ////    { value: 0, label: 'asd4' },
-    ////    { value: 10, label: '1255' },
-    ////    { value: 11, label: '12AAS6' },
-    ////    { value: 12, label: 'ASD7' },
-    ////    { value: 6, label: '001238' },
-    ////];
-
-
-    ////const MARGIN = { top: 10, right: 10, bottom: 20, left: 30 };
-    ////const INNER_WIDTH = WIDTH - MARGIN.left - MARGIN.right;
-    ////const INNER_HEIGHT = HEIGHT - MARGIN.top - MARGIN.bottom;
-    ////const svgLOC = d3.select('#lodistic_operating_curves').append('svg')
-    ////    .attr('width', WIDTH)
-    ////    .attr('height', HEIGHT)
-    ////    .append('g')
-    ////    .attr('transform', 'translate(' + MARGIN.left + ',' + MARGIN.top + ')');
-
-    ////const x = d3.scaleBand().domain(DUMMY_DATA.map(d => d.label)).range([0, INNER_WIDTH]);
-    ////const y = d3.scaleLinear().domain([0, 30]).range([INNER_HEIGHT, 0]);
-    ////const xAxis = d3.axisBottom(x);
-    ////const yAxis = d3.axisLeft(y).ticks(30 / 6);
-    //////const xAxisGrid = d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat('').ticks(10);
-    ////const yAxisGrid = d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat('').ticks(30 / 6);
-
-    ////// Create grids.
-    //////svgLOC.append('g')
-    //////    .attr('class', 'x axis-grid')
-    //////    .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
-    //////    .call(xAxisGrid);
-    ////svgLOC.append('g')
-    ////    .attr('class', 'y axis-grid')
-    ////    .call(yAxisGrid);
-    ////// Create axes.
-    ////svgLOC.append('g')
-    ////    .attr('class', 'x axis')
-    ////    .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
-    ////    .call(xAxis);
-    ////svgLOC.append('g')
-    ////    .attr('class', 'y axis')
-    ////    .call(yAxis);
-    ////// Add data
-    ////svgLOC.selectAll('.bar').data(DUMMY_DATA).enter()
-    ////    .append('rect').classed('bar', true)
-    ////    .attr('width', 10)
-    ////    .attr('height', data => INNER_HEIGHT - y(data.value))
-    ////    .style('fill', 'green')
-    ////    .attr('x', data => x(data.label) + x.bandwidth() / 2 - 5)
-    ////    .attr('y', data => y(data.value));
-
-
-
-    //////###############################################################
-
-
-    ////// set the dimensions and margins of the graph
-    ////var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-    ////    width = 460 - margin.left - margin.right,
-    ////    height = 400 - margin.top - margin.bottom;
-
-    ////// append the svg object to the body of the page
-    ////var svg = d3.select("#work_content_distribution")
-    ////    .append("svg")
-    ////    .attr('width', WIDTH)
-    ////    .attr('height', HEIGHT)
-    ////    .append("g")
-    ////    .attr("transform",
-    ////        "translate(" + margin.left + "," + margin.top + ")");
-
-    //////Read the data
-    ////var legendsData = [];
-    ////d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv", function (data) {
-
-
-    ////    // group the data: I want to draw one line per group
-    ////    var sumstat = d3.nest() // nest function allows to group the calculation per level of a factor
-    ////        .key(d => d.name)
-    ////        .entries(data);
-
-    ////    // Add X axis --> it is a date format
-    ////    var x = d3.scaleLinear()
-    ////        .domain(d3.extent(data, d => d.year.toString()))
-    ////        .range([0, INNER_WIDTH]);
-    ////    svg.append("g")
-    ////        .attr("transform", "translate(0," + INNER_HEIGHT + ")")
-    ////        .call(d3.axisBottom(x).ticks(5));
-
-    ////    // Add Y axis
-    ////    var y = d3.scaleLinear()
-    ////        .domain([0, d3.max(data, d => +d.n)])
-    ////        .range([INNER_HEIGHT, 0]);
-    ////    svg.append("g")
-    ////        .call(d3.axisLeft(y));
-
-    ////    // color palette
-    ////    var res = sumstat.map(d => d.key) // list of group names
-    ////    var color = d3.scaleOrdinal()
-    ////        .domain(res)
-    ////        .range(['#e41a1c', '#377eb8', '#4daf4a', '#984ea3', '#ff7f00', '#ffff33', '#a65628', '#f781bf', '#999999'])
-
-    ////    // grid
-    ////    svg.append('g')
-    ////        .attr('class', 'x axis-grid')
-    ////        .attr('transform', 'translate(0,' + INNER_HEIGHT + ')')
-    ////        .call(d3.axisBottom(x).tickSize(-INNER_HEIGHT).tickFormat(''));
-    ////    svg.append('g')
-    ////        .attr('class', 'y axis-grid')
-    ////        .call(d3.axisLeft(y).tickSize(-INNER_WIDTH).tickFormat(''));
-
-    ////    // Draw the line
-    ////    svg.selectAll(".line")
-    ////        .data(sumstat)
-    ////        .enter()
-    ////        .append("path")
-    ////        .attr("fill", "none")
-    ////        .attr("stroke", d => color(d.key))
-    ////        .attr("stroke-width", 1.5)
-    ////        .attr("d", function (d) {
-    ////            console.log(d)
-    ////            legendsData.push(d.key);
-    ////            return d3.line()
-    ////                .x(d => x(d.year))
-    ////                .y(d => y(+d.n))
-    ////                (d.values)
-    ////        })
-
-
-
-    ////    console.log(legendsData)
-
-    ////    var legend = svg.selectAll(".legend")
-    ////        .data(legendsData)
-    ////        .enter().append("g")
-    ////        .attr("class", "legend")
-    ////    //.attr("transform", function (d, i) {
-    ////    //    if (i === 0) {
-    ////    //        dataL = d.length + offset
-    ////    //        return "translate(0,0)"
-    ////    //    } else {
-    ////    //        var newdataL = dataL
-    ////    //        dataL += d.length + offset
-    ////    //        overallOffset = width - dataL
-    ////    //        return "translate(" + (newdataL) + ",0)"
-    ////    //    }
-    ////    //})
-    ////    //.attr("transform", function (d, i) {
-    ////    //    if (i === 0) {
-    ////    //        dataL = d.length + offset
-    ////    //        return "translate(" + (overallOffset + (offset / 4)) + ",0)"
-    ////    //    } else {
-    ////    //        var newdataL = dataL
-    ////    //        dataL += d.length + offset
-    ////    //        return "translate(" + (newdataL + overallOffset + (offset / 4)) + ",0)"
-    ////    //    }
-    ////    //})
-    ////    //.style("opacity", "0");
-
-    ////    legend.append('rect')
-    ////        .attr("x", 0)
-    ////        .attr("y", (height + 30))
-    ////        .attr("width", 10)
-    ////        .attr("height", 10)
-    ////        .style("fill",'red'
-    ////            //function (d, i) {
-    ////            //return color(d)
-    ////            //}
-    ////        )
-
-    ////    legend.append('text')
-    ////        .attr("x", 20)
-    ////        .attr("y", (height + 30 + 10))
-    ////        //.attr("dy", ".35em")
-    ////        .text(function (d, i) {
-    ////            return d
-    ////        })
-    ////        .attr("class", "textselected")
-    ////        .style("text-anchor", "start")
-    ////        .style("font-size", 12);
-
-    ////    legend.style("opacity", "1");
-
-    ////})
-
-
-
-
-
-
-    //###############################################################
-
-
-    //const DATA_COUNT = 7;
-    //const NUMBER_CFG = { count: DATA_COUNT, min: -100, max: 100 };
-
-    //const labels = Utils.months({ count: 7 });
-    //const data = {
-    //    labels: labels,
-    //    datasets: [
-    //        {
-    //            label: 'Dataset 1',
-    //            data: Utils.numbers(NUMBER_CFG),
-    //            borderColor: Utils.CHART_COLORS.red,
-    //            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
-    //            yAxisID: 'y',
-    //        },
-    //        {
-    //            label: 'Dataset 2',
-    //            data: Utils.numbers(NUMBER_CFG),
-    //            borderColor: Utils.CHART_COLORS.blue,
-    //            backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
-    //            yAxisID: 'y1',
-    //        }
-    //    ]
-    //};
-
-    //const actions = [
-    //    {
-    //        name: 'Randomize',
-    //        handler(chart) {
-    //            chart.data.datasets.forEach(dataset => {
-    //                dataset.data = Utils.numbers({ count: chart.data.labels.length, min: -100, max: 100 });
-    //            });
-    //            chart.update();
-    //        }
-    //    },
-    //];
-
-    //const config = {
-    //    type: 'line',
-    //    data: data,
-    //    options: {
-    //        responsive: true,
-    //        interaction: {
-    //            mode: 'index',
-    //            intersect: false,
-    //        },
-    //        stacked: false,
-    //        plugins: {
-    //            title: {
-    //                display: true,
-    //                text: 'Chart.js Line Chart - Multi Axis'
-    //            }
-    //        },
-    //        scales: {
-    //            y: {
-    //                type: 'linear',
-    //                display: true,
-    //                position: 'left',
-    //            },
-    //            y1: {
-    //                type: 'linear',
-    //                display: true,
-    //                position: 'right',
-
-    //                // grid line settings
-    //                grid: {
-    //                    drawOnChartArea: false, // only want the grid lines for one axis to show up
-    //                },
-    //            },
-    //        }
-    //    },
-    //};
-
-
-
-    //###############################################################
-    //###############################################################
-    //###############################################################
-
     const labels = [
         'January',
         'February',
@@ -481,8 +207,6 @@
     var wcd_Classes = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel.Classes))');
     var wcd_Rel = JSON.parse('@Html.Raw(Json.Serialize(Model.WorkContentDistributionDiagramModel.Rel))');
     console.log('work_content_distribution');
-    //format
-   // wcd_Classes = wcd_Classes.map(st=>st.toString().)
     console.log(wcd_Classes);
     console.log(wcd_Rel);
 
@@ -509,7 +233,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'work content distribution'
+                    text: 'Work Content Distribution'
                 }
             },
             scales: {
@@ -517,14 +241,14 @@
                     display: true,
                     title: {
                         display: true,
-                        text: 'Work content (hrs)'
+                        text: 'Work Content [hrs]'
                     }
                 },
                 y: {
                     display: true,
                     title: {
                         display: true,
-                        text: 'frequency'
+                        text: 'Frequency'
                     },
                 }
             },
@@ -540,7 +264,7 @@
     );
 
      //###############################################################
-    // lodistic_operating_curves
+    // logistic_operating_curves
 
     var loc_Labels = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.Labels))');
     var loc_output_rate = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OutputRate))');
@@ -628,7 +352,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Lodistic operating curves'
+                    text: 'Logistic Operating Curves'
                 }
             },
             elements: {
@@ -648,7 +372,7 @@
                     display: true,
                     title: {
                         display: true,
-                        text: 'Average output rate [SCD]',
+                        text: 'Average Output Rate [SCD]',
                     },
                 }
             },
@@ -695,7 +419,7 @@
                 },
                 title: {
                     display: true,
-                    text: 'Throughput time distribution'
+                    text: 'Throughput Time Distribution'
                 }
             },
             scales: {
@@ -703,14 +427,14 @@
                     display: true,
                     title: {
                         display: true,
-                        text: 'throughput'
+                        text: 'Throughput'
                     }
                 },
                 y: {
                     display: true,
                     title: {
                         display: true,
-                        text: 'frequency'
+                        text: 'Frequency'
                     },
                 }
             },
@@ -776,7 +500,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Schedule Reliability Operating Curve '
+                    text: 'Schedule Reliability Operating Curve'
                 }
             },
             elements: {
@@ -850,13 +574,6 @@
             }
         }
     });
-
-
-
-    //###############################################################
-
-
-
 </script>
 <style>
     .axis-grid line {
