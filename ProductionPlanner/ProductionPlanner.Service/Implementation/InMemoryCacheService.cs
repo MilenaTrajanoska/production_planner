@@ -29,7 +29,7 @@ namespace ProductionPlanner.Service.Implementation
             {
                 _cache.Remove(CacheKeys.GlobalPerformance);
                 // Key not in cache, so get data.
-                performance = _diagramService.setGlobalPerformance(minDate, maxDate);
+                performance = _diagramService.setGlobalPerformance(_diagramService.getMinDateOfOrders(), _diagramService.getMaxDateOfOrders());
 
                 // Set cache options.
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
@@ -59,7 +59,7 @@ namespace ProductionPlanner.Service.Implementation
             if (!_cache.TryGetValue(key, out diagram))
             {
                 _cache.Remove(key);
-                diagram = _diagramService.GetDiagram(minDate, maxDate);
+                diagram = _diagramService.GetDiagram(_diagramService.getMinDateOfOrders(), _diagramService.getMaxDateOfOrders());
                 // Set cache options.
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     // Keep in cache for this time, reset time if accessed.

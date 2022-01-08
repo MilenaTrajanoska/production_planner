@@ -18,6 +18,8 @@ namespace ProductionPlanner.Service.Implementation
         private readonly ICompanyService _companyService;
         private readonly IOrderService _orderService;
         private readonly ICalculationService _calculationService;
+        private DateTime _maxDate = DateTime.Now;
+        private DateTime _minDate = DateTime.Now;
 
         public DiagramService(
             IScheduleReliabilityCalculationService scheduleReliabilityCalculationService,
@@ -38,6 +40,8 @@ namespace ProductionPlanner.Service.Implementation
             _companyService = companyService;
             _orderService = orderService;
             _calculationService = calculationService;
+            _maxDate = _orderService.GetAllOrders().Select(order => order.StartDate).Max();
+            _minDate = _orderService.GetAllOrders().Select(order => order.StartDate).Min();
         }
         public Diagram GetDiagram(DateTime minDate, DateTime maxDate)
         {
@@ -107,9 +111,6 @@ namespace ProductionPlanner.Service.Implementation
 
         public GlobalPerformanceViewModel setGlobalPerformance(DateTime minDate, DateTime maxDate)
         {
-            var year = DateTime.Now.Year - 1;
-            minDate = new DateTime(year, 1, 1);
-
             var company = _companyService.GetCompany();
 
             var performance = new GlobalPerformanceViewModel();
@@ -118,7 +119,6 @@ namespace ProductionPlanner.Service.Implementation
                 .ToList()
                 .Count;
             performance.CompletedOrders = num_orders;
-            maxDate = DateTime.Now;
 
             if (num_orders != 0)
             {
@@ -140,5 +140,14 @@ namespace ProductionPlanner.Service.Implementation
             return performance;
         }
 
+        public DateTime getMinDateOfOrders()
+        {
+            return this._minDate;
+        }
+
+        public DateTime getMaxDateOfOrders()
+        {
+            return this._maxDate;
+        }
     }
 }

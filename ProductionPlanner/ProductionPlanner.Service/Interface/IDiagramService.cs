@@ -9,5 +9,7 @@ namespace ProductionPlanner.Service.Interface
     {
         public Diagram GetDiagram(DateTime minDate, DateTime maxDate);
         public GlobalPerformanceViewModel setGlobalPerformance(DateTime min, DateTime max);
+        public DateTime getMaxDateOfOrders();
+        public DateTime getMinDateOfOrders();
     }
 }
