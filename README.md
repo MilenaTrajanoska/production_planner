@@ -10,6 +10,7 @@ It was designed using the Mockplus tool for UI/UX inital designs.
 ## Metrics and Vizualizations
 ### Dashboard
 The landing page of the appliacation represents a dashboard of commonly utilized metrics in the prooduction management.
+
 ![Dashboard](https://github.com/MilenaTrajanoska/production_planner/blob/main/charts/dashboard.PNG?raw=true)
 
 ### Diagrams
