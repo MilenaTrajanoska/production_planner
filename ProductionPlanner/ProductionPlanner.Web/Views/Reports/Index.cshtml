@@ -49,35 +49,32 @@
     <br />
     <br />
     <div class="row">
-        @*<div class="col-md-12 p-5">
-                <div id="throughput_diagram"></div>
-            </div>
-            <div class="col-md-12 p-5">
-                <div id="lodistic_operating_curves"></div>
-            </div>
-            <div class="col-md-12 p-5">
-                <div id="work_content_distribution"></div>
-            </div>
-            <div class="col-md-12 p-5">
-                <div id="throughput_time_distribution"></div>
-            </div>
-            <div class="col-md-12 p-5">
-                <div id="schedule_reliability_operating_curve "></div>
-            </div>
-            <div class="col-md-12 p-5">
-                <svg id="visualisation" width="1000" height="500"></svg>
-            </div>*@
+        <div class="col-md-12 p-5 text-right">
+            <a id="tt_link" download="throughput_diagram.png" class="btn btn-primary text-white">Export</a>
+        </div>
         <div class="col-md-12 p-5">
             <canvas id="throughput_diagram"></canvas>
+        </div>
+        <div class="col-md-12 p-5 text-right">
+            <a id="wcd_link" download="work_content_distribution.png" class="btn btn-primary text-white">Export</a>
         </div>
         <div class="col-md-12 p-5">
             <canvas id="work_content_distribution"></canvas>
         </div>
+        <div class="col-md-12 p-5 text-right">
+            <a id="loc_link" download="logistic_operating_curves.png" class="btn btn-primary text-white">Export</a>
+        </div>
         <div class="col-md-12 p-5">
             <canvas id="lodistic_operating_curves"></canvas>
         </div>
+        <div class="col-md-12 p-5 text-right">
+            <a id="ttd_link" download="throughput_time_distribution.png" class="btn btn-primary text-white">Export</a>
+        </div>
         <div class="col-md-12 p-5">
             <canvas id="throughput_time_distribution"></canvas>
+        </div>
+        <div class="col-md-12 p-5 text-right">
+            <a id="sr_link" download="schedule_reliability_operating_curve.png" class="btn btn-primary text-white">Export</a>
         </div>
         <div class="col-md-12 p-5">
             <canvas id="schedule_reliability_operating_curve"></canvas>
@@ -90,6 +87,21 @@
     <br />
 </div>
 
+<script>
+    window.onload = function () {
+        console.log("trigger");
+        setTimeout(function () {
+            canvas_ids = ["throughput_diagram", "work_content_distribution", "lodistic_operating_curves", "throughput_time_distribution", "schedule_reliability_operating_curve"]
+            link_ids = ["tt_link", "wcd_link", "loc_link", "ttd_link", "sr_link"]
+            canvas_ids.forEach(function (canvasId, index) {
+                linkId = link_ids[index];
+                var chart = document.getElementById(canvasId);
+                var link = document.getElementById(linkId);
+                link.setAttribute("href", chart.toDataURL('image/png'));
+            })
+        }, 1000);
+    }
+</script>
 @*<script src="https://d3js.org/d3.v7.min.js"></script>*@
 
 <script src="https://d3js.org/d3.v4.js"></script>
@@ -200,7 +212,6 @@
         throughput_diagram_config
     );
 
-
     //###############################################################
     // work_content_distribution
 
@@ -258,7 +269,7 @@
     var work_content_distribution_chart = document.getElementById('work_content_distribution');
     work_content_distribution_chart.setAttribute("width", WIDTH);
     work_content_distribution_chart.setAttribute("height", HEIGHT);
-    var throughput_diagram_myChart = new Chart(
+    var work_content_distribution_myChart = new Chart(
         work_content_distribution_chart,
         work_content_distribution_config
     );
@@ -277,18 +288,6 @@
     var loc_OPRangeY = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPRangeY))');
     var loc_OPThroughputTimeX = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPThroughputTimeX))');
     var loc_OPThroughputTimeY = JSON.parse('@Html.Raw(Json.Serialize(Model.LodisticOperatingCurvesDiagramModel.OPThroughputTimeY))');
-    console.log('lodistic_operating_curves');
-    console.log(loc_Labels);
-    console.log(loc_output_rate);
-    console.log(loc_throughput_time);
-    console.log(loc_rangeX);
-    console.log(loc_rangeY);
-    console.log(loc_capacity);
-    console.log(loc_OPOperatingPoin);
-    console.log(loc_OPRangeX);
-    console.log(loc_OPRangeY);
-    console.log(loc_OPThroughputTimeX);
-    console.log(loc_OPThroughputTimeY);
 
     const lodistic_operating_curves_data = {
         labels: loc_Labels,
@@ -387,6 +386,7 @@
         lodistic_operating_curves_config
     );
 
+
     //###############################################################
     // throughput_time_distribution
 
@@ -449,6 +449,7 @@
         throughput_time_distribution_config
     );
 
+
     //###############################################################
     // schedule_reliability_operating_curve
 
@@ -456,14 +457,6 @@
     var sroc_ScheduleReliability = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.ScheduleReliability))');
     var sroc_MeanWIP = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.MeanWIP))');
     var sroc_MeanWIP_X = JSON.parse('@Html.Raw(Json.Serialize(Model.ScheduleReliabilityOperatingCurveDiagramModel.MeanWIP_X))');
-
-    console.log('schedule_reliability_operating_curve');
-    console.log(sroc_Labels);
-    console.log(sroc_ScheduleReliability);
-    console.log(sroc_MeanWIP_X);
-
-    // prava linija!
-    console.log(sroc_MeanWIP);
 
     const schedule_reliability_operating_curve_data = {
         labels: sroc_Labels,
@@ -483,13 +476,6 @@
                 borderColor: 'rgb(255, 99, 0)',
                 data: [{ x: sroc_MeanWIP_X[0], y: 100, r: 5 }]
             }
-            //{
-            //    label: 'Mean WIP',
-            //    backgroundColor: 'rgb(255, 0, 0)',
-            //    borderColor: 'rgb(255, 0, 0)',
-            //    data: sroc_MeanWIP,
-            //    cubicInterpolationMode: 'monotone',
-            //}
         ]
     };
 
@@ -534,9 +520,6 @@
         schedule_reliability_operating_curve_chart,
         schedule_reliability_operating_curve_config
     );
-
-
-
 
     var config = {
         type: 'line',
