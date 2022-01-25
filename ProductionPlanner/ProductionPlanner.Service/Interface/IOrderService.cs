@@ -13,6 +13,6 @@ namespace ProductionPlanner.Service.Interface
         Order GetOrder(long id);
         void UpdateExistingOrder(Order order);
         void DeleteOrder(long id);
-        public List<string> ImportOrdersFromExcel(IFormFile file);
+        public Dictionary<string, List<string>> ImportOrdersFromExcel(IFormFile file);
     }
 }
