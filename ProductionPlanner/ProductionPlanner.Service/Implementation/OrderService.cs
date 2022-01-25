@@ -52,7 +52,7 @@ namespace ProductionPlanner.Service.Implementation
             this.orderRepository.Delete(Order);
         }
 
-        public List<string> ImportOrdersFromExcel(IFormFile file)
+        public Dictionary<string, List<string>> ImportOrdersFromExcel(IFormFile file)
         {
            
             string filePath = $"{Directory.GetCurrentDirectory()}/files/{file.FileName}";
@@ -66,7 +66,9 @@ namespace ProductionPlanner.Service.Implementation
             }
 
             Order order;
-            var errorMessages = new List<string>();
+            var errorMessages = new Dictionary<string, List<string>>();
+            errorMessages["error"] = new List<string>();
+            errorMessages["success"] = new List<string>();
 
             using (var stream = File.Open(filePath, FileMode.Open, FileAccess.Read))
             {
@@ -104,14 +106,15 @@ namespace ProductionPlanner.Service.Implementation
                                     EndDate = DateTime.Parse(reader.GetValue(4).ToString())
                                 };
                                 CreateNewOrder(order);
+                                errorMessages["success"].Add(String.Format("Successfully created order with number: {0}.", orderName));
                             }
                             else
                             {
-                                errorMessages.Add(String.Format("Order with number: {0} already exists.", orderName));
+                                errorMessages["error"].Add(String.Format("Order with number: {0} already exists.", orderName));
                             }
                         }catch(NullReferenceException e)
                         {
-                            errorMessages.Add(e.Message);
+                            errorMessages["error"].Add(e.Message);
                             return errorMessages;
                         }
                     }

@@ -10,19 +10,24 @@
     <div class="col-6">
         <form asp-controller="Order" asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            @if (ViewBag.Error != null)
-            {
-
-                <div class="alert alert-danger" role="alert">
-                    @ViewBag.Error
-                </div>
-            }
             @if (ViewBag.Success != null)
             {
+                @foreach (var success in ViewBag.Success)
+                {
+                    <div class="alert alert-success" role="alert">
+                        @success
+                    </div>
+                }
+            }
+            @if (ViewBag.Errors != null)
+            {
+                foreach (var error in ViewBag.Errors)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @error
+                    </div>
+                }
 
-                <div class="alert alert-success" role="alert">
-                    @ViewBag.Success
-                </div>
             }
             <div class="pb-3">
                 <h1><b>New order</b></h1>
@@ -41,7 +46,7 @@
                         <label asp-for="OrderedProduct.ProductName" class="control-label">Product name:</label>
                     </div>
                     <div class="col-8">
-                        <select class="form-control" asp-for="OrderedProduct.ProductName"  asp-items="@ViewBag.ProductNames" style="max-width: 55% !important" ></select>
+                        <select class="form-control" asp-for="OrderedProduct.ProductName" asp-items="@ViewBag.ProductNames" style="max-width: 55% !important"></select>
                         <span asp-validation-for="OrderedProduct.ProductName" class="text-danger"></span>
                     </div>
 

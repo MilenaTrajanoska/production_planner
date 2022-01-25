@@ -51,7 +51,19 @@ namespace ProductionPlanner.Web.Controllers
         {
             if(year == null)
             {
-                year = DateTime.Now.Year;
+                if (HttpContext.Session.GetInt32("year") != null)
+                {
+                    year = HttpContext.Session.GetInt32("year");
+                }
+                else
+                {
+                    year = DateTime.Now.Year;
+                }
+
+            }
+            else
+            {
+                HttpContext.Session.SetInt32("year", (int)year);
             }
 
             var ordersYears = orderService.GetAllOrders().Select(o => o.StartDate.Year).ToList();
@@ -129,22 +141,26 @@ namespace ProductionPlanner.Web.Controllers
             if (file != null)
             {
                 List<string> errors = new List<string>();
-                String error = "";
+                List<string> success = new List<string>();
+
                 try
                 {
-                    errors = orderService.ImportOrdersFromExcel(file);
-                    error = errors.Count > 0 ? errors.ElementAt(0) : "";
+                   var messages = orderService.ImportOrdersFromExcel(file);
+                   errors = messages["error"];
+                    success = messages["success"];
+
                 }catch (Exception e){
-                    error = "Could not open file." ;
+                    errors.Add("Could not open file.");
                 }
                 
                 if (errors.Count > 0)
                 {
-                    ViewBag.Error = error;
+                    ViewBag.Errors = errors;
+                    ViewBag.Success = success;
                 }
                 else
                 {
-                    ViewBag.Messages = new List<string>() { "Successfully uploaded orders." };
+                    ViewBag.Success = new List<string>() { "Successfully imported all orders!" };
                 }
             }
             else
