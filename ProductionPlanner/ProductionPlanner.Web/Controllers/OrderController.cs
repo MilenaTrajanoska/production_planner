@@ -51,7 +51,19 @@ namespace ProductionPlanner.Web.Controllers
         {
             if(year == null)
             {
-                year = DateTime.Now.Year;
+                if (HttpContext.Session.GetInt32("year") != null)
+                {
+                    year = HttpContext.Session.GetInt32("year");
+                }
+                else
+                {
+                    year = DateTime.Now.Year;
+                }
+
+            }
+            else
+            {
+                HttpContext.Session.SetInt32("year", (int)year);
             }
 
             var ordersYears = orderService.GetAllOrders().Select(o => o.StartDate.Year).ToList();
